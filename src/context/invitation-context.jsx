@@ -21,12 +21,12 @@ const InvitationContext = createContext(null);
  * - Cleans URL after extracting parameters
  * - Prevents Wayback Machine scraping
  * - 30-day expiration for stored data
+ * - Automatically updates when different UID or guest name is provided
  *
  * The UID priority:
- * 1. localStorage (if not expired)
- * 2. URL path: /couple-name-2025
- * 3. URL query parameter: ?uid=couple-name-2025
- * 4. Environment variable: VITE_INVITATION_UID
+ * 1. URL parameters (if different from stored, updates localStorage)
+ * 2. localStorage (if not expired and no URL override)
+ * 3. Environment variable: VITE_INVITATION_UID
  *
  * @example
  * <InvitationProvider>
@@ -39,30 +39,43 @@ export function InvitationProvider({ children }) {
   const navigate = useNavigate();
 
   const invitationUid = useMemo(() => {
-    // 1. First, check localStorage for existing UID
-    const storedUid = getWeddingUid();
-    if (storedUid) {
-      return storedUid;
-    }
+    // Extract UID from URL first (to check if it's different)
+    let uidFromUrl = null;
 
-    // 2. Try to get UID from URL path (e.g., /rifqi-dina-2025)
+    // 1. Try to get UID from URL path (e.g., /rifqi-dina-2025)
     const pathSegments = location.pathname.split("/").filter(Boolean);
     if (pathSegments.length > 0) {
-      const uidFromPath = pathSegments[0];
-      storeWeddingUid(uidFromPath);
-      return uidFromPath;
+      uidFromUrl = pathSegments[0];
     }
 
-    // 3. Try to get UID from URL query parameter (legacy support)
-    const urlParams = new URLSearchParams(location.search);
-    const uidFromUrl = urlParams.get("uid");
+    // 2. Try to get UID from URL query parameter (legacy support)
+    if (!uidFromUrl) {
+      const urlParams = new URLSearchParams(location.search);
+      uidFromUrl = urlParams.get("uid");
+    }
 
+    // Check if we have a stored UID
+    const storedUid = getWeddingUid();
+
+    // If URL has UID and it's different from stored, update localStorage
+    if (uidFromUrl && uidFromUrl !== storedUid) {
+      console.log(`Updating invitation from "${storedUid}" to "${uidFromUrl}"`);
+      storeWeddingUid(uidFromUrl);
+      return uidFromUrl;
+    }
+
+    // If URL has UID (same as stored or no stored), use it
     if (uidFromUrl) {
       storeWeddingUid(uidFromUrl);
       return uidFromUrl;
     }
 
-    // 4. Fallback to environment variable
+    // If no URL UID but have stored UID, use stored
+    if (storedUid) {
+      return storedUid;
+    }
+
+    // 3. Fallback to environment variable
     const uidFromEnv = import.meta.env.VITE_INVITATION_UID;
 
     if (uidFromEnv) {
@@ -82,11 +95,17 @@ export function InvitationProvider({ children }) {
     const urlParams = new URLSearchParams(location.search);
     const guestParam = urlParams.get("guest");
 
-    // Store guest name if present
+    // Store guest name if present (even if different from stored - auto-update)
     if (guestParam) {
       try {
         const decodedName = safeBase64.decode(guestParam);
         if (decodedName) {
+          const storedName = localStorage.getItem("sakeenah_guest_name");
+          if (decodedName !== storedName) {
+            console.log(
+              `Updating guest name from "${storedName}" to "${decodedName}"`,
+            );
+          }
           storeGuestName(decodedName);
         }
       } catch (error) {
