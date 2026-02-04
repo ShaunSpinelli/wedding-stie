@@ -209,6 +209,24 @@ api.post(
         return c.json({ success: false, error: "Invitation not found" }, 404);
       }
 
+      // Check if guest has already submitted a wish
+      const existingWish = await pool.query(
+        "SELECT id FROM wishes WHERE invitation_uid = $1 AND name = $2",
+        [uid, name],
+      );
+
+      if (existingWish.rows.length > 0) {
+        return c.json(
+          {
+            success: false,
+            error:
+              "You have already submitted a wish. Each guest can only send one wish.",
+            code: "DUPLICATE_WISH",
+          },
+          409, // Conflict status code
+        );
+      }
+
       // Insert wish (name and message already trimmed by Zod)
       const result = await pool.query(
         `INSERT INTO wishes (invitation_uid, name, message, attendance, created_at)
@@ -221,6 +239,21 @@ api.post(
       return c.json({ success: true, data: result.rows[0] }, 201);
     } catch (error) {
       console.error("Error creating wish:", error);
+
+      // Handle database unique constraint violation (fallback)
+      if (error.code === "23505") {
+        // PostgreSQL unique violation error code
+        return c.json(
+          {
+            success: false,
+            error:
+              "You have already submitted a wish. Each guest can only send one wish.",
+            code: "DUPLICATE_WISH",
+          },
+          409,
+        );
+      }
+
       return c.json({ success: false, error: "Internal server error" }, 500);
     }
   },

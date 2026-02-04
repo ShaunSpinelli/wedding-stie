@@ -40,7 +40,10 @@ CREATE TABLE wishes (
     name VARCHAR(100) NOT NULL,
     message TEXT NOT NULL,
     attendance VARCHAR(20) DEFAULT 'MAYBE' CHECK (attendance IN ('ATTENDING', 'NOT_ATTENDING', 'MAYBE')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Unique constraint: one wish per guest name per invitation
+    CONSTRAINT unique_wish_per_guest UNIQUE (invitation_uid, name)
 );
 
 -- Agenda table (multiple events per wedding: Akad, Resepsi, etc.)

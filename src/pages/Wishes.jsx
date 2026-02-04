@@ -30,6 +30,7 @@ export default function Wishes() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [isNameFromInvitation, setIsNameFromInvitation] = useState(false);
+  const [hasSubmittedWish, setHasSubmittedWish] = useState(false);
 
   // Get guest name from localStorage
   useEffect(() => {
@@ -94,6 +95,7 @@ export default function Wishes() {
         // Reset form (keep guest name)
         setNewWish("");
         setAttendance("");
+        setHasSubmittedWish(true);
         // Show confetti
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 3000);
@@ -101,7 +103,16 @@ export default function Wishes() {
     },
     onError: (err) => {
       console.error("Error submitting wish:", err);
-      alert("Gagal mengirim pesan: " + err.message);
+
+      // Check if it's a duplicate wish error
+      if (err.message.includes("already submitted")) {
+        setHasSubmittedWish(true);
+        alert(
+          "Anda sudah mengirim pesan sebelumnya. Setiap tamu hanya dapat mengirim satu pesan.",
+        );
+      } else {
+        alert("Gagal mengirim pesan. Silakan coba lagi.");
+      }
     },
   });
 
@@ -280,148 +291,166 @@ export default function Wishes() {
             transition={{ delay: 0.5 }}
             className="max-w-2xl mx-auto mt-12"
           >
-            <form onSubmit={handleSubmitWish} className="relative">
-              <div className="backdrop-blur-sm bg-white/80 p-6 rounded-2xl border border-rose-100/50 shadow-lg">
-                <div className="space-y-2">
-                  {/* Name Input - Pre-filled from URL or editable */}
+            {hasSubmittedWish ? (
+              <div className="backdrop-blur-sm bg-white/80 p-8 rounded-2xl border border-emerald-100 shadow-lg text-center">
+                <div className="flex flex-col items-center space-y-4">
+                  <CheckCircle className="w-16 h-16 text-emerald-500" />
+                  <h3 className="text-2xl font-serif text-gray-800">
+                    Terima Kasih!
+                  </h3>
+                  <p className="text-gray-600">
+                    Pesan dan doa Anda telah terkirim. Kami sangat menghargai
+                    ucapan Anda.
+                  </p>
+                  <p className="text-sm text-gray-500 italic">
+                    Setiap tamu hanya dapat mengirim satu pesan.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitWish} className="relative">
+                <div className="backdrop-blur-sm bg-white/80 p-6 rounded-2xl border border-rose-100/50 shadow-lg">
                   <div className="space-y-2">
-                    <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
-                      <User className="w-4 h-4" />
-                      <span>Nama Kamu</span>
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Masukan nama kamu..."
-                      value={guestName}
-                      onChange={(e) => {
-                        setGuestName(e.target.value);
-                        setIsNameFromInvitation(false);
-                      }}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-gray-700 placeholder-gray-400"
-                      required
-                    />
-                    {isNameFromInvitation && guestName && (
-                      <p className="text-xs text-gray-500 italic">
-                        Terdeteksi dari undangan Anda. Anda dapat mengubahnya
-                        jika perlu.
-                      </p>
-                    )}
-                  </div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="space-y-2 relative"
-                    ref={dropdownRef}
-                  >
-                    <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>Apakah kamu hadir?</span>
-                    </div>
-
-                    {/* Custom Select Button */}
-                    <button
-                      type="button"
-                      onClick={() => setIsOpen(!isOpen)}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-left flex items-center justify-between"
-                    >
-                      <span
-                        className={
-                          attendance ? "text-gray-700" : "text-gray-400"
-                        }
-                      >
-                        {attendance
-                          ? options.find((opt) => opt.value === attendance)
-                              ?.label
-                          : "Pilih kehadiran..."}
-                      </span>
-                      <ChevronDown
-                        className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                          isOpen ? "transform rotate-180" : ""
-                        }`}
+                    {/* Name Input - Pre-filled from URL or editable */}
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
+                        <User className="w-4 h-4" />
+                        <span>Nama Kamu</span>
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Masukan nama kamu..."
+                        value={guestName}
+                        onChange={(e) => {
+                          setGuestName(e.target.value);
+                          setIsNameFromInvitation(false);
+                        }}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                        required
                       />
-                    </button>
+                      {isNameFromInvitation && guestName && (
+                        <p className="text-xs text-gray-500 italic">
+                          Terdeteksi dari undangan Anda. Anda dapat mengubahnya
+                          jika perlu.
+                        </p>
+                      )}
+                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className="space-y-2 relative"
+                      ref={dropdownRef}
+                    >
+                      <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>Apakah kamu hadir?</span>
+                      </div>
 
-                    {/* Dropdown Options */}
-                    <AnimatePresence>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="absolute z-10 w-full mt-1 bg-white rounded-xl shadow-lg border border-rose-100 overflow-hidden"
+                      {/* Custom Select Button */}
+                      <button
+                        type="button"
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-left flex items-center justify-between"
+                      >
+                        <span
+                          className={
+                            attendance ? "text-gray-700" : "text-gray-400"
+                          }
                         >
-                          {options.map((option) => (
-                            <motion.button
-                              key={option.value}
-                              type="button"
-                              onClick={() => {
-                                setAttendance(option.value);
-                                setIsOpen(false);
-                              }}
-                              whileHover={{
-                                backgroundColor: "rgb(255, 241, 242)",
-                              }}
-                              className={`w-full px-4 py-2.5 text-left transition-colors
+                          {attendance
+                            ? options.find((opt) => opt.value === attendance)
+                                ?.label
+                            : "Pilih kehadiran..."}
+                        </span>
+                        <ChevronDown
+                          className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                            isOpen ? "transform rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+
+                      {/* Dropdown Options */}
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="absolute z-10 w-full mt-1 bg-white rounded-xl shadow-lg border border-rose-100 overflow-hidden"
+                          >
+                            {options.map((option) => (
+                              <motion.button
+                                key={option.value}
+                                type="button"
+                                onClick={() => {
+                                  setAttendance(option.value);
+                                  setIsOpen(false);
+                                }}
+                                whileHover={{
+                                  backgroundColor: "rgb(255, 241, 242)",
+                                }}
+                                className={`w-full px-4 py-2.5 text-left transition-colors
                                         ${
                                           attendance === option.value
                                             ? "bg-rose-50 text-rose-600"
                                             : "text-gray-700 hover:bg-rose-50"
                                         }`}
-                            >
-                              {option.label}
-                            </motion.button>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                  {/* Wish Textarea */}
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
-                      <MessageCircle className="w-4 h-4" />
-                      <span>Harapan kamu</span>
+                              >
+                                {option.label}
+                              </motion.button>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                    {/* Wish Textarea */}
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
+                        <MessageCircle className="w-4 h-4" />
+                        <span>Harapan kamu</span>
+                      </div>
+                      <textarea
+                        placeholder="Kirimkan harapan dan doa untuk kedua mempelai..."
+                        value={newWish}
+                        onChange={(e) => setNewWish(e.target.value)}
+                        className="w-full h-32 p-4 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 resize-none transition-all duration-200"
+                        required
+                      />
                     </div>
-                    <textarea
-                      placeholder="Kirimkan harapan dan doa untuk kedua mempelai..."
-                      value={newWish}
-                      onChange={(e) => setNewWish(e.target.value)}
-                      className="w-full h-32 p-4 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 resize-none transition-all duration-200"
-                      required
-                    />
                   </div>
-                </div>
-                <div className="flex items-center justify-between mt-4">
-                  <motion.button
-                    type="submit"
-                    disabled={createWishMutation.isPending}
-                    whileHover={{
-                      scale: createWishMutation.isPending ? 1 : 1.02,
-                    }}
-                    whileTap={{
-                      scale: createWishMutation.isPending ? 1 : 0.98,
-                    }}
-                    className={`w-full flex items-center justify-center space-x-2 px-6 py-3 rounded-xl text-white font-medium transition-all duration-200
+                  <div className="flex items-center justify-between mt-4">
+                    <motion.button
+                      type="submit"
+                      disabled={createWishMutation.isPending}
+                      whileHover={{
+                        scale: createWishMutation.isPending ? 1 : 1.02,
+                      }}
+                      whileTap={{
+                        scale: createWishMutation.isPending ? 1 : 0.98,
+                      }}
+                      className={`w-full flex items-center justify-center space-x-2 px-6 py-3 rounded-xl text-white font-medium transition-all duration-200
                     ${
                       createWishMutation.isPending
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-rose-500 hover:bg-rose-600"
                     }`}
-                  >
-                    {createWishMutation.isPending ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Send className="w-4 h-4" />
-                    )}
-                    <span>
-                      {createWishMutation.isPending
-                        ? "Sedang Mengirim..."
-                        : "Kirimkan Doa"}
-                    </span>
-                  </motion.button>
+                    >
+                      {createWishMutation.isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Send className="w-4 h-4" />
+                      )}
+                      <span>
+                        {createWishMutation.isPending
+                          ? "Sedang Mengirim..."
+                          : "Kirimkan Doa"}
+                      </span>
+                    </motion.button>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            )}
           </motion.div>
         </div>
       </section>
