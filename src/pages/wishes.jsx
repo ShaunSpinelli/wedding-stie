@@ -325,13 +325,21 @@ export default function Wishes() {
                           setGuestName(e.target.value);
                           setIsNameFromInvitation(false);
                         }}
-                        className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                        disabled={isNameFromInvitation}
+                        className={`w-full px-4 py-2.5 rounded-xl border transition-all duration-200 text-gray-700 placeholder-gray-400 ${
+                          isNameFromInvitation
+                            ? "bg-gray-100 border-gray-200 cursor-not-allowed opacity-75"
+                            : "bg-white/50 border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50"
+                        }`}
                         required
                       />
                       {isNameFromInvitation && guestName && (
-                        <p className="text-xs text-gray-500 italic">
-                          Terdeteksi dari undangan Anda. Anda dapat mengubahnya
-                          jika perlu.
+                        <p className="text-xs text-emerald-600 italic flex items-center space-x-1">
+                          <CheckCircle className="w-3 h-3" />
+                          <span>
+                            Nama terdeteksi dari undangan Anda dan tidak dapat
+                            diubah untuk mencegah pesan palsu.
+                          </span>
                         </p>
                       )}
                     </div>
