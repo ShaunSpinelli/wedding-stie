@@ -187,7 +187,7 @@ export default function Wishes() {
                 <Marquee
                   pauseOnHover={true}
                   repeat={2}
-                  className="[--duration:40s] [--gap:1rem] py-2"
+                  className="[--duration:20s] [--gap:1rem] py-2"
                 >
                   {wishes.map((wish, index) => (
                     <motion.div
