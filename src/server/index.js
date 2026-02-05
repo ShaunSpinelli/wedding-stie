@@ -285,6 +285,38 @@ api.delete(
   },
 );
 
+// Check if guest has already submitted a wish
+api.get(
+  "/:uid/wishes/check/:name",
+  zValidator("param", uidParamSchema),
+  async (c) => {
+    const { uid } = c.req.valid("param");
+    const name = c.req.param("name");
+
+    if (!name || name.trim().length === 0) {
+      return c.json({ success: false, error: "Name is required" }, 400);
+    }
+
+    try {
+      const pool = await getDbClient(c);
+
+      // Check if guest has already submitted a wish
+      const existingWish = await pool.query(
+        "SELECT id FROM wishes WHERE invitation_uid = $1 AND name = $2",
+        [uid, name.trim()],
+      );
+
+      return c.json({
+        success: true,
+        hasSubmitted: existingWish.rows.length > 0,
+      });
+    } catch (error) {
+      console.error("Error checking wish:", error);
+      return c.json({ success: false, error: "Internal server error" }, 500);
+    }
+  },
+);
+
 // Get attendance stats
 api.get("/:uid/stats", zValidator("param", uidParamSchema), async (c) => {
   const { uid } = c.req.valid("param");

@@ -18,7 +18,7 @@ import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { formatEventDate } from "@/lib/format-event-date";
 import { useInvitation } from "@/context/invitation-context";
-import { fetchWishes, createWish } from "@/services/api";
+import { fetchWishes, createWish, checkWishSubmitted } from "@/services/api";
 import { getGuestName } from "@/lib/invitation-storage";
 
 export default function Wishes() {
@@ -42,6 +42,25 @@ export default function Wishes() {
       setIsNameFromInvitation(true);
     }
   }, []);
+
+  // Check if guest has already submitted a wish
+  useEffect(() => {
+    const checkSubmissionStatus = async () => {
+      if (uid && guestName && isNameFromInvitation) {
+        try {
+          const response = await checkWishSubmitted(uid, guestName);
+          if (response.success && response.hasSubmitted) {
+            setHasSubmittedWish(true);
+          }
+        } catch (error) {
+          console.error("Error checking wish status:", error);
+          // Don't show error to user, just let them try to submit
+        }
+      }
+    };
+
+    checkSubmissionStatus();
+  }, [uid, guestName, isNameFromInvitation]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -108,7 +127,10 @@ export default function Wishes() {
       console.error("Error submitting wish:", err);
 
       // Check if it's a duplicate wish error
-      if (err.message.includes("already submitted")) {
+      if (
+        err.code === "DUPLICATE_WISH" ||
+        err.message.includes("already submitted")
+      ) {
         setHasSubmittedWish(true);
         setErrorMessage("");
       } else {
