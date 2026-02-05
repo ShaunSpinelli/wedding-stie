@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Name input lock**: Guest name field automatically disabled when detected from invitation URL/localStorage to prevent impersonation (afc8be6)
+- **Inline error messages**: Beautiful animated error banners replacing browser alert() dialogs for better UX (5155c57)
+- AlertCircle icon for error state visualization in wishes form (5155c57)
+
+### Changed
+
+- Wish form errors now display as inline rose-colored banners instead of blocking alert() dialogs (5155c57)
+- Error messages auto-dismiss after 5 seconds with manual close option (5155c57)
+- Name input styling updated to show disabled state with gray background and reduced opacity (afc8be6)
+- Simplified UX by removing explanatory helper text from disabled name input (f341de1)
+
+### Fixed
+
+- Non-intrusive error handling that doesn't block UI interaction (5155c57)
+- Clear visual feedback for locked/unlocked name input states (afc8be6)
+
+### Security
+
+- Enhanced spam prevention by disabling name modification when guest is identified from invitation (afc8be6)
+- Multi-layer protection against fake wishes: frontend lock + backend validation + database constraint (afc8be6)
+
 ## [2.1.0] - 2026-02-05
 
 ### Added
