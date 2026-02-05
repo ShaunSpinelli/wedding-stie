@@ -370,10 +370,13 @@ export default function Wishes() {
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
                         <User className="w-4 h-4" />
-                        <span>Nama Kamu</span>
+                        <label htmlFor="guest-name">Nama Kamu</label>
                       </div>
                       <input
                         type="text"
+                        id="guest-name"
+                        name="guestName"
+                        autoComplete="name"
                         placeholder="Masukan nama kamu..."
                         value={guestName}
                         onChange={(e) => {
@@ -398,13 +401,35 @@ export default function Wishes() {
                     >
                       <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
                         <Calendar className="w-4 h-4" />
-                        <span>Apakah kamu hadir?</span>
+                        <label htmlFor="attendance-select">
+                          Apakah kamu hadir?
+                        </label>
                       </div>
+
+                      {/* Hidden select for accessibility */}
+                      <select
+                        id="attendance-select"
+                        name="attendance"
+                        value={attendance}
+                        onChange={(e) => setAttendance(e.target.value)}
+                        className="sr-only"
+                        aria-hidden="true"
+                      >
+                        <option value="">Pilih kehadiran...</option>
+                        {options.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
 
                       {/* Custom Select Button */}
                       <button
                         type="button"
                         onClick={() => setIsOpen(!isOpen)}
+                        aria-label="Pilih status kehadiran"
+                        aria-expanded={isOpen}
+                        aria-controls="attendance-dropdown"
                         className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-left flex items-center justify-between"
                       >
                         <span
@@ -428,6 +453,8 @@ export default function Wishes() {
                       <AnimatePresence>
                         {isOpen && (
                           <motion.div
+                            id="attendance-dropdown"
+                            role="listbox"
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
@@ -462,9 +489,11 @@ export default function Wishes() {
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
                         <MessageCircle className="w-4 h-4" />
-                        <span>Harapan kamu</span>
+                        <label htmlFor="wish-message">Harapan kamu</label>
                       </div>
                       <textarea
+                        id="wish-message"
+                        name="message"
                         placeholder="Kirimkan harapan dan doa untuk kedua mempelai..."
                         value={newWish}
                         onChange={(e) => setNewWish(e.target.value)}
