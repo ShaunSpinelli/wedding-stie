@@ -1,5 +1,5 @@
-import { useInvitation } from '@/context/invitation-context';
-import staticConfig from '@/config/config';
+import { useInvitation } from "@/features/invitation/invitation-context";
+import staticConfig from "@/config/config";
 
 /**
  * Custom hook to access wedding configuration

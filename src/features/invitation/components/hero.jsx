@@ -1,7 +1,7 @@
 import { Calendar, Clock, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useConfig } from "@/hooks/use-config";
+import { useConfig } from "@/features/invitation/hooks/use-config";
 import { formatEventDate } from "@/lib/format-event-date";
 import { getGuestName } from "@/lib/invitation-storage";
 

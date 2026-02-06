@@ -1,4 +1,4 @@
-import { useConfig } from "@/hooks/use-config";
+import { useConfig } from "@/features/invitation/hooks/use-config";
 import {
   Clock,
   Navigation as NavigationIcon,

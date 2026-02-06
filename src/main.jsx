@@ -20,7 +20,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./app.jsx";
 import "./index.css";
-import { InvitationProvider } from "./context/invitation-context";
+import { InvitationProvider } from "./features/invitation";
 
 // Create a client
 const queryClient = new QueryClient({

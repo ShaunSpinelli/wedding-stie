@@ -1,22 +1,28 @@
 // src/components/bottom-bar/BottomBar.jsx
-import React, { useEffect, useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useCallback, useMemo } from "react";
+import { motion } from "framer-motion";
 import {
   Home,
   CalendarHeart,
   MapPin,
   Gift,
-  MessageCircleHeart
-} from 'lucide-react';
+  MessageCircleHeart,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useConfig } from '@/hooks/use-config';
+import { useConfig } from "@/features/invitation/hooks/use-config";
 
 const baseMenuItems = [
-  { icon: Home, label: 'Beranda', href: '#home', id: 'home' },
-  { icon: CalendarHeart, label: 'Event', href: '#event', id: 'event' },
-  { icon: MapPin, label: 'Lokasi', href: '#location', id: 'location' },
-  { icon: Gift, label: 'Hadiah', href: '#gifts', id: 'gifts', requiresBanks: true },
-  { icon: MessageCircleHeart, label: 'Harapan', href: '#wishes', id: 'wishes' },
+  { icon: Home, label: "Beranda", href: "#home", id: "home" },
+  { icon: CalendarHeart, label: "Event", href: "#event", id: "event" },
+  { icon: MapPin, label: "Lokasi", href: "#location", id: "location" },
+  {
+    icon: Gift,
+    label: "Hadiah",
+    href: "#gifts",
+    id: "gifts",
+    requiresBanks: true,
+  },
+  { icon: MessageCircleHeart, label: "Harapan", href: "#wishes", id: "wishes" },
 ];
 
 /**
@@ -37,12 +43,12 @@ const baseMenuItems = [
  */
 const BottomBar = () => {
   const config = useConfig();
-  const [active, setActive] = React.useState('home');
+  const [active, setActive] = React.useState("home");
 
   // Filter menu items based on config - hide gifts when no banks configured
   const menuItems = useMemo(() => {
     const hasBanks = config?.banks && config.banks.length > 0;
-    return baseMenuItems.filter(item => {
+    return baseMenuItems.filter((item) => {
       if (item.requiresBanks && !hasBanks) {
         return false;
       }
@@ -60,8 +66,8 @@ const BottomBar = () => {
 
       // Smooth scroll to element
       element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+        behavior: "smooth",
+        block: "start",
       });
     }
   }, []);
@@ -70,8 +76,8 @@ const BottomBar = () => {
   useEffect(() => {
     const observerOptions = {
       root: null, // Use viewport as root
-      rootMargin: '-20% 0px -80% 0px', // Trigger when section is 20% visible from top
-      threshold: 0
+      rootMargin: "-20% 0px -80% 0px", // Trigger when section is 20% visible from top
+      threshold: 0,
     };
 
     const observerCallback = (entries) => {
@@ -80,7 +86,7 @@ const BottomBar = () => {
           const sectionId = entry.target.id;
 
           // Only update if it's a valid menu section
-          const validSection = menuItems.find(item => item.id === sectionId);
+          const validSection = menuItems.find((item) => item.id === sectionId);
           if (validSection) {
             setActive(sectionId);
           }
@@ -88,7 +94,10 @@ const BottomBar = () => {
       });
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
 
     // Observe all sections that correspond to menu items
     menuItems.forEach((item) => {
@@ -123,7 +132,7 @@ const BottomBar = () => {
                   "hover:bg-gray-50/80 cursor-pointer min-w-[60px]",
                   active === item.id
                     ? "text-primary bg-primary/5"
-                    : "text-gray-600"
+                    : "text-gray-600",
                 )}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.95 }}
@@ -140,7 +149,7 @@ const BottomBar = () => {
                       "h-[18px] w-[18px] sm:h-5 sm:w-5 mb-0.5 sm:mb-1 transition-all duration-300",
                       active === item.id
                         ? "stroke-rose-500 stroke-[2.5px]"
-                        : "stroke-gray-600 stroke-2"
+                        : "stroke-gray-600 stroke-2",
                     )}
                   />
                 </motion.div>
@@ -149,7 +158,7 @@ const BottomBar = () => {
                     "text-[10px] sm:text-xs font-medium transition-all duration-300 line-clamp-1",
                     active === item.id
                       ? "text-rose-500 font-semibold"
-                      : "text-gray-600"
+                      : "text-gray-600",
                   )}
                   animate={{
                     scale: active === item.id ? 1.05 : 1,

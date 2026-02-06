@@ -1,5 +1,5 @@
-import EventCards from "@/components/events-card";
-import { useConfig } from "@/hooks/use-config";
+import EventCards from "@/features/events/components/events-card";
+import { useConfig } from "@/features/invitation/hooks/use-config";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 

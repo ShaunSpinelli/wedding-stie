@@ -17,7 +17,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { formatEventDate } from "@/lib/format-event-date";
-import { useInvitation } from "@/context/invitation-context";
+import { useInvitation } from "@/features/invitation";
 import { fetchWishes, createWish, checkWishSubmitted } from "@/services/api";
 import { getGuestName } from "@/lib/invitation-storage";
 

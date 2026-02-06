@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Music, PauseCircle, PlayCircle } from "lucide-react";
-import { useConfig } from "@/hooks/use-config";
-import BottomBar from "@/components/bottom-bar";
+import { useConfig } from "@/features/invitation/hooks/use-config";
+import BottomBar from "@/components/layout/bottom-bar";
 
 const Layout = ({ children }) => {
   const config = useConfig(); // Use hook to get config from API or fallback to static
