@@ -131,6 +131,26 @@
         "success_create": "You have been added to the guest list!"
       }
     },
+    "menu": {
+      "title": "The Menu",
+      "subtitle": "Wedding Feast",
+      "description": "A selection of fine dishes prepared for our celebration.",
+      "starter": {
+        "title": "Starter",
+        "name": "Burrata & Heirloom Tomato",
+        "description": "Creamy burrata served with heritage tomatoes, fresh basil pesto, and balsamic glaze."
+      },
+      "main": {
+        "title": "Main Course",
+        "name": "Slow-Roasted Beef Fillet",
+        "description": "Tender beef fillet with truffle mashed potatoes, seasonal greens, and a red wine reduction."
+      },
+      "dessert": {
+        "title": "Dessert",
+        "name": "Valrhona Chocolate Fondant",
+        "description": "Warm chocolate fondant with a molten core, served with Madagascan vanilla bean ice cream."
+      }
+    },
     "playlist": {
       "title": "The Vibe",
       "subtitle": "Wedding Playlist",
@@ -215,7 +235,8 @@
       "events": "Events",
       "location": "Location",
       "wishes": "Wishes",
-      "playlist": "Playlist"
+      "playlist": "Playlist",
+      "menu": "Menu"
     }
   },
   "fr": {
@@ -350,6 +371,26 @@
         "success_create": "Vous avez été ajouté à la liste des invités !"
       }
     },
+    "menu": {
+      "title": "Le Menu",
+      "subtitle": "Festin de Mariage",
+      "description": "Une sélection de mets raffinés préparés pour notre célébration.",
+      "starter": {
+        "title": "Entrée",
+        "name": "Burrata & Tomates d'Antan",
+        "description": "Burrata crémeuse servie avec des tomates anciennes, pesto de basilic frais et crème de balsamique."
+      },
+      "main": {
+        "title": "Plat Principal",
+        "name": "Filet de Bœuf Rôti Lentement",
+        "description": "Filet de bœuf tendre accompagné d'une purée de pommes de terre à la truffe, légumes de saison et réduction de vin rouge."
+      },
+      "dessert": {
+        "title": "Dessert",
+        "name": "Fondant au Chocolat Valrhona",
+        "description": "Fondant au chocolat tiède au cœur coulant, servi avec une glace à la vanille de Madagascar."
+      }
+    },
     "playlist": {
       "title": "L'Ambiance",
       "subtitle": "Playlist du Mariage",
@@ -434,7 +475,8 @@
       "events": "Événements",
       "location": "Lieu",
       "wishes": "Vœux",
-      "playlist": "Playlist"
+      "playlist": "Playlist",
+      "menu": "Menu"
     }
   }
 }

@@ -4,6 +4,7 @@ import { Events } from "@/features/events";
 import { Location } from "@/features/location";
 import { Timeline, Schedule } from "@/features/timeline";
 import { GuestRSVP } from "@/features/guests";
+import { WeddingMenu } from "@/features/menu";
 import { FeatureGate } from "@/components/ui/feature-gate";
 import Funny from "@/features/funny/components/funny";
 import Playlist from "@/features/playlist/components/playlist";
@@ -34,6 +35,7 @@ export default function MainContent() {
       <Timeline />
       <Schedule />
       <GuestRSVP />
+      <WeddingMenu />
       <Events />
       <Location />
 
