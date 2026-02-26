@@ -59,6 +59,87 @@ const config = {
       // You can add more agenda items with the same format
     ],
 
+    // Story Timeline
+    timeline: [
+      {
+        year: "2020",
+        title: "The First Meeting",
+        description: "Where our journey began, under the autumn leaves.",
+      },
+      {
+        year: "2022",
+        title: "The Proposal",
+        description:
+          "A magical moment by the sea where we said 'Yes' to forever.",
+      },
+      {
+        year: "2024",
+        title: "The Big Day",
+        description: "Celebrating our love with all of you.",
+      },
+    ],
+
+    // Wedding Weekend Schedule
+    schedule: [
+      {
+        day: "Friday",
+        events: [
+          {
+            time: "4:00 PM - 6:00 PM",
+            title: "Arrival & Check-in",
+            description: "Welcome to the countryside! Settle into your rooms.",
+          },
+          {
+            time: "6:00 PM - 7:00 PM",
+            title: "Welcome Drinks",
+            description:
+              "Join us for local wine and appetizers on the terrace.",
+          },
+          {
+            time: "7:00 PM - Late",
+            title: "BBQ & Festivities",
+            description:
+              "Casual outdoor dinner and music to kick off the weekend.",
+          },
+        ],
+      },
+      {
+        day: "Saturday",
+        events: [
+          {
+            time: "11:00 AM",
+            title: "Garden Yoga",
+            description: "Optional morning stretch for early birds.",
+          },
+          {
+            time: "3:30 PM",
+            title: "Wedding Ceremony",
+            description: "The main event under the big oak tree.",
+          },
+          {
+            time: "5:00 PM",
+            title: "Cocktail Hour",
+            description: "Drinks and music in the courtyard.",
+          },
+          {
+            time: "7:00 PM",
+            title: "Dinner & Dancing",
+            description: "Feast, speeches, and plenty of dancing.",
+          },
+        ],
+      },
+      {
+        day: "Sunday",
+        events: [
+          {
+            time: "10:00 AM",
+            title: "Farewell Brunch",
+            description: "A relaxed morning meal before we say our goodbyes.",
+          },
+        ],
+      },
+    ],
+
     /* 
     // Background music settings (Disabled)
     audio: {
