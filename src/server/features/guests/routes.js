@@ -242,7 +242,10 @@ guestsRoutes.patch(
 
     let updates = {};
     Object.keys(incomingUpdates).forEach((key) => {
-      if (fieldMapping[key]) {
+      if (
+        fieldMapping[key] !== undefined &&
+        incomingUpdates[key] !== undefined
+      ) {
         updates[fieldMapping[key]] = incomingUpdates[key];
       }
     });

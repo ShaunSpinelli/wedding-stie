@@ -8,6 +8,7 @@ import {
   History,
   Calendar,
   HeartHandshake,
+  Music,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-context";
@@ -24,6 +25,7 @@ const menuItems = [
   { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
   { icon: CalendarHeart, labelKey: "nav.events", href: "#event", id: "event" },
   { icon: MapPin, labelKey: "nav.location", href: "#location", id: "location" },
+  { icon: Music, labelKey: "nav.playlist", href: "#playlist", id: "playlist" },
 ];
 
 /**

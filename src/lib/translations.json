@@ -131,6 +131,11 @@
         "success_create": "You have been added to the guest list!"
       }
     },
+    "playlist": {
+      "title": "The Vibe",
+      "subtitle": "Wedding Playlist",
+      "description": "Get in the mood for our celebration with some of our favorite tunes."
+    },
     "hero": {
       "save_the_date": "Save the Date",
       "married_announcement": "We Are Getting Married",
@@ -209,7 +214,8 @@
       "itinerary": "Itinerary",
       "events": "Events",
       "location": "Location",
-      "wishes": "Wishes"
+      "wishes": "Wishes",
+      "playlist": "Playlist"
     }
   },
   "fr": {
@@ -278,7 +284,7 @@
             },
             {
               "time": "19:00 - Tard",
-              "title": "BBQ & Festivités",
+              "title": "BBQ & Festivities",
               "description": "Dîner décontracté en plein air et musique pour lancer le week-end."
             }
           ]
@@ -344,6 +350,11 @@
         "success_create": "Vous avez été ajouté à la liste des invités !"
       }
     },
+    "playlist": {
+      "title": "L'Ambiance",
+      "subtitle": "Playlist du Mariage",
+      "description": "Plongez dans l'ambiance de notre célébration avec nos morceaux préférés."
+    },
     "hero": {
       "save_the_date": "Réservez la date",
       "married_announcement": "Nous nous marions",
@@ -362,7 +373,7 @@
       "subtitle": "Le Voyage de l'Amour"
     },
     "schedule": {
-      "title": "Itinéraire",
+      "title": "Itéraire",
       "subtitle": "Week-end de Mariage",
       "days": {
         "Friday": "Vendredi",
@@ -422,7 +433,8 @@
       "itinerary": "Programme",
       "events": "Événements",
       "location": "Lieu",
-      "wishes": "Vœux"
+      "wishes": "Vœux",
+      "playlist": "Playlist"
     }
   }
 }
