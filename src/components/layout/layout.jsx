@@ -1,20 +1,18 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Music, PauseCircle, PlayCircle } from "lucide-react";
-import { useConfig } from "@/features/invitation/hooks/use-config";
+import { motion /*, AnimatePresence */ } from "framer-motion";
+// import { Music, PauseCircle, PlayCircle } from "lucide-react";
+// import { useState, useEffect } from "react";
+// import { useConfig } from "@/features/invitation/hooks/use-config";
 import BottomBar from "@/components/layout/bottom-bar";
 
 /**
  * Layout component that wraps the main invitation content.
- * Handles music playback controls and navigation.
+ * Handles navigation and basic layout structure.
  *
  * @param {Object} props
  * @param {React.ReactNode} props.children - Child components to render
- * @param {Object} props.audioControls - Audio controls from useAudio hook
- * @param {boolean} props.audioControls.isPlaying - Whether audio is playing
- * @param {Function} props.audioControls.toggle - Toggle audio play/pause
  */
-const Layout = ({ children, audioControls }) => {
+const Layout = ({ children /*, audioControls */ }) => {
+  /*
   const config = useConfig();
   const [showToast, setShowToast] = useState(false);
 
@@ -33,6 +31,7 @@ const Layout = ({ children, audioControls }) => {
       setShowToast(false);
     }
   }, [isPlaying, config.audio?.toastDuration]);
+  */
 
   return (
     <div className="relative min-h-screen w-full bg-theme-support-3/30">
@@ -42,7 +41,8 @@ const Layout = ({ children, audioControls }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Music Control Button with Status Indicator */}
+        {/* 
+        Music Control Button with Status Indicator
         {toggle && (
           <motion.button
             initial={{ scale: 0 }}
@@ -62,11 +62,13 @@ const Layout = ({ children, audioControls }) => {
             )}
           </motion.button>
         )}
+        */}
 
         <main className="relative h-full w-full pb-[100px]">{children}</main>
         <BottomBar />
 
-        {/* Music Info Toast */}
+        {/* 
+        Music Info Toast
         <AnimatePresence>
           {showToast && (
             <motion.div
@@ -85,6 +87,7 @@ const Layout = ({ children, audioControls }) => {
             </motion.div>
           )}
         </AnimatePresence>
+        */}
       </motion.div>
     </div>
   );

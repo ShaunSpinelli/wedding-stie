@@ -20,7 +20,7 @@ import { AnimatePresence } from "framer-motion";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Heart } from "lucide-react";
 import { useInvitation } from "@/features/invitation";
-import { useAudio } from "@/hooks/use-audio";
+// import { useAudio } from "@/hooks/use-audio";
 import staticConfig from "@/config/config";
 
 // Lazy load components for better performance
@@ -57,17 +57,20 @@ function App() {
   // Use config from API if available, otherwise fall back to static config
   const activeConfig = config || staticConfig.data;
 
+  /*
   // Initialize audio with config settings
   const audioControls = useAudio({
     src: activeConfig?.audio?.src || "/audio/fulfilling-humming.mp3",
     loop: activeConfig?.audio?.loop !== false,
   });
+  */
 
-  // Handle opening the invitation - this is called from a user click,
-  // which is the perfect opportunity to start audio (browser policy compliant)
+  // Handle opening the invitation - this is called from a user click
   const handleOpenInvitation = async () => {
+    /*
     // Start audio playback during user interaction
     await audioControls.play();
+    */
     setIsInvitationOpen(true);
   };
 
@@ -161,7 +164,7 @@ function App() {
           {!isInvitationOpen ? (
             <LandingPage onOpenInvitation={handleOpenInvitation} />
           ) : (
-            <Layout audioControls={audioControls}>
+            <Layout /* audioControls={audioControls} */>
               <MainContent />
             </Layout>
           )}
