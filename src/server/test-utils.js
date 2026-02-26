@@ -5,6 +5,16 @@
 
 import { vi } from "vitest";
 
+export const TEST_ADMIN_SECRET = "test-secret-key";
+process.env.ADMIN_SECRET = TEST_ADMIN_SECRET;
+
+/**
+ * Get authorized headers for admin requests
+ */
+export const getAuthHeaders = () => ({
+  Authorization: TEST_ADMIN_SECRET,
+});
+
 /**
  * Creates a mock database pool for testing
  * @param {Object} queryResponses - Map of query patterns to responses
@@ -38,6 +48,7 @@ export function createMockContext(mockPool) {
   return {
     env: {
       DB: mockPool,
+      ADMIN_SECRET: TEST_ADMIN_SECRET,
     },
   };
 }

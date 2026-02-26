@@ -10,6 +10,7 @@ import {
   createMockPool,
   createMockWish,
   createMockStats,
+  getAuthHeaders,
 } from "../../test-utils.js";
 
 // Mock the db-client module
@@ -249,6 +250,7 @@ describe("wishes routes", () => {
 
       const res = await app.request("/test-wedding/wishes/1", {
         method: "DELETE",
+        headers: getAuthHeaders(),
       });
 
       const json = await res.json();
@@ -267,6 +269,7 @@ describe("wishes routes", () => {
 
       const res = await app.request("/test-wedding/wishes/999", {
         method: "DELETE",
+        headers: getAuthHeaders(),
       });
 
       const json = await res.json();
@@ -315,7 +318,9 @@ describe("wishes routes", () => {
 
       getDbClient.mockResolvedValue(mockPool);
 
-      const res = await app.request("/test-wedding/wishes/stats");
+      const res = await app.request("/test-wedding/wishes/stats", {
+        headers: getAuthHeaders(),
+      });
       const json = await res.json();
 
       expect(res.status).toBe(200);

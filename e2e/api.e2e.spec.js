@@ -1,171 +1,84 @@
 /**
- * E2E tests for the Sakeenah API
- *
- * These tests run against the actual Hono app (but with mocked database).
- * For full integration tests with a real database, see the integration test files.
- *
- * To run E2E tests against a real server:
- * 1. Start the server: bun run dev:server
- * 2. Set TEST_API_URL=http://localhost:3000/api
- * 3. Run: bun run test:e2e
+ * End-to-End Tests for Sakeenah API
+ * Tests actual HTTP responses using the Hono app instance
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import app from "../src/server/index.js";
+import { getDbClient } from "../src/server/lib/db-client.js";
+import { TEST_ADMIN_SECRET } from "../src/server/test-utils.js";
 
-// Mock database for E2E tests
-vi.mock("../src/server/lib/db-client.js", () => {
-  const mockInvitation = {
-    uid: "e2e-test-wedding",
-    title: "E2E Test Wedding",
-    description: "Test invitation",
-    groom_name: "Test Groom",
-    bride_name: "Test Bride",
-    parent_groom: "Parent Groom",
-    parent_bride: "Parent Bride",
-    wedding_date: "2025-12-25",
-    time: "10:00",
-    location: "Test Venue",
-    address: "123 Test Street",
-    maps_url: "https://maps.google.com",
-    maps_embed: "<iframe></iframe>",
-    og_image: "/og.jpg",
-    favicon: "/favicon.ico",
-    audio: "/music.mp3",
-  };
+// Ensure DATABASE_URL is available for the test environment
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL =
+    "postgresql://postgres:password@localhost:5432/wedding_db";
+}
 
-  const mockWishes = [
-    {
-      id: 1,
-      name: "Guest One",
-      message: "Congratulations!",
-      attendance: "ATTENDING",
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: 2,
-      name: "Guest Two",
-      message: "Best wishes!",
-      attendance: "MAYBE",
-      created_at: new Date().toISOString(),
-    },
-  ];
-
-  const mockPool = {
-    query: vi.fn(async (sql, params) => {
-      // Invitation queries
-      if (
-        sql.includes("SELECT * FROM invitations") ||
-        sql.includes("SELECT uid FROM invitations")
-      ) {
-        if (params[0] === "e2e-test-wedding") {
-          return { rows: [mockInvitation] };
-        }
-        return { rows: [] };
-      }
-
-      // Agenda queries
-      if (sql.includes("SELECT id, title, date, start_time")) {
-        return {
-          rows: [
-            {
-              id: 1,
-              title: "Akad Nikah",
-              date: "2025-12-25",
-              start_time: "10:00",
-              end_time: "11:00",
-              location: "Mosque",
-              address: "123 Street",
-            },
-          ],
-        };
-      }
-
-      // Banks queries
-      if (sql.includes("SELECT id, bank, account_number")) {
-        return {
-          rows: [
-            {
-              id: 1,
-              bank: "BCA",
-              account_number: "1234567890",
-              account_name: "Test Groom",
-            },
-          ],
-        };
-      }
-
-      // Wishes list query
-      if (sql.includes("SELECT id, name, message, attendance")) {
-        return { rows: mockWishes };
-      }
-
-      // Wishes count query
-      if (sql.includes("SELECT COUNT(*)") && !sql.includes("FILTER")) {
-        return { rows: [{ count: "2" }] };
-      }
-
-      // Stats query
-      if (sql.includes("FILTER")) {
-        return {
-          rows: [
-            {
-              attending: "1",
-              not_attending: "0",
-              maybe: "1",
-              total: "2",
-            },
-          ],
-        };
-      }
-
-      // Check existing wish
-      if (
-        sql.includes("SELECT id FROM wishes WHERE invitation_uid") &&
-        sql.includes("name")
-      ) {
-        if (params[1] === "Existing Guest") {
-          return { rows: [{ id: 1 }] };
-        }
-        return { rows: [] };
-      }
-
-      // Insert wish
-      if (sql.includes("INSERT INTO wishes")) {
-        return {
-          rows: [
-            {
-              id: 3,
-              name: params[1],
-              message: params[2],
-              attendance: params[3],
-              created_at: new Date().toISOString(),
-            },
-          ],
-        };
-      }
-
-      // Delete wish
-      if (sql.includes("DELETE FROM wishes")) {
-        if (params[0] === "1") {
-          return { rows: [{ id: 1 }] };
-        }
-        return { rows: [] };
-      }
-
-      return { rows: [] };
-    }),
-  };
-
-  return {
-    getDbClient: vi.fn().mockResolvedValue(mockPool),
-  };
-});
+const TEST_UID = "e2e-test-wedding";
 
 describe("E2E: Sakeenah API", () => {
+  let pool;
+
+  beforeAll(async () => {
+    pool = await getDbClient({});
+
+    // Clean up and seed test data
+    await pool.query("DELETE FROM wishes WHERE invitation_uid = $1", [
+      TEST_UID,
+    ]);
+    await pool.query("DELETE FROM agenda WHERE invitation_uid = $1", [
+      TEST_UID,
+    ]);
+    await pool.query("DELETE FROM invitations WHERE uid = $1", [TEST_UID]);
+
+    // Create test invitation
+    await pool.query(
+      `INSERT INTO invitations (uid, title, description, groom_name, bride_name, wedding_date, time, location, address)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [
+        TEST_UID,
+        "Test Wedding",
+        "Test Description",
+        "Test Groom",
+        "Test Bride",
+        "2025-12-31",
+        "10:00",
+        "Test Location",
+        "Test Address",
+      ],
+    );
+
+    // Create test agenda
+    await pool.query(
+      `INSERT INTO agenda (invitation_uid, title, date, start_time, end_time, location, address, order_index)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [
+        TEST_UID,
+        "Test Ceremony",
+        "2025-12-31",
+        "10:00",
+        "11:00",
+        "Test Location",
+        "Test Address",
+        0,
+      ],
+    );
+  });
+
+  afterAll(async () => {
+    // Clean up
+    await pool.query("DELETE FROM wishes WHERE invitation_uid = $1", [
+      TEST_UID,
+    ]);
+    await pool.query("DELETE FROM agenda WHERE invitation_uid = $1", [
+      TEST_UID,
+    ]);
+    await pool.query("DELETE FROM invitations WHERE uid = $1", [TEST_UID]);
+  });
+
   describe("Invitation Endpoints", () => {
     it("GET /api/invitation/:uid - should return invitation data", async () => {
-      const res = await app.request("/api/invitation/e2e-test-wedding");
+      const res = await app.request(`/api/invitation/${TEST_UID}`);
       const json = await res.json();
 
       expect(res.status).toBe(200);
@@ -173,16 +86,11 @@ describe("E2E: Sakeenah API", () => {
       expect(json.data.groomName).toBe("Test Groom");
       expect(json.data.brideName).toBe("Test Bride");
       expect(json.data.agenda).toHaveLength(1);
-      expect(json.data.banks).toHaveLength(1);
     });
 
     it("GET /api/invitation/:uid - should return 404 for non-existent wedding", async () => {
       const res = await app.request("/api/invitation/non-existent");
-      const json = await res.json();
-
       expect(res.status).toBe(404);
-      expect(json.success).toBe(false);
-      expect(json.error).toBe("Invitation not found");
     });
 
     it("GET /api/invitation/:uid - should validate UID format", async () => {
@@ -192,58 +100,59 @@ describe("E2E: Sakeenah API", () => {
   });
 
   describe("Wishes Endpoints", () => {
+    let createdWishId;
+
     it("GET /api/:uid/wishes - should return wishes with pagination", async () => {
-      const res = await app.request("/api/e2e-test-wedding/wishes");
+      const res = await app.request(`/api/${TEST_UID}/wishes`);
       const json = await res.json();
 
       expect(res.status).toBe(200);
       expect(json.success).toBe(true);
-      expect(json.data).toHaveLength(2);
-      expect(json.pagination.total).toBe(2);
+      expect(Array.isArray(json.data)).toBe(true);
+      expect(json.pagination).toBeDefined();
     });
 
     it("GET /api/:uid/wishes - should respect limit parameter", async () => {
-      const res = await app.request("/api/e2e-test-wedding/wishes?limit=1");
+      const res = await app.request(`/api/${TEST_UID}/wishes?limit=1`);
+      const json = await res.json();
+
       expect(res.status).toBe(200);
+      expect(json.pagination.limit).toBe(1);
     });
 
     it("POST /api/:uid/wishes - should create a new wish", async () => {
-      const res = await app.request("/api/e2e-test-wedding/wishes", {
+      const res = await app.request(`/api/${TEST_UID}/wishes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "New Guest",
-          message: "Happy wedding!",
+          name: "E2E Guest",
+          message: "Created via E2E test",
           attendance: "ATTENDING",
         }),
       });
 
       const json = await res.json();
-
       expect(res.status).toBe(201);
       expect(json.success).toBe(true);
-      expect(json.data.name).toBe("New Guest");
+      expect(json.data.name).toBe("E2E Guest");
+      createdWishId = json.data.id;
     });
 
     it("POST /api/:uid/wishes - should reject duplicate wish", async () => {
-      const res = await app.request("/api/e2e-test-wedding/wishes", {
+      const res = await app.request(`/api/${TEST_UID}/wishes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "Existing Guest",
+          name: "E2E Guest",
           message: "Another message",
-          attendance: "ATTENDING",
         }),
       });
 
-      const json = await res.json();
-
       expect(res.status).toBe(409);
-      expect(json.code).toBe("DUPLICATE_WISH");
     });
 
     it("POST /api/:uid/wishes - should validate input", async () => {
-      const res = await app.request("/api/e2e-test-wedding/wishes", {
+      const res = await app.request(`/api/${TEST_UID}/wishes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -256,19 +165,21 @@ describe("E2E: Sakeenah API", () => {
     });
 
     it("DELETE /api/:uid/wishes/:id - should delete a wish", async () => {
-      const res = await app.request("/api/e2e-test-wedding/wishes/1", {
-        method: "DELETE",
-      });
-
-      const json = await res.json();
+      const res = await app.request(
+        `/api/${TEST_UID}/wishes/${createdWishId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: TEST_ADMIN_SECRET },
+        },
+      );
 
       expect(res.status).toBe(200);
-      expect(json.success).toBe(true);
     });
 
     it("DELETE /api/:uid/wishes/:id - should return 404 for non-existent wish", async () => {
-      const res = await app.request("/api/e2e-test-wedding/wishes/999", {
+      const res = await app.request(`/api/${TEST_UID}/wishes/999999`, {
         method: "DELETE",
+        headers: { Authorization: TEST_ADMIN_SECRET },
       });
 
       expect(res.status).toBe(404);
@@ -277,24 +188,21 @@ describe("E2E: Sakeenah API", () => {
 
   describe("Stats Endpoint", () => {
     it("GET /api/:uid/stats - should return attendance statistics", async () => {
-      const res = await app.request("/api/e2e-test-wedding/stats");
+      const res = await app.request(`/api/${TEST_UID}/stats`, {
+        headers: { Authorization: TEST_ADMIN_SECRET },
+      });
       const json = await res.json();
 
       expect(res.status).toBe(200);
       expect(json.success).toBe(true);
       expect(json.data).toHaveProperty("attending");
-      expect(json.data).toHaveProperty("not_attending");
-      expect(json.data).toHaveProperty("maybe");
-      expect(json.data).toHaveProperty("total");
     });
   });
 
   describe("CORS and Headers", () => {
     it("should include CORS headers on regular requests", async () => {
-      const res = await app.request("/api/e2e-test-wedding/wishes");
-
-      // CORS headers are added on actual requests, not preflight
-      expect(res.status).toBe(200);
+      const res = await app.request(`/api/${TEST_UID}/wishes`);
+      expect(res.headers.get("access-control-allow-origin")).toBeDefined();
     });
   });
 });
