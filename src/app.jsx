@@ -20,7 +20,7 @@ import { AnimatePresence } from "framer-motion";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Heart, Settings } from "lucide-react";
-import { useInvitation } from "@/features/invitation";
+import { useInvitation } from "@/features/invitation/invitation-context";
 import { useLanguage } from "@/lib/language-context";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 // import { useAudio } from "@/hooks/use-audio";

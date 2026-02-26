@@ -13,7 +13,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
-import { useInvitation } from "@/features/invitation";
+import { useInvitation } from "@/features/invitation/invitation-context";
 import { searchGuest, createGuest, updateGuest } from "@/services/api";
 import { getGuestName } from "@/lib/invitation-storage";
 

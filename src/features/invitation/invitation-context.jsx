@@ -20,6 +20,14 @@ export function InvitationProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Debug log to check instantiation
+  useEffect(() => {
+    console.log(
+      "[InvitationProvider] Context instantiated with UID:",
+      invitationUid,
+    );
+  }, [invitationUid]);
+
   // 1. Initial Load: Fetch Wedding Config
   useEffect(() => {
     const loadInvitation = async () => {
@@ -112,6 +120,9 @@ export function InvitationProvider({ children }) {
 export function useInvitation() {
   const context = useContext(InvitationContext);
   if (!context) {
+    console.error(
+      "[useInvitation] Error: Attempted to use context outside of Provider.",
+    );
     throw new Error("useInvitation must be used within an InvitationProvider");
   }
   return context;

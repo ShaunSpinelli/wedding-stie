@@ -16,7 +16,7 @@ import {
   X,
   Save,
 } from "lucide-react";
-import { useInvitation } from "@/features/invitation";
+import { useInvitation } from "@/features/invitation/invitation-context";
 import { fetchGuests, setAdminSecret, updateGuest } from "@/services/api";
 import { useLanguage } from "@/lib/language-context";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,20 +33,20 @@ export default function AdminDashboard() {
   const [editForm, setEditForm] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    const loadGuests = async () => {
-      try {
-        const response = await fetchGuests(uid);
-        if (response.success) {
-          setGuests(response.data);
-        }
-      } catch (err) {
-        console.error("Failed to load guests", err);
-      } finally {
-        setLoading(false);
+  const loadGuests = async () => {
+    try {
+      const response = await fetchGuests(uid);
+      if (response.success) {
+        setGuests(response.data);
       }
-    };
+    } catch (err) {
+      console.error("Failed to load guests", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (uid) loadGuests();
   }, [uid]);
 
