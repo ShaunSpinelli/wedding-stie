@@ -3,6 +3,7 @@ import { Events } from "@/features/events";
 import { Location } from "@/features/location";
 import { Wishes } from "@/features/wishes";
 import { Timeline, Schedule } from "@/features/timeline";
+import { GuestRSVP } from "@/features/guests";
 
 // Main Invitation Content
 export default function MainContent() {
@@ -11,6 +12,7 @@ export default function MainContent() {
       <Hero />
       <Timeline />
       <Schedule />
+      <GuestRSVP />
       <Events />
       <Location />
       <Wishes />

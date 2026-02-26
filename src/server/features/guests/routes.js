@@ -16,6 +16,49 @@ import { getDbClient } from "../../lib/db-client.js";
 const guestsRoutes = new Hono();
 
 /**
+ * GET /api/:uid/guests/search
+ * Find a guest by name or email
+ */
+guestsRoutes.get("/search", zValidator("param", uidParamSchema), async (c) => {
+  const { uid } = c.req.valid("param");
+  const name = c.req.query("name");
+  const email = c.req.query("email");
+
+  if (!name && !email) {
+    return c.json({ success: false, error: "Name or email required" }, 400);
+  }
+
+  try {
+    const pool = await getDbClient(c);
+    let query = "SELECT * FROM guests WHERE invitation_uid = $1 AND (";
+    const params = [uid];
+
+    if (name && email) {
+      query += "LOWER(name) = LOWER($2) OR LOWER(email) = LOWER($3)";
+      params.push(name, email);
+    } else if (name) {
+      query += "LOWER(name) = LOWER($2)";
+      params.push(name);
+    } else {
+      query += "LOWER(email) = LOWER($2)";
+      params.push(email);
+    }
+    query += ")";
+
+    const result = await pool.query(query, params);
+
+    if (result.rows.length === 0) {
+      return c.json({ success: false, error: "Guest not found" }, 404);
+    }
+
+    return c.json({ success: true, data: result.rows[0] });
+  } catch (error) {
+    console.error("Error searching guest:", error);
+    return c.json({ success: false, error: "Internal server error" }, 500);
+  }
+});
+
+/**
  * GET /api/:uid/guests
  * List all guests for a specific invitation
  */
@@ -109,6 +152,11 @@ guestsRoutes.patch(
     const { uid, id } = c.req.valid("param");
     const updates = c.req.valid("json");
 
+    console.log(
+      `[Guests API] Updating guest ${id} for invitation ${uid}`,
+      updates,
+    );
+
     try {
       const pool = await getDbClient(c);
 
@@ -118,24 +166,29 @@ guestsRoutes.patch(
         return c.json({ success: false, error: "No updates provided" }, 400);
       }
 
+      // Important: Use explicit numbering for params starting from $3
+      // since $1 is uid and $2 is id
       const setClause = keys.map((key, i) => `${key} = $${i + 3}`).join(", ");
       const values = keys.map((key) => updates[key]);
 
-      const result = await pool.query(
-        `UPDATE guests
+      const query = `UPDATE guests
          SET ${setClause}, updated_at = CURRENT_TIMESTAMP
          WHERE invitation_uid = $1 AND id = $2
-         RETURNING *`,
-        [uid, id, ...values],
-      );
+         RETURNING *`;
+
+      console.log("[Guests API] Executing query:", query, [uid, id, ...values]);
+
+      const result = await pool.query(query, [uid, id, ...values]);
 
       if (result.rows.length === 0) {
+        console.log("[Guests API] Guest not found for update");
         return c.json({ success: false, error: "Guest not found" }, 404);
       }
 
+      console.log("[Guests API] Update successful");
       return c.json({ success: true, data: result.rows[0] });
     } catch (error) {
-      console.error("Error updating guest:", error);
+      console.error("[Guests API] Update error:", error);
       return c.json({ success: false, error: "Internal server error" }, 500);
     }
   },

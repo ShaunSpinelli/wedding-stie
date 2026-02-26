@@ -95,10 +95,7 @@ export const updateGuestSchema = createGuestSchema.partial();
  */
 export const guestIdParamSchema = z.object({
   uid: z.string().min(1),
-  id: z
-    .string()
-    .regex(/^\d+$/, "Guest ID must be a valid number")
-    .transform((val) => parseInt(val, 10)),
+  id: z.string().uuid("Invalid Guest ID format"),
 });
 
 /**

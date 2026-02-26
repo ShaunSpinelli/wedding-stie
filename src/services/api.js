@@ -108,3 +108,71 @@ export async function fetchInvitation(uid) {
   }
   return response.json();
 }
+
+/**
+ * GUESTS API
+ */
+
+/**
+ * Search guest by name or email
+ * @param {string} uid - Invitation UID
+ * @param {object} params - { name, email }
+ * @returns {Promise<object>} Response with guest data
+ */
+export async function searchGuest(uid, params = {}) {
+  const url = new URL(`${API_URL}/api/${uid}/guests/search`);
+  if (params.name) url.searchParams.set("name", params.name);
+  if (params.email) url.searchParams.set("email", params.email);
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to fetch guest");
+  }
+  return response.json();
+}
+
+/**
+ * Create a new guest record (Registration)
+ * @param {string} uid - Invitation UID
+ * @param {object} guestData - Guest data
+ * @returns {Promise<object>} Response with created guest
+ */
+export async function createGuest(uid, guestData) {
+  const response = await fetch(`${API_URL}/api/${uid}/guests`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(guestData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to register guest");
+  }
+  return response.json();
+}
+
+/**
+ * Update guest details
+ * @param {string} uid - Invitation UID
+ * @param {number} id - Guest ID
+ * @param {object} updates - Fields to update
+ * @returns {Promise<object>} Response with updated guest
+ */
+export async function updateGuest(uid, id, updates) {
+  const response = await fetch(`${API_URL}/api/${uid}/guests/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updates),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to update guest");
+  }
+  return response.json();
+}

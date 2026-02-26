@@ -107,6 +107,24 @@
         }
       ]
     },
+    "rsvp": {
+      "title": "RSVP",
+      "subtitle": "Guest Details",
+      "description": "Please confirm your attendance and provide your contact details.",
+      "loading_guest": "Fetching your details...",
+      "not_found": "We couldn't find you on the guest list, but you can register here!",
+      "form": {
+        "label_name": "Full Name",
+        "placeholder_name": "Enter your full name...",
+        "label_email": "Email Address",
+        "placeholder_email": "your@email.com",
+        "label_attendance": "Attendance Status",
+        "btn_save": "Save Details",
+        "btn_saving": "Saving...",
+        "success_update": "Your details have been updated successfully!",
+        "success_create": "You have been added to the guest list!"
+      }
+    },
     "hero": {
       "save_the_date": "Save the Date",
       "married_announcement": "We Are Getting Married",
@@ -126,7 +144,12 @@
     },
     "schedule": {
       "title": "Itinerary",
-      "subtitle": "Wedding Weekend"
+      "subtitle": "Wedding Weekend",
+      "days": {
+        "Friday": "Friday",
+        "Saturday": "Saturday",
+        "Sunday": "Sunday"
+      }
     },
     "events": {
       "title": "Wedding Event Schedule",
@@ -175,6 +198,7 @@
     },
     "nav": {
       "home": "Home",
+      "rsvp": "RSVP",
       "story": "Story",
       "itinerary": "Itinerary",
       "events": "Events",
@@ -248,7 +272,7 @@
             },
             {
               "time": "19:00 - Tard",
-              "title": "BBQ & Festivités",
+              "title": "BBQ & Festivities",
               "description": "Dîner décontracté en plein air et musique pour lancer le week-end."
             }
           ]
@@ -290,6 +314,24 @@
         }
       ]
     },
+    "rsvp": {
+      "title": "RSVP",
+      "subtitle": "Détails de l'invité",
+      "description": "Veuillez confirmer votre présence et fournir vos coordonnées.",
+      "loading_guest": "Récupération de vos détails...",
+      "not_found": "Nous ne vous avons pas trouvé sur la liste des invités, mais vous pouvez vous inscrire ici !",
+      "form": {
+        "label_name": "Nom Complet",
+        "placeholder_name": "Entrez votre nom complet...",
+        "label_email": "Adresse E-mail",
+        "placeholder_email": "votre@email.com",
+        "label_attendance": "Statut de Présence",
+        "btn_save": "Enregistrer les détails",
+        "btn_saving": "Enregistrement...",
+        "success_update": "Vos détails ont été mis à jour avec succès !",
+        "success_create": "Vous avez été ajouté à la liste des invités !"
+      }
+    },
     "hero": {
       "save_the_date": "Réservez la date",
       "married_announcement": "Nous nous marions",
@@ -309,7 +351,12 @@
     },
     "schedule": {
       "title": "Itinéraire",
-      "subtitle": "Week-end de Mariage"
+      "subtitle": "Week-end de Mariage",
+      "days": {
+        "Friday": "Vendredi",
+        "Saturday": "Samedi",
+        "Sunday": "Dimanche"
+      }
     },
     "events": {
       "title": "Programme du mariage",
@@ -358,6 +405,7 @@
     },
     "nav": {
       "home": "Accueil",
+      "rsvp": "RSVP",
       "story": "Histoire",
       "itinerary": "Programme",
       "events": "Événements",

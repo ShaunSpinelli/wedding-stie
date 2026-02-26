@@ -68,7 +68,7 @@ CREATE INDEX idx_agenda_order ON agenda(invitation_uid, order_index);
 
 -- Guests table
 CREATE TABLE guests (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     invitation_uid VARCHAR(50) NOT NULL REFERENCES invitations(uid) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255),
