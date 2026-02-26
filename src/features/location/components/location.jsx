@@ -24,7 +24,7 @@ export default function Location() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
-              className="inline-block text-rose-500 font-medium"
+              className="inline-block text-theme-main-2 font-medium"
             >
               Event Location
             </motion.span>
@@ -34,7 +34,7 @@ export default function Location() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-5xl font-serif text-gray-800"
+              className="text-4xl md:text-5xl font-serif text-theme-accent"
             >
               Location
             </motion.h2>
@@ -47,9 +47,9 @@ export default function Location() {
               viewport={{ once: true }}
               className="flex items-center justify-center gap-4 pt-4"
             >
-              <div className="h-[1px] w-12 bg-rose-200" />
-              <MapPin className="w-5 h-5 text-rose-400" />
-              <div className="h-[1px] w-12 bg-rose-200" />
+              <div className="h-[1px] w-12 bg-theme-support-1/30" />
+              <MapPin className="w-5 h-5 text-theme-support-1" />
+              <div className="h-[1px] w-12 bg-theme-support-1/30" />
             </motion.div>
           </motion.div>
 
@@ -61,7 +61,7 @@ export default function Location() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="w-full h-[400px] rounded-2xl overflow-hidden shadow-lg border-8 border-white"
+              className="w-full h-[400px] rounded-2xl overflow-hidden shadow-lg border-8 border-white/50 backdrop-blur-sm"
             >
               <iframe
                 src={config.maps_embed}
@@ -83,27 +83,29 @@ export default function Location() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                <h3 className="text-2xl font-serif text-gray-800 mb-6">
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-theme-support-1/20">
+                <h3 className="text-2xl font-serif text-theme-accent mb-6">
                   {config.location}
                 </h3>
 
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <MapPin className="w-5 h-5 text-rose-500 mt-1" />
-                    <p className="text-gray-600 flex-1">{config.address}</p>
+                    <MapPin className="w-5 h-5 text-theme-main-2 mt-1" />
+                    <p className="text-theme-accent/80 flex-1">
+                      {config.address}
+                    </p>
                   </div>
 
                   <div className="flex items-center space-x-4">
-                    <CalendarCheck className="w-5 h-5 text-rose-500" />
-                    <p className="text-gray-600">
+                    <CalendarCheck className="w-5 h-5 text-theme-main-2" />
+                    <p className="text-theme-accent/80">
                       {formatEventDate(config.date)}
                     </p>
                   </div>
 
                   <div className="flex items-center space-x-4">
-                    <Clock className="w-5 h-5 text-rose-500" />
-                    <p className="text-gray-600">{config.time}</p>
+                    <Clock className="w-5 h-5 text-theme-main-2" />
+                    <p className="text-theme-accent/80">{config.time}</p>
                   </div>
 
                   {/* Action Button - Full Width */}
@@ -115,10 +117,10 @@ export default function Location() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       viewport={{ once: true }}
-                      className="w-full flex items-center justify-center gap-1.5 bg-white text-gray-600 px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-sm"
+                      className="w-full flex items-center justify-center gap-1.5 bg-theme-main-2 text-white px-4 py-2 rounded-lg transition-colors text-sm font-semibold shadow-md"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      <span className="font-semibold">View Map</span>
+                      <span>View Map</span>
                     </motion.a>
                   </div>
                 </div>

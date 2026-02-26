@@ -105,10 +105,10 @@ const BottomBar = () => {
                 href={item.href}
                 className={cn(
                   "flex flex-col items-center justify-center py-2 px-2 rounded-xl transition-all duration-300 ease-in-out",
-                  "hover:bg-gray-50/80 cursor-pointer min-w-[60px]",
+                  "hover:bg-theme-main-1/30 cursor-pointer min-w-[60px]",
                   active === item.id
-                    ? "text-primary bg-primary/5"
-                    : "text-gray-600",
+                    ? "text-theme-main-2 bg-theme-main-1/50"
+                    : "text-gray-500",
                 )}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.95 }}
@@ -124,8 +124,8 @@ const BottomBar = () => {
                     className={cn(
                       "h-[18px] w-[18px] sm:h-5 sm:w-5 mb-0.5 sm:mb-1 transition-all duration-300",
                       active === item.id
-                        ? "stroke-rose-500 stroke-[2.5px]"
-                        : "stroke-gray-600 stroke-2",
+                        ? "stroke-theme-main-2 stroke-[2.5px]"
+                        : "stroke-gray-500 stroke-2",
                     )}
                   />
                 </motion.div>
@@ -133,8 +133,8 @@ const BottomBar = () => {
                   className={cn(
                     "text-[10px] sm:text-xs font-medium transition-all duration-300 line-clamp-1",
                     active === item.id
-                      ? "text-rose-500 font-semibold"
-                      : "text-gray-600",
+                      ? "text-theme-main-2 font-semibold"
+                      : "text-gray-500",
                   )}
                   animate={{
                     scale: active === item.id ? 1.05 : 1,

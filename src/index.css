@@ -11,6 +11,17 @@
 
 @layer base {
   :root {
+    /* Theme Config - Change these to swap themes! */
+    --theme-main-1: #f6e6b4; /* Buttercream */
+    --theme-main-2: #e0a93b; /* Honey */
+    --theme-main-3: #c76b4f; /* Terracotta */
+
+    --theme-support-1: #a3b18a; /* Sage */
+    --theme-support-2: #a9c5d3; /* Sky blue */
+    --theme-support-3: #efe6da; /* Natural linen */
+
+    --theme-accent: #5f6b3c; /* Deep olive */
+
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -35,7 +46,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
     --background: 240 10% 3.9%;
@@ -61,7 +72,7 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
 @layer base {

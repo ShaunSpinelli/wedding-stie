@@ -67,10 +67,10 @@ export default function Hero() {
         size: Math.floor(Math.random() * 2) + 8,
         color:
           i % 3 === 0
-            ? "text-rose-400"
+            ? "text-theme-main-2/40"
             : i % 3 === 1
-              ? "text-pink-400"
-              : "text-red-400",
+              ? "text-theme-support-1/40"
+              : "text-theme-accent/20",
         initialX: Math.random() * 100,
         animateX: Math.random() * 100,
       })),
@@ -119,7 +119,7 @@ export default function Hero() {
     <>
       <section
         id="home"
-        className="min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20 text-center relative overflow-hidden"
+        className="min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20 text-center relative overflow-hidden bg-theme-support-3/20"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -133,7 +133,7 @@ export default function Hero() {
             transition={{ delay: 0.2 }}
             className="inline-block mx-auto"
           >
-            <span className="px-4 py-1 text-sm bg-rose-50 text-rose-600 rounded-full border border-rose-200">
+            <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-accent rounded-full border border-theme-support-1/20">
               Save the Date
             </span>
           </motion.div>
@@ -143,7 +143,7 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-gray-500 font-light italic text-base sm:text-lg"
+              className="text-theme-main-2 font-light italic text-base sm:text-lg"
             >
               We Are Getting Married
             </motion.p>
@@ -151,7 +151,7 @@ export default function Hero() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="text-3xl sm:text-5xl lg:text-7xl font-serif bg-clip-text text-transparent bg-gradient-to-r from-rose-600 to-pink-600"
+              className="text-3xl sm:text-5xl lg:text-7xl font-serif bg-clip-text text-transparent bg-gradient-to-r from-theme-accent via-theme-main-2 to-theme-accent"
             >
               {config.groomName} & {config.brideName}
             </motion.h2>
@@ -163,11 +163,11 @@ export default function Hero() {
             transition={{ delay: 0.8 }}
             className="relative max-w-md lg:max-w-2xl mx-auto"
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-rose-50/50 to-white/50 backdrop-blur-md rounded-2xl" />
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-md rounded-2xl" />
 
-            <div className="relative px-4 sm:px-8 py-8 sm:py-10 rounded-2xl border border-rose-100/50">
+            <div className="relative px-4 sm:px-8 py-8 sm:py-10 rounded-2xl border border-theme-support-1/20">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-px">
-                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-rose-200 to-transparent" />
+                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-theme-main-2/30 to-transparent" />
               </div>
 
               <div className="space-y-6 text-center">
@@ -178,8 +178,8 @@ export default function Hero() {
                     transition={{ delay: 0.9 }}
                     className="flex items-center justify-center space-x-2"
                   >
-                    <Calendar className="w-4 h-4 text-rose-400" />
-                    <span className="text-gray-700 font-medium text-sm sm:text-base">
+                    <Calendar className="w-4 h-4 text-theme-main-2" />
+                    <span className="text-theme-accent font-medium text-sm sm:text-base">
                       {formatEventDate(config.date, "full")}
                     </span>
                   </motion.div>
@@ -190,17 +190,17 @@ export default function Hero() {
                     transition={{ delay: 1 }}
                     className="flex items-center justify-center space-x-2"
                   >
-                    <Clock className="w-4 h-4 text-rose-400" />
-                    <span className="text-gray-700 font-medium text-sm sm:text-base">
+                    <Clock className="w-4 h-4 text-theme-main-2" />
+                    <span className="text-theme-accent font-medium text-sm sm:text-base">
                       {config.time}
                     </span>
                   </motion.div>
                 </div>
 
                 <div className="flex items-center justify-center gap-3">
-                  <div className="h-px w-8 sm:w-12 bg-rose-200/50" />
-                  <div className="w-2 h-2 rounded-full bg-rose-200" />
-                  <div className="h-px w-8 sm:w-12 bg-rose-200/50" />
+                  <div className="h-px w-8 sm:w-12 bg-theme-support-1/30" />
+                  <div className="w-2 h-2 rounded-full bg-theme-main-2" />
+                  <div className="h-px w-8 sm:w-12 bg-theme-support-1/30" />
                 </div>
 
                 <motion.div
@@ -209,25 +209,25 @@ export default function Hero() {
                   transition={{ delay: 1.1 }}
                   className="space-y-2"
                 >
-                  <p className="text-gray-500 font-serif italic text-sm">
+                  <p className="text-theme-main-2/70 font-serif italic text-sm">
                     Dear:
                   </p>
-                  <p className="text-gray-600 font-medium text-sm">
+                  <p className="text-theme-accent font-medium text-sm">
                     Our Honored Guest
                   </p>
-                  <p className="text-rose-500 font-semibold text-lg">
+                  <p className="text-theme-main-2 font-semibold text-lg">
                     {guestName || "Guest Name"}
                   </p>
                 </motion.div>
               </div>
 
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-px">
-                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-rose-200 to-transparent" />
+                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-theme-main-2/30 to-transparent" />
               </div>
             </div>
 
-            <div className="absolute -top-2 -right-2 w-16 sm:w-24 h-16 sm:h-24 bg-rose-100/20 rounded-full blur-xl" />
-            <div className="absolute -bottom-2 -left-2 w-16 sm:w-24 h-16 sm:h-24 bg-rose-100/20 rounded-full blur-xl" />
+            <div className="absolute -top-2 -right-2 w-16 sm:w-24 h-16 sm:h-24 bg-theme-support-1/10 rounded-full blur-xl" />
+            <div className="absolute -bottom-2 -left-2 w-16 sm:w-24 h-16 sm:h-24 bg-theme-main-1/20 rounded-full blur-xl" />
           </motion.div>
 
           <CountdownTimer targetDate={config.date} />
@@ -246,7 +246,7 @@ export default function Hero() {
               }}
             >
               <Heart
-                className="w-10 sm:w-12 h-10 sm:h-12 text-rose-500 mx-auto"
+                className="w-10 sm:w-12 h-10 sm:h-12 text-theme-main-2 mx-auto"
                 fill="currentColor"
               />
             </motion.div>

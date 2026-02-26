@@ -30,32 +30,29 @@ export default function Events() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="inline-block text-rose-500 font-medium mb-2"
+              className="inline-block text-theme-main-2 font-medium mb-2"
             >
               Save the Date
             </motion.span>
-
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="text-4xl md:text-5xl font-serif text-gray-800 leading-tight"
+              className="text-4xl md:text-5xl font-serif text-theme-accent leading-tight"
             >
               Wedding Event Schedule
             </motion.h2>
-
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="text-gray-500 max-w-md mx-auto"
+              className="text-theme-accent/70 max-w-md mx-auto"
             >
               We invite you to celebrate this special day as the beginning of
               our journey of love
             </motion.p>
-
             {/* Decorative Line */}
             <motion.div
               initial={{ scale: 0 }}
@@ -64,12 +61,12 @@ export default function Events() {
               transition={{ delay: 0.5 }}
               className="flex items-center justify-center gap-4 mt-6"
             >
-              <div className="h-[1px] w-12 bg-rose-200" />
-              <div className="text-rose-400">
+              <div className="h-[1px] w-12 bg-theme-support-1/30" />
+              <div className="text-theme-support-1">
                 <Heart className="w-4 h-4" fill="currentColor" />
               </div>
-              <div className="h-[1px] w-12 bg-rose-200" />
-            </motion.div>
+              <div className="h-[1px] w-12 bg-theme-support-1/30" />
+            </motion.div>{" "}
           </motion.div>
 
           {/* Events Grid */}

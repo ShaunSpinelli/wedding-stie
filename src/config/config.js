@@ -1,14 +1,14 @@
 const config = {
   data: {
     // Main invitation title that appears on the page
-    title: "The Wedding of Fulan & Fulana",
+    title: "The Wedding of Shaun & Manon",
     // Opening message/description of the invitation
     description:
       "We are getting married and invite you to celebrate this special moment with us.",
     // Groom's name
-    groomName: "Fulan",
+    groomName: "Shaun",
     // Bride's name
-    brideName: "Fulana",
+    brideName: "Manon",
     // Groom's parents names
     parentGroom: "Mr. Groom & Mrs. Groom",
     // Bride's parents names
@@ -66,7 +66,7 @@ const config = {
       // Music title to display
       title: "Fulfilling Humming", // or Nature Sound
       // Whether music plays automatically when website opens
-      autoplay: true,
+      autoplay: false,
       loop: true,
     },
   },
