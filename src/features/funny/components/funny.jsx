@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 
 export default function Funny() {
+  const eyebrowPath1 = "M60 80 Q80 60 100 80 T140 80";
+  const eyebrowPath2 = "M60 70 Q80 90 100 70 T140 70";
+
   return (
     <section className="py-20 bg-theme-support-3/5 overflow-hidden">
       <div className="container mx-auto px-4 text-center space-y-8">
@@ -26,31 +29,43 @@ export default function Funny() {
               fill="currentColor"
               fillOpacity="0.1"
             />
+            {/* Animated Eyebrows */}
             <motion.path
-              d="M60 80 Q80 60 100 80 T140 80"
               stroke="currentColor"
               strokeWidth="8"
               fill="none"
               strokeLinecap="round"
+              initial={{ d: eyebrowPath1 }}
               animate={{
-                d: [
-                  "M60 80 Q80 60 100 80 T140 80",
-                  "M60 70 Q80 90 100 70 T140 70",
-                  "M60 80 Q80 60 100 80 T140 80",
-                ],
+                d: [eyebrowPath1, eyebrowPath2, eyebrowPath1],
               }}
-              transition={{ repeat: Infinity, duration: 2 }}
+              transition={{
+                repeat: Infinity,
+                duration: 2,
+                ease: "easeInOut",
+              }}
             />
-            <circle cx="70" cy="100" r="10" fill="currentColor" />
-            <circle cx="130" cy="100" r="10" fill="currentColor" />
+
+            {/* Eyes */}
+            <circle cx="70" cy="110" r="10" fill="currentColor" />
+            <circle cx="130" cy="110" r="10" fill="currentColor" />
+
+            {/* Animated Mouth */}
             <motion.path
               d="M60 140 Q100 170 140 140"
               stroke="currentColor"
               strokeWidth="8"
               fill="none"
               strokeLinecap="round"
-              animate={{ strokeWidth: [8, 12, 8] }}
-              transition={{ repeat: Infinity, duration: 1 }}
+              animate={{
+                strokeWidth: [8, 12, 8],
+                scaleY: [1, 1.1, 1],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 1.5,
+                ease: "easeInOut",
+              }}
             />
           </svg>
 
