@@ -54,7 +54,6 @@ export default function Schedule() {
                 >
                   {dayPlan.day}
                 </motion.h3>
-                {/* Visual horizontal guide */}
                 <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-theme-support-1/10 -z-0" />
               </div>
 
@@ -64,16 +63,17 @@ export default function Schedule() {
                   className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 hidden md:block"
                   style={{
                     backgroundColor: "var(--theme-support-1)",
-                    opacity: 0.4,
+                    opacity: 0.5,
                   }}
                 />
 
-                {/* THE VERTICAL LINE - MOBILE */}
+                {/* THE VERTICAL LINE - MOBILE (Aligned at left-10 for better indentation) */}
                 <div
-                  className="absolute left-4 top-0 bottom-0 w-0.5 md:hidden"
+                  className="absolute left-10 top-0 bottom-0 w-0.5 md:hidden block"
                   style={{
                     backgroundColor: "var(--theme-support-1)",
-                    opacity: 0.4,
+                    opacity: 0.6,
+                    transform: "translateX(-50%)",
                   }}
                 />
 
@@ -91,7 +91,6 @@ export default function Schedule() {
                       >
                         {/* DESKTOP ROW */}
                         <div className="hidden md:grid grid-cols-[1fr_100px_1fr] items-center w-full min-h-[100px]">
-                          {/* Left Column */}
                           <div className="flex flex-col items-end text-right pr-8">
                             {isEven ? (
                               <div className="flex items-center gap-3 text-theme-main-2 font-bold text-sm tracking-widest uppercase">
@@ -110,12 +109,10 @@ export default function Schedule() {
                             )}
                           </div>
 
-                          {/* Center Column (Dot) */}
                           <div className="relative flex justify-center items-center">
                             <div className="w-4 h-4 rounded-full bg-white border-2 border-theme-main-2 shadow-sm z-10" />
                           </div>
 
-                          {/* Right Column */}
                           <div className="flex flex-col items-start text-left pl-8">
                             {isEven ? (
                               <div className="space-y-1">
@@ -136,16 +133,19 @@ export default function Schedule() {
                         </div>
 
                         {/* MOBILE ROW */}
-                        <div className="md:hidden flex flex-col pl-12 relative mb-10 last:mb-0">
-                          {/* Dot */}
-                          <div className="absolute left-[-4px] top-1.5 w-3.5 h-3.5 rounded-full bg-theme-main-2 z-10 border-2 border-white shadow-sm" />
+                        <div className="md:hidden flex flex-col pl-20 relative mb-12 last:mb-0">
+                          {/* Dot - Using same left-10 position as the line */}
+                          <div
+                            className="absolute left-10 top-[32px] w-4 h-4 rounded-full bg-theme-main-2 z-10 border-2 border-white shadow-md"
+                            style={{ transform: "translate(-50%, -50%)" }}
+                          />
 
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2 text-theme-main-2 font-bold text-xs tracking-wider uppercase">
-                              <Clock className="w-3.5 h-3.5" />
+                          <div className="space-y-1.5">
+                            <div className="flex items-center gap-2 text-theme-main-2 font-bold text-[10px] tracking-widest uppercase opacity-80">
+                              <Clock className="w-3 h-3" />
                               <span>{event.time}</span>
                             </div>
-                            <h4 className="text-lg font-bold text-theme-accent">
+                            <h4 className="text-lg font-bold text-theme-accent leading-tight">
                               {event.title}
                             </h4>
                             <p className="text-theme-accent/60 text-sm leading-relaxed">
