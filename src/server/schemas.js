@@ -82,10 +82,19 @@ export const uidParamSchema = z.object({
  */
 export const createGuestSchema = z.object({
   name: z.string().min(1, "Name is required").max(255).trim(),
-  email: z.string().email("Invalid email address").optional().or(z.literal("")),
+  email: z
+    .string()
+    .email("Invalid email address")
+    .optional()
+    .nullable()
+    .or(z.literal("")),
   attending: z.enum(["ATTENDING", "NOT_ATTENDING", "MAYBE"]).default("MAYBE"),
-  country: z.string().max(100).optional().or(z.literal("")),
+  country: z.string().max(100).optional().nullable().or(z.literal("")),
   features: z.array(z.string()).default([]),
+  dietary_requirements: z.string().optional().nullable().or(z.literal("")),
+  has_plus_one: z.boolean().default(false),
+  plus_one_name: z.string().max(255).optional().nullable().or(z.literal("")),
+  children_count: z.number().int().min(0).default(0),
 });
 
 export const updateGuestSchema = createGuestSchema.partial();

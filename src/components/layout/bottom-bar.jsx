@@ -5,9 +5,9 @@ import {
   Home,
   CalendarHeart,
   MapPin,
-  MessageCircleHeart,
   History,
   Calendar,
+  HeartHandshake,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-context";
@@ -21,14 +21,9 @@ const menuItems = [
     href: "#schedule",
     id: "schedule",
   },
+  { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
   { icon: CalendarHeart, labelKey: "nav.events", href: "#event", id: "event" },
   { icon: MapPin, labelKey: "nav.location", href: "#location", id: "location" },
-  {
-    icon: MessageCircleHeart,
-    labelKey: "nav.wishes",
-    href: "#wishes",
-    id: "wishes",
-  },
 ];
 
 /**

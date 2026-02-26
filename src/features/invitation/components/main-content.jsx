@@ -1,9 +1,10 @@
 import Hero from "@/features/invitation/components/hero";
 import { Events } from "@/features/events";
 import { Location } from "@/features/location";
-import { Wishes } from "@/features/wishes";
 import { Timeline, Schedule } from "@/features/timeline";
 import { GuestRSVP } from "@/features/guests";
+import { FeatureGate } from "@/components/ui/feature-gate";
+import Funny from "@/features/funny/components/funny";
 
 // Main Invitation Content
 export default function MainContent() {
@@ -15,7 +16,11 @@ export default function MainContent() {
       <GuestRSVP />
       <Events />
       <Location />
-      <Wishes />
+
+      {/* Proof of Concept: Conditional Component based on tags */}
+      <FeatureGate feature="funny">
+        <Funny />
+      </FeatureGate>
     </>
   );
 }

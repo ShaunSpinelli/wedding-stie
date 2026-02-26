@@ -119,6 +119,12 @@
         "label_email": "Email Address",
         "placeholder_email": "your@email.com",
         "label_attendance": "Attendance Status",
+        "label_dietary": "Dietary Requirements",
+        "placeholder_dietary": "Allergies, vegetarian, etc...",
+        "label_plus_one": "Will you bring a plus one?",
+        "label_plus_one_name": "Plus One Name",
+        "placeholder_plus_one_name": "Their full name...",
+        "label_children": "Number of Children",
         "btn_save": "Save Details",
         "btn_saving": "Saving...",
         "success_update": "Your details have been updated successfully!",
@@ -272,7 +278,7 @@
             },
             {
               "time": "19:00 - Tard",
-              "title": "BBQ & Festivities",
+              "title": "BBQ & Festivités",
               "description": "Dîner décontracté en plein air et musique pour lancer le week-end."
             }
           ]
@@ -326,6 +332,12 @@
         "label_email": "Adresse E-mail",
         "placeholder_email": "votre@email.com",
         "label_attendance": "Statut de Présence",
+        "label_dietary": "Régime Alimentaire",
+        "placeholder_dietary": "Allergies, végétarien, etc...",
+        "label_plus_one": "Serez-vous accompagné ?",
+        "label_plus_one_name": "Nom de l'accompagnateur",
+        "placeholder_plus_one_name": "Son nom complet...",
+        "label_children": "Nombre d'enfants",
         "btn_save": "Enregistrer les détails",
         "btn_saving": "Enregistrement...",
         "success_update": "Vos détails ont été mis à jour avec succès !",

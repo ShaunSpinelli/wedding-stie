@@ -12,6 +12,7 @@ import {
   guestIdParamSchema,
 } from "../../schemas.js";
 import { getDbClient } from "../../lib/db-client.js";
+import { adminAuth, isAdmin } from "../../lib/auth.js";
 
 const guestsRoutes = new Hono();
 
@@ -51,7 +52,24 @@ guestsRoutes.get("/search", zValidator("param", uidParamSchema), async (c) => {
       return c.json({ success: false, error: "Guest not found" }, 404);
     }
 
-    return c.json({ success: true, data: result.rows[0] });
+    // Convert snake_case from DB to camelCase for frontend
+    const guest = result.rows[0];
+    const data = {
+      id: guest.id,
+      name: guest.name,
+      email: guest.email,
+      attending: guest.attending,
+      country: guest.country,
+      features: guest.features,
+      dietary_requirements: guest.dietary_requirements,
+      has_plus_one: guest.has_plus_one,
+      plus_one_name: guest.plus_one_name,
+      children_count: guest.children_count,
+      createdAt: guest.created_at,
+      updatedAt: guest.updated_at,
+    };
+
+    return c.json({ success: true, data });
   } catch (error) {
     console.error("Error searching guest:", error);
     return c.json({ success: false, error: "Internal server error" }, 500);
@@ -60,28 +78,48 @@ guestsRoutes.get("/search", zValidator("param", uidParamSchema), async (c) => {
 
 /**
  * GET /api/:uid/guests
- * List all guests for a specific invitation
+ * List all guests for a specific invitation (Admin only)
  */
-guestsRoutes.get("/", zValidator("param", uidParamSchema), async (c) => {
-  const { uid } = c.req.valid("param");
+guestsRoutes.get(
+  "/",
+  adminAuth,
+  zValidator("param", uidParamSchema),
+  async (c) => {
+    const { uid } = c.req.valid("param");
 
-  try {
-    const pool = await getDbClient(c);
-    const result = await pool.query(
-      "SELECT * FROM guests WHERE invitation_uid = $1 ORDER BY created_at DESC",
-      [uid],
-    );
+    try {
+      const pool = await getDbClient(c);
+      const result = await pool.query(
+        "SELECT * FROM guests WHERE invitation_uid = $1 ORDER BY created_at DESC",
+        [uid],
+      );
 
-    return c.json({ success: true, data: result.rows });
-  } catch (error) {
-    console.error("Error fetching guests:", error);
-    return c.json({ success: false, error: "Internal server error" }, 500);
-  }
-});
+      const data = result.rows.map((guest) => ({
+        id: guest.id,
+        name: guest.name,
+        email: guest.email,
+        attending: guest.attending,
+        country: guest.country,
+        features: guest.features,
+        dietary_requirements: guest.dietary_requirements,
+        has_plus_one: guest.has_plus_one,
+        plus_one_name: guest.plus_one_name,
+        children_count: guest.children_count,
+        createdAt: guest.created_at,
+        updatedAt: guest.updated_at,
+      }));
+
+      return c.json({ success: true, data });
+    } catch (error) {
+      console.error("Error fetching guests:", error);
+      return c.json({ success: false, error: "Internal server error" }, 500);
+    }
+  },
+);
 
 /**
  * POST /api/:uid/guests
- * Add a new guest
+ * Add a new guest (Public registration)
  */
 guestsRoutes.post(
   "/",
@@ -94,8 +132,8 @@ guestsRoutes.post(
     try {
       const pool = await getDbClient(c);
       const result = await pool.query(
-        `INSERT INTO guests (invitation_uid, name, email, attending, country, features)
-         VALUES ($1, $2, $3, $4, $5, $6)
+        `INSERT INTO guests (invitation_uid, name, email, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, children_count)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
          RETURNING *`,
         [
           uid,
@@ -104,10 +142,32 @@ guestsRoutes.post(
           guestData.attending,
           guestData.country || null,
           guestData.features || [],
+          guestData.dietary_requirements || null,
+          guestData.has_plus_one || false,
+          guestData.plus_one_name || null,
+          guestData.children_count || 0,
         ],
       );
 
-      return c.json({ success: true, data: result.rows[0] }, 201);
+      const guest = result.rows[0];
+      return c.json(
+        {
+          success: true,
+          data: {
+            id: guest.id,
+            name: guest.name,
+            email: guest.email,
+            attending: guest.attending,
+            country: guest.country,
+            features: guest.features,
+            dietary_requirements: guest.dietary_requirements,
+            has_plus_one: guest.has_plus_one,
+            plus_one_name: guest.plus_one_name,
+            children_count: guest.children_count,
+          },
+        },
+        201,
+      );
     } catch (error) {
       console.error("Error creating guest:", error);
       return c.json({ success: false, error: "Internal server error" }, 500);
@@ -117,7 +177,7 @@ guestsRoutes.post(
 
 /**
  * GET /api/:uid/guests/:id
- * Get a single guest
+ * Get a single guest (Admin or own record via UUID)
  */
 guestsRoutes.get("/:id", zValidator("param", guestIdParamSchema), async (c) => {
   const { uid, id } = c.req.valid("param");
@@ -133,7 +193,22 @@ guestsRoutes.get("/:id", zValidator("param", guestIdParamSchema), async (c) => {
       return c.json({ success: false, error: "Guest not found" }, 404);
     }
 
-    return c.json({ success: true, data: result.rows[0] });
+    const guest = result.rows[0];
+    return c.json({
+      success: true,
+      data: {
+        id: guest.id,
+        name: guest.name,
+        email: guest.email,
+        attending: guest.attending,
+        country: guest.country,
+        features: guest.features,
+        dietary_requirements: guest.dietary_requirements,
+        has_plus_one: guest.has_plus_one,
+        plus_one_name: guest.plus_one_name,
+        children_count: guest.children_count,
+      },
+    });
   } catch (error) {
     console.error("Error fetching guest:", error);
     return c.json({ success: false, error: "Internal server error" }, 500);
@@ -142,7 +217,7 @@ guestsRoutes.get("/:id", zValidator("param", guestIdParamSchema), async (c) => {
 
 /**
  * PATCH /api/:uid/guests/:id
- * Update a guest
+ * Update a guest (Admin or own record via UUID)
  */
 guestsRoutes.patch(
   "/:id",
@@ -150,24 +225,45 @@ guestsRoutes.patch(
   zValidator("json", updateGuestSchema),
   async (c) => {
     const { uid, id } = c.req.valid("param");
-    const updates = c.req.valid("json");
+    const incomingUpdates = c.req.valid("json");
 
-    console.log(
-      `[Guests API] Updating guest ${id} for invitation ${uid}`,
-      updates,
-    );
+    // Mapping frontend camelCase to backend snake_case
+    const fieldMapping = {
+      name: "name",
+      email: "email",
+      attending: "attending",
+      country: "country",
+      features: "features",
+      dietary_requirements: "dietary_requirements",
+      has_plus_one: "has_plus_one",
+      plus_one_name: "plus_one_name",
+      children_count: "children_count",
+    };
+
+    let updates = {};
+    Object.keys(incomingUpdates).forEach((key) => {
+      if (fieldMapping[key]) {
+        updates[fieldMapping[key]] = incomingUpdates[key];
+      }
+    });
+
+    // Authorization check: Non-admins cannot update country or features
+    if (!isAdmin(c)) {
+      delete updates.country;
+      delete updates.features;
+    }
+
+    const keys = Object.keys(updates);
+    if (keys.length === 0) {
+      return c.json(
+        { success: false, error: "No authorized updates provided" },
+        400,
+      );
+    }
 
     try {
       const pool = await getDbClient(c);
 
-      // Build dynamic update query
-      const keys = Object.keys(updates);
-      if (keys.length === 0) {
-        return c.json({ success: false, error: "No updates provided" }, 400);
-      }
-
-      // Important: Use explicit numbering for params starting from $3
-      // since $1 is uid and $2 is id
       const setClause = keys.map((key, i) => `${key} = $${i + 3}`).join(", ");
       const values = keys.map((key) => updates[key]);
 
@@ -176,19 +272,30 @@ guestsRoutes.patch(
          WHERE invitation_uid = $1 AND id = $2
          RETURNING *`;
 
-      console.log("[Guests API] Executing query:", query, [uid, id, ...values]);
-
       const result = await pool.query(query, [uid, id, ...values]);
 
       if (result.rows.length === 0) {
-        console.log("[Guests API] Guest not found for update");
         return c.json({ success: false, error: "Guest not found" }, 404);
       }
 
-      console.log("[Guests API] Update successful");
-      return c.json({ success: true, data: result.rows[0] });
+      const guest = result.rows[0];
+      return c.json({
+        success: true,
+        data: {
+          id: guest.id,
+          name: guest.name,
+          email: guest.email,
+          attending: guest.attending,
+          country: guest.country,
+          features: guest.features,
+          dietary_requirements: guest.dietary_requirements,
+          has_plus_one: guest.has_plus_one,
+          plus_one_name: guest.plus_one_name,
+          children_count: guest.children_count,
+        },
+      });
     } catch (error) {
-      console.error("[Guests API] Update error:", error);
+      console.error("Update error:", error);
       return c.json({ success: false, error: "Internal server error" }, 500);
     }
   },
@@ -196,10 +303,11 @@ guestsRoutes.patch(
 
 /**
  * DELETE /api/:uid/guests/:id
- * Delete a guest
+ * Delete a guest (Admin only)
  */
 guestsRoutes.delete(
   "/:id",
+  adminAuth,
   zValidator("param", guestIdParamSchema),
   async (c) => {
     const { uid, id } = c.req.valid("param");

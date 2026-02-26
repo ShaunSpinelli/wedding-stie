@@ -7,6 +7,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { createWishSchema, wishesQuerySchema } from "../../schemas.js";
 import { getDbClient } from "../../lib/db-client.js";
+import { adminAuth } from "../../lib/auth.js";
 
 const wishesRoutes = new Hono();
 
@@ -134,7 +135,7 @@ wishesRoutes.post("/", zValidator("json", createWishSchema), async (c) => {
  * DELETE /:uid/wishes/:id
  * Delete a wish (admin only)
  */
-wishesRoutes.delete("/:id", async (c) => {
+wishesRoutes.delete("/:id", adminAuth, async (c) => {
   const uid = c.req.param("uid");
   const id = c.req.param("id");
 
@@ -188,9 +189,9 @@ wishesRoutes.get("/check/:name", async (c) => {
 
 /**
  * GET /:uid/stats
- * Get attendance statistics
+ * Get attendance statistics (admin only)
  */
-wishesRoutes.get("/stats", async (c) => {
+wishesRoutes.get("/stats", adminAuth, async (c) => {
   const uid = c.req.param("uid");
 
   try {

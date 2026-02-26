@@ -17,12 +17,14 @@
 // src/App.jsx
 import { useState, lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Heart } from "lucide-react";
+import { Heart, Settings } from "lucide-react";
 import { useInvitation } from "@/features/invitation";
 import { useLanguage } from "@/lib/language-context";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 // import { useAudio } from "@/hooks/use-audio";
+import { getAdminSecret } from "@/services/api";
 import staticConfig from "@/config/config";
 
 // Lazy load components for better performance
@@ -33,52 +35,40 @@ const MainContent = lazy(
 const LandingPage = lazy(
   () => import("@/features/invitation/components/landing-page"),
 );
+const AdminDashboard = lazy(
+  () => import("@/features/admin/components/admin-dashboard"),
+);
+const AdminLogin = lazy(
+  () => import("@/features/admin/components/admin-login"),
+);
 
 /**
  * App component serves as the root of the application.
- *
- * It manages the state to determine whether the invitation content should be shown.
- * Initially, the invitation is closed and the LandingPage component is rendered.
- * Once triggered, the Layout component containing MainContent is displayed.
- *
- * This component also uses HelmetProvider and Helmet to set up various meta tags:
- *   - Primary meta tags: title and description.
- *   - Open Graph tags for Facebook.
- *   - Twitter meta tags for summary and large image preview.
- *   - Favicon link and additional meta tags for responsive design and theme color.
- *
- * @component
- * @example
- * // Renders the App component
- * <App />
  */
 function App() {
   const [isInvitationOpen, setIsInvitationOpen] = useState(false);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] =
+    useState(!!getAdminSecret());
   const { config, isLoading, error } = useInvitation();
   const { t } = useLanguage();
+  const location = useLocation();
+
+  const isAdminPath = location.pathname === "/admin";
 
   // Use config from API if available, otherwise fall back to static config
   const activeConfig = config || staticConfig.data;
 
-  /*
-  // Initialize audio with config settings
-  const audioControls = useAudio({
-    src: activeConfig?.audio?.src || "/audio/fulfilling-humming.mp3",
-    loop: activeConfig?.audio?.loop !== false,
-  });
-  */
-
   // Handle opening the invitation - this is called from a user click
   const handleOpenInvitation = async () => {
-    /*
-    // Start audio playback during user interaction
-    await audioControls.play();
-    */
     setIsInvitationOpen(true);
   };
 
+  const handleAdminLogin = () => {
+    setIsAdminAuthenticated(true);
+  };
+
   // Show loading state
-  if (isLoading) {
+  if (isLoading && !isAdminPath) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-theme-support-3">
         <div className="text-center">
@@ -93,7 +83,7 @@ function App() {
   }
 
   // Show error state
-  if (error) {
+  if (error && !isAdminPath) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-theme-support-3">
         <div className="text-center max-w-md mx-auto p-6">
@@ -111,6 +101,18 @@ function App() {
   return (
     <HelmetProvider>
       <LanguageToggle />
+
+      {/* Admin Toggle Button */}
+      {location.pathname !== "/admin" && (
+        <Link
+          to="/admin"
+          className="fixed top-4 right-4 z-[100] flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 border border-theme-support-1/30 shadow-lg text-theme-accent hover:bg-theme-main-1/50 transition-all text-xs font-bold"
+        >
+          <Settings className="w-3.5 h-3.5" />
+          <span>{isAdminAuthenticated ? "DASHBOARD" : "ADMIN"}</span>
+        </Link>
+      )}
+
       <Helmet>
         {/* Primary Meta Tags */}
         <title>{t("wedding.title")}</title>
@@ -162,15 +164,32 @@ function App() {
           </div>
         }
       >
-        <AnimatePresence mode="wait">
-          {!isInvitationOpen ? (
-            <LandingPage onOpenInvitation={handleOpenInvitation} />
-          ) : (
-            <Layout /* audioControls={audioControls} */>
-              <MainContent />
-            </Layout>
-          )}
-        </AnimatePresence>
+        <Routes>
+          <Route
+            path="/admin"
+            element={
+              isAdminAuthenticated ? (
+                <AdminDashboard />
+              ) : (
+                <AdminLogin onLoginSuccess={handleAdminLogin} />
+              )
+            }
+          />
+          <Route
+            path="/*"
+            element={
+              <AnimatePresence mode="wait">
+                {!isInvitationOpen ? (
+                  <LandingPage onOpenInvitation={handleOpenInvitation} />
+                ) : (
+                  <Layout>
+                    <MainContent />
+                  </Layout>
+                )}
+              </AnimatePresence>
+            }
+          />
+        </Routes>
       </Suspense>
     </HelmetProvider>
   );

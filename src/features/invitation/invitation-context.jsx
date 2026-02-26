@@ -1,172 +1,118 @@
-import { createContext, useContext, useMemo, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { fetchInvitation } from "@/services/api";
 import {
-  getWeddingUid,
-  storeWeddingUid,
-  storeGuestName,
-  hasInvitationData,
-} from "@/lib/invitation-storage";
+  createContext,
+  useContext,
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
+import { storeGuestName, getGuestName } from "@/lib/invitation-storage";
 import { safeBase64 } from "@/lib/base64";
+import { fetchInvitation, searchGuest } from "@/services/api";
 
-const InvitationContext = createContext(null);
+const InvitationContext = createContext();
 
-/**
- * InvitationProvider component
- * Provides the invitation UID and config data throughout the app
- *
- * Security Features:
- * - Stores UID in localStorage to hide from URL
- * - Cleans URL after extracting parameters
- * - Prevents Wayback Machine scraping
- * - 30-day expiration for stored data
- * - Automatically updates when different UID or guest name is provided
- *
- * The UID priority:
- * 1. URL parameters (if different from stored, updates localStorage)
- * 2. localStorage (if not expired and no URL override)
- * 3. Environment variable: VITE_INVITATION_UID
- *
- * @example
- * <InvitationProvider>
- *   <App />
- * </InvitationProvider>
- */
 export function InvitationProvider({ children }) {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const invitationUid = "shaun-manon-2027";
 
-  const invitationUid = useMemo(() => {
-    // Extract UID from URL first (to check if it's different)
-    let uidFromUrl = null;
+  const [config, setConfig] = useState(null);
+  const [guest, setGuest] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    // 1. Try to get UID from URL path (e.g., /rifqi-dina-2025)
-    const pathSegments = location.pathname.split("/").filter(Boolean);
-    if (pathSegments.length > 0) {
-      uidFromUrl = pathSegments[0];
-    }
-
-    // 2. Try to get UID from URL query parameter (legacy support)
-    if (!uidFromUrl) {
-      const urlParams = new URLSearchParams(location.search);
-      uidFromUrl = urlParams.get("uid");
-    }
-
-    // Check if we have a stored UID
-    const storedUid = getWeddingUid();
-
-    // If URL has UID and it's different from stored, update localStorage
-    if (uidFromUrl && uidFromUrl !== storedUid) {
-      console.log(`Updating invitation from "${storedUid}" to "${uidFromUrl}"`);
-      storeWeddingUid(uidFromUrl);
-      return uidFromUrl;
-    }
-
-    // If URL has UID (same as stored or no stored), use it
-    if (uidFromUrl) {
-      storeWeddingUid(uidFromUrl);
-      return uidFromUrl;
-    }
-
-    // If no URL UID but have stored UID, use stored
-    if (storedUid) {
-      return storedUid;
-    }
-
-    // 3. Fallback to environment variable
-    const uidFromEnv = import.meta.env.VITE_INVITATION_UID;
-
-    if (uidFromEnv) {
-      storeWeddingUid(uidFromEnv);
-      return uidFromEnv;
-    }
-
-    // If no UID is provided, log a warning
-    console.warn(
-      "No invitation UID found. Please provide /your-uid in the URL or set VITE_INVITATION_UID in .env",
-    );
-    return null;
-  }, [location.pathname, location.search]);
-
-  // Extract and store guest name from URL, then clean URL
+  // 1. Initial Load: Fetch Wedding Config
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const guestParam = urlParams.get("guest");
-
-    // Store guest name if present (even if different from stored - auto-update)
-    if (guestParam) {
+    const loadInvitation = async () => {
       try {
-        const decodedName = safeBase64.decode(guestParam);
-        if (decodedName) {
-          const storedName = localStorage.getItem("sakeenah_guest_name");
-          if (decodedName !== storedName) {
-            console.log(
-              `Updating guest name from "${storedName}" to "${decodedName}"`,
-            );
-          }
-          storeGuestName(decodedName);
+        const response = await fetchInvitation(invitationUid);
+        if (response.success) {
+          setConfig(response.data);
+        } else {
+          setError(response.error || "Failed to load invitation");
         }
-      } catch (error) {
-        console.error("Error decoding guest name:", error);
+      } catch {
+        setError("Invitation not found");
+      } finally {
+        if (!getGuestName()) setIsLoading(false);
       }
-    }
+    };
 
-    // Clean URL if we have UID in path or guest in query params
-    const hasUidInPath = location.pathname !== "/" && location.pathname !== "";
-    const hasGuestParam = urlParams.has("guest");
-    const hasUidParam = urlParams.has("uid");
+    loadInvitation();
+  }, [invitationUid]);
 
-    if (hasUidInPath || hasGuestParam || hasUidParam) {
-      // Only clean URL if we have data stored
-      if (hasInvitationData()) {
-        // Use window.history.replaceState for clean URL without reload
-        window.history.replaceState({}, "", "/");
+  // 2. Guest Identification & Features
+  useEffect(() => {
+    const identifyGuest = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const guestParam = urlParams.get("guest");
+      let nameToSearch = getGuestName();
+
+      if (guestParam) {
+        try {
+          const decodedName = safeBase64.decode(guestParam);
+          if (decodedName) {
+            nameToSearch = decodedName;
+            storeGuestName(decodedName);
+            window.history.replaceState({}, "", window.location.pathname);
+          }
+        } catch (e) {
+          console.error("Error decoding guest name", e);
+        }
       }
-    }
-  }, [location.pathname, location.search, navigate]);
 
-  const {
-    data: config,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["invitation", invitationUid],
-    queryFn: async () => {
-      const response = await fetchInvitation(invitationUid);
-      if (response.success) {
-        return response.data;
+      if (nameToSearch) {
+        try {
+          const response = await searchGuest(invitationUid, {
+            name: nameToSearch,
+          });
+          if (response.success) {
+            setGuest(response.data);
+          }
+        } catch {
+          console.log("Guest record not found for:", nameToSearch);
+        }
       }
-      throw new Error("Failed to load invitation");
+      setIsLoading(false);
+    };
+
+    identifyGuest();
+  }, [invitationUid]);
+
+  // Helper to check if guest has a specific feature tag
+  const hasFeature = useCallback(
+    (featureName) => {
+      if (!guest || !guest.features) return false;
+      return guest.features.some(
+        (f) => f.toLowerCase() === featureName.toLowerCase(),
+      );
     },
-    enabled: !!invitationUid,
-    staleTime: 10 * 60 * 1000, // 10 minutes
-  });
+    [guest],
+  );
+
+  const value = useMemo(
+    () => ({
+      uid: invitationUid,
+      config,
+      guest,
+      setGuest,
+      hasFeature,
+      isLoading,
+      error,
+    }),
+    [config, guest, isLoading, error, hasFeature],
+  );
 
   return (
-    <InvitationContext.Provider
-      value={{ uid: invitationUid, config, isLoading, error: error?.message }}
-    >
+    <InvitationContext.Provider value={value}>
       {children}
     </InvitationContext.Provider>
   );
 }
 
-/**
- * Custom hook to access the invitation UID
- *
- * @returns {object} Object containing the invitation UID
- * @throws {Error} If used outside of InvitationProvider
- *
- * @example
- * const { uid } = useInvitation();
- */
 export function useInvitation() {
   const context = useContext(InvitationContext);
-
-  if (context === null) {
-    throw new Error("useInvitation must be used within InvitationProvider");
+  if (!context) {
+    throw new Error("useInvitation must be used within an InvitationProvider");
   }
-
   return context;
 }
