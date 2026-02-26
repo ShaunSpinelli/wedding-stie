@@ -1,103 +1,56 @@
 /**
- * Formats a date string into Indonesian format
+ * Formats a date string into English format
  * @param {string} isoString - The ISO date string to format
  * @param {('full'|'short'|'time')} [format='full'] - The format type to use
  * @param {boolean} [isJakartaTime=false] - Whether the input is already in Jakarta time
- * @returns {string} The formatted date string in Indonesian
+ * @returns {string} The formatted date string in English
  *
  * @example
- * // returns "Senin, 1 Januari 2024"
+ * // returns "Monday, January 1, 2024"
  * formatEventDate("2024-01-01T00:00:00.000Z", "full")
  *
- * // returns "1 Januari 2024"
+ * // returns "January 1, 2024"
  * formatEventDate("2024-01-01T00:00:00.000Z", "short")
  *
- * // returns "00:00"
+ * // returns "12:00 AM"
  * formatEventDate("2024-01-01T00:00:00.000Z", "time")
  */
-export const formatEventDate = (isoString, format = 'full', isJakartaTime = false) => {
-    let date = new Date(isoString);
+export const formatEventDate = (
+  isoString,
+  format = "full",
+  isJakartaTime = false,
+) => {
+  let date = new Date(isoString);
 
-    // If the timestamp is already in Jakarta time (from API), we need to adjust it
-    // because JavaScript Date constructor assumes UTC for ISO strings
-    if (isJakartaTime && isoString && !isoString.endsWith('Z')) {
-        // Add 'Z' to treat it as UTC, then it will be converted correctly to Jakarta time
-        date = new Date(isoString + 'Z');
-    }
+  // If the timestamp is already in Jakarta time (from API), we need to adjust it
+  // because JavaScript Date constructor assumes UTC for ISO strings
+  if (isJakartaTime && isoString && !isoString.endsWith("Z")) {
+    // Add 'Z' to treat it as UTC, then it will be converted correctly
+    date = new Date(isoString + "Z");
+  }
 
-    const formats = {
-        full: {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            timeZone: 'Asia/Jakarta'
-        },
-        short: {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            timeZone: 'Asia/Jakarta'
-        },
-        time: {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-            timeZone: 'Asia/Jakarta'
-        }
-    };
+  const formats = {
+    full: {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    },
+    short: {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    },
+    time: {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    },
+  };
 
-    // Indonesian month names mapping
-    const monthsIndonesian = {
-        'January': 'Januari',
-        'February': 'Februari',
-        'March': 'Maret',
-        'April': 'April',
-        'May': 'Mei',
-        'June': 'Juni',
-        'July': 'Juli',
-        'August': 'Agustus',
-        'September': 'September',
-        'October': 'Oktober',
-        'November': 'November',
-        'December': 'Desember'
-    };
+  if (format === "time") {
+    return date.toLocaleTimeString("en-US", formats[format]);
+  }
 
-    // Indonesian day names mapping
-    const daysIndonesian = {
-        'Sunday': 'Minggu',
-        'Monday': 'Senin',
-        'Tuesday': 'Selasa',
-        'Wednesday': 'Rabu',
-        'Thursday': 'Kamis',
-        'Friday': 'Jumat',
-        'Saturday': 'Sabtu'
-    };
-
-    let formatted = date.toLocaleDateString('en-US', formats[format]);
-
-    // Handle time format separately
-    if (format === 'time') {
-        return date.toLocaleTimeString('en-US', formats[format]);
-    }
-
-    // Replace English month and day names with Indonesian ones
-    Object.keys(monthsIndonesian).forEach(english => {
-        formatted = formatted.replace(english, monthsIndonesian[english]);
-    });
-
-    Object.keys(daysIndonesian).forEach(english => {
-        formatted = formatted.replace(english, daysIndonesian[english]);
-    });
-
-    // Format adjustment for full date
-    if (format === 'full') {
-        // Convert "Hari, Tanggal Bulan Tahun" format
-        const parts = formatted.split(', ');
-        if (parts.length === 2) {
-            formatted = `${parts[0]}, ${parts[1]}`;
-        }
-    }
-
-    return formatted;
+  return date.toLocaleDateString("en-US", formats[format]);
 };

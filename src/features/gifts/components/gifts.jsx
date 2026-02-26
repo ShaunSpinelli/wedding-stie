@@ -41,7 +41,7 @@ export default function Gifts() {
               transition={{ delay: 0.2 }}
               className="inline-block text-rose-500 font-medium"
             >
-              Hadiah Pernikahan
+              Wedding Gifts
             </motion.span>
 
             <motion.h2
@@ -50,7 +50,7 @@ export default function Gifts() {
               transition={{ delay: 0.3 }}
               className="text-4xl md:text-5xl font-serif text-gray-800"
             >
-              Berikan Hadiah
+              Send a Gift
             </motion.h2>
 
             {/* Decorative Divider */}
@@ -77,8 +77,8 @@ export default function Gifts() {
 
               {/* Main Message */}
               <p className="text-gray-600 leading-relaxed">
-                Insya Allah, Kami Akan Menyalurkan Semua Hadiah yang Diberikan
-                ke Beberapa Masjid dan Lembaga yang Membutuhkan
+                God willing, we will distribute all gifts given to several
+                mosques and institutions in need.
               </p>
 
               {/* Arabic Dua */}
@@ -106,7 +106,7 @@ export default function Gifts() {
           </motion.div>
 
           {/* Bank Accounts Grid */}
-          <div className="max-w-2xl mx-auto grid gap-6">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
             {config.banks.map((account, index) => (
               <motion.div
                 key={account.accountNumber}

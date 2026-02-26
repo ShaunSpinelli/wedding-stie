@@ -24,10 +24,10 @@ export default function Hero() {
 
       if (difference > 0) {
         timeLeft = {
-          hari: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          jam: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          menit: Math.floor((difference / 1000 / 60) % 60),
-          detik: Math.floor((difference / 1000) % 60),
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
         };
       }
       return timeLeft;
@@ -71,10 +71,8 @@ export default function Hero() {
             : i % 3 === 1
               ? "text-pink-400"
               : "text-red-400",
-        initialX:
-          typeof window !== "undefined" ? Math.random() * window.innerWidth : 0,
-        animateX:
-          typeof window !== "undefined" ? Math.random() * window.innerWidth : 0,
+        initialX: Math.random() * 100,
+        animateX: Math.random() * 100,
       })),
     );
 
@@ -86,14 +84,14 @@ export default function Hero() {
             initial={{
               opacity: 0,
               scale: 0,
-              x: heart.initialX,
-              y: typeof window !== "undefined" ? window.innerHeight : 0,
+              left: `${heart.initialX}%`,
+              bottom: "-10%",
             }}
             animate={{
               opacity: [0, 1, 1, 0],
               scale: [0, 1, 1, 0.5],
-              x: heart.animateX,
-              y: -100,
+              left: `${heart.animateX}%`,
+              bottom: "110%",
             }}
             transition={{
               duration: 4,
@@ -136,7 +134,7 @@ export default function Hero() {
             className="inline-block mx-auto"
           >
             <span className="px-4 py-1 text-sm bg-rose-50 text-rose-600 rounded-full border border-rose-200">
-              Catat Tanggal Penting Ini
+              Save the Date
             </span>
           </motion.div>
 
@@ -147,13 +145,13 @@ export default function Hero() {
               transition={{ delay: 0.4 }}
               className="text-gray-500 font-light italic text-base sm:text-lg"
             >
-              InsyaAllah Kami Akan Menikah
+              We Are Getting Married
             </motion.p>
             <motion.h2
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="text-3xl sm:text-5xl font-serif bg-clip-text text-transparent bg-gradient-to-r from-rose-600 to-pink-600"
+              className="text-3xl sm:text-5xl lg:text-7xl font-serif bg-clip-text text-transparent bg-gradient-to-r from-rose-600 to-pink-600"
             >
               {config.groomName} & {config.brideName}
             </motion.h2>
@@ -163,7 +161,7 @@ export default function Hero() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="relative max-w-md mx-auto"
+            className="relative max-w-md lg:max-w-2xl mx-auto"
           >
             <div className="absolute inset-0 bg-gradient-to-b from-rose-50/50 to-white/50 backdrop-blur-md rounded-2xl" />
 
@@ -212,13 +210,13 @@ export default function Hero() {
                   className="space-y-2"
                 >
                   <p className="text-gray-500 font-serif italic text-sm">
-                    Kepada Yth.
+                    Dear:
                   </p>
                   <p className="text-gray-600 font-medium text-sm">
-                    Bapak/Ibu/Saudara/i
+                    Our Honored Guest
                   </p>
                   <p className="text-rose-500 font-semibold text-lg">
-                    {guestName || "Tamu Undangan"}
+                    {guestName || "Guest Name"}
                   </p>
                 </motion.div>
               </div>

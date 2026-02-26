@@ -12,17 +12,17 @@ import { cn } from "@/lib/utils";
 import { useConfig } from "@/features/invitation/hooks/use-config";
 
 const baseMenuItems = [
-  { icon: Home, label: "Beranda", href: "#home", id: "home" },
-  { icon: CalendarHeart, label: "Event", href: "#event", id: "event" },
-  { icon: MapPin, label: "Lokasi", href: "#location", id: "location" },
+  { icon: Home, label: "Home", href: "#home", id: "home" },
+  { icon: CalendarHeart, label: "Events", href: "#event", id: "event" },
+  { icon: MapPin, label: "Location", href: "#location", id: "location" },
   {
     icon: Gift,
-    label: "Hadiah",
+    label: "Gifts",
     href: "#gifts",
     id: "gifts",
     requiresBanks: true,
   },
-  { icon: MessageCircleHeart, label: "Harapan", href: "#wishes", id: "wishes" },
+  { icon: MessageCircleHeart, label: "Wishes", href: "#wishes", id: "wishes" },
 ];
 
 /**

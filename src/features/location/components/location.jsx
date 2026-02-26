@@ -26,7 +26,7 @@ export default function Location() {
               viewport={{ once: true }}
               className="inline-block text-rose-500 font-medium"
             >
-              Lokasi Acara
+              Event Location
             </motion.span>
 
             <motion.h2
@@ -36,7 +36,7 @@ export default function Location() {
               viewport={{ once: true }}
               className="text-4xl md:text-5xl font-serif text-gray-800"
             >
-              Lokasi
+              Location
             </motion.h2>
 
             {/* Decorative Divider */}
@@ -54,7 +54,7 @@ export default function Location() {
           </motion.div>
 
           {/* Location Content */}
-          <div className="max-w-6xl mx-auto grid md:grid-row-2 gap-8 items-center">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             {/* Map Container */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}

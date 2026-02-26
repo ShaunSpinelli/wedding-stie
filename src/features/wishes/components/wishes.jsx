@@ -81,9 +81,9 @@ export default function Wishes() {
   }, [isOpen]);
 
   const options = [
-    { value: "ATTENDING", label: "Ya, saya akan hadir" },
-    { value: "NOT_ATTENDING", label: "Tidak, saya tidak bisa hadir" },
-    { value: "MAYBE", label: "Mungkin, saya akan konfirmasi nanti" },
+    { value: "ATTENDING", label: "Yes, I will attend" },
+    { value: "NOT_ATTENDING", label: "No, I cannot attend" },
+    { value: "MAYBE", label: "Maybe, I will confirm later" },
   ];
 
   // Fetch wishes using React Query
@@ -135,7 +135,7 @@ export default function Wishes() {
         setHasSubmittedWish(true);
         setErrorMessage("");
       } else {
-        setErrorMessage("Gagal mengirim pesan. Silakan coba lagi.");
+        setErrorMessage("Failed to send message. Please try again.");
         // Auto-hide error after 5 seconds
         setTimeout(() => setErrorMessage(""), 5000);
       }
@@ -147,7 +147,7 @@ export default function Wishes() {
     if (!newWish.trim() || !guestName.trim()) return;
 
     if (!uid) {
-      setErrorMessage("Undangan tidak ditemukan. Silakan periksa URL Anda.");
+      setErrorMessage("Invitation not found. Please check your URL.");
       setTimeout(() => setErrorMessage(""), 5000);
       return;
     }
@@ -193,7 +193,7 @@ export default function Wishes() {
               transition={{ delay: 0.2 }}
               className="inline-block text-rose-500 font-medium"
             >
-              Kirimkan Doa dan Harapan Terbaik Anda
+              Send Your Best Wishes and Prayers
             </motion.span>
 
             <motion.h2
@@ -202,7 +202,7 @@ export default function Wishes() {
               transition={{ delay: 0.3 }}
               className="text-4xl md:text-5xl font-serif text-gray-800"
             >
-              Pesan dan Doa
+              Messages & Wishes
             </motion.h2>
 
             {/* Decorative Divider */}
@@ -219,11 +219,11 @@ export default function Wishes() {
           </motion.div>
 
           {/* Wishes List */}
-          <div className="max-w-2xl mx-auto space-y-6">
+          <div className="max-w-4xl mx-auto space-y-6">
             {isLoading && (
               <div className="flex justify-center items-center py-12">
                 <Loader2 className="w-8 h-8 text-rose-500 animate-spin" />
-                <span className="ml-3 text-gray-600">Memuat pesan...</span>
+                <span className="ml-3 text-gray-600">Loading messages...</span>
               </div>
             )}
 
@@ -237,7 +237,7 @@ export default function Wishes() {
               <div className="text-center py-12">
                 <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500">
-                  Belum ada pesan. Jadilah yang pertama!
+                  No messages yet. Be the first to send one!
                 </p>
               </div>
             )}
@@ -382,11 +382,11 @@ export default function Wishes() {
                           {getAttendanceIcon(selectedWish.attendance)}
                           <span className="text-sm font-medium text-gray-700">
                             {selectedWish.attendance === "ATTENDING" &&
-                              "Akan hadir"}
+                              "Will attend"}
                             {selectedWish.attendance === "NOT_ATTENDING" &&
-                              "Tidak bisa hadir"}
+                              "Cannot attend"}
                             {selectedWish.attendance === "MAYBE" &&
-                              "Mungkin hadir"}
+                              "Might attend"}
                           </span>
                         </div>
                       )}
@@ -407,7 +407,7 @@ export default function Wishes() {
                         onClick={() => setSelectedWish(null)}
                         className="px-6 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-lg font-medium transition-colors"
                       >
-                        Tutup
+                        Close
                       </button>
                     </div>
                   </motion.div>
@@ -421,21 +421,21 @@ export default function Wishes() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="max-w-2xl mx-auto mt-12"
+            className="max-w-4xl mx-auto mt-12"
           >
             {hasSubmittedWish ? (
               <div className="backdrop-blur-sm bg-white/80 p-8 rounded-2xl border border-emerald-100 shadow-lg text-center">
                 <div className="flex flex-col items-center space-y-4">
                   <CheckCircle className="w-16 h-16 text-emerald-500" />
                   <h3 className="text-2xl font-serif text-gray-800">
-                    Terima Kasih!
+                    Thank You!
                   </h3>
                   <p className="text-gray-600">
-                    Pesan dan doa Anda telah terkirim. Kami sangat menghargai
-                    ucapan Anda.
+                    Your message and wishes have been sent. We really appreciate
+                    your words.
                   </p>
                   <p className="text-sm text-gray-500 italic">
-                    Setiap tamu hanya dapat mengirim satu pesan.
+                    Each guest can only send one message.
                   </p>
                 </div>
               </div>
@@ -473,14 +473,14 @@ export default function Wishes() {
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
                         <User className="w-4 h-4" />
-                        <label htmlFor="guest-name">Nama Kamu</label>
+                        <label htmlFor="guest-name">Your Name</label>
                       </div>
                       <input
                         type="text"
                         id="guest-name"
                         name="guestName"
                         autoComplete="name"
-                        placeholder="Masukan nama kamu..."
+                        placeholder="Enter your name..."
                         value={guestName}
                         onChange={(e) => {
                           setGuestName(e.target.value);
@@ -505,7 +505,7 @@ export default function Wishes() {
                       <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
                         <Calendar className="w-4 h-4" />
                         <label htmlFor="attendance-select">
-                          Apakah kamu hadir?
+                          Will you attend?
                         </label>
                       </div>
 
@@ -518,7 +518,7 @@ export default function Wishes() {
                         className="sr-only"
                         aria-hidden="true"
                       >
-                        <option value="">Pilih kehadiran...</option>
+                        <option value="">Select attendance...</option>
                         {options.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
@@ -530,7 +530,7 @@ export default function Wishes() {
                       <button
                         type="button"
                         onClick={() => setIsOpen(!isOpen)}
-                        aria-label="Pilih status kehadiran"
+                        aria-label="Select attendance status"
                         aria-expanded={isOpen}
                         aria-controls="attendance-dropdown"
                         className="w-full px-4 py-2.5 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 transition-all duration-200 text-left flex items-center justify-between"
@@ -543,7 +543,7 @@ export default function Wishes() {
                           {attendance
                             ? options.find((opt) => opt.value === attendance)
                                 ?.label
-                            : "Pilih kehadiran..."}
+                            : "Select attendance..."}
                         </span>
                         <ChevronDown
                           className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
@@ -592,12 +592,12 @@ export default function Wishes() {
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2 text-gray-500 text-sm mb-1">
                         <MessageCircle className="w-4 h-4" />
-                        <label htmlFor="wish-message">Harapan kamu</label>
+                        <label htmlFor="wish-message">Your wishes</label>
                       </div>
                       <textarea
                         id="wish-message"
                         name="message"
-                        placeholder="Kirimkan harapan dan doa untuk kedua mempelai..."
+                        placeholder="Send your wishes and prayers for the couple..."
                         value={newWish}
                         onChange={(e) => setNewWish(e.target.value)}
                         className="w-full h-32 p-4 rounded-xl bg-white/50 border border-rose-100 focus:border-rose-300 focus:ring focus:ring-rose-200 focus:ring-opacity-50 resize-none transition-all duration-200"
@@ -629,8 +629,8 @@ export default function Wishes() {
                       )}
                       <span>
                         {createWishMutation.isPending
-                          ? "Sedang Mengirim..."
-                          : "Kirimkan Doa"}
+                          ? "Sending..."
+                          : "Send Wishes"}
                       </span>
                     </motion.button>
                   </div>

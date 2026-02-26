@@ -80,7 +80,7 @@ function App() {
             className="h-12 w-12 text-rose-500 mx-auto mb-4 animate-pulse"
             fill="currentColor"
           />
-          <p className="text-gray-600">Memuat undangan...</p>
+          <p className="text-gray-600">Loading invitation...</p>
         </div>
       </div>
     );
@@ -93,11 +93,11 @@ function App() {
         <div className="text-center max-w-md mx-auto p-6">
           <div className="text-rose-500 text-6xl mb-4">!</div>
           <h1 className="text-2xl font-serif text-gray-800 mb-2">
-            Undangan Tidak Ditemukan
+            Invitation Not Found
           </h1>
           <p className="text-gray-600 mb-4">{error}</p>
           <p className="text-sm text-gray-500">
-            Silakan periksa URL Anda atau hubungi penyelenggara.
+            Please check your URL or contact the organizer.
           </p>
         </div>
       </div>
@@ -152,7 +152,7 @@ function App() {
                 className="h-12 w-12 text-rose-500 mx-auto mb-4 animate-pulse"
                 fill="currentColor"
               />
-              <p className="text-gray-600">Memuat...</p>
+              <p className="text-gray-600">Loading...</p>
             </div>
           </div>
         }
