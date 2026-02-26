@@ -14,16 +14,18 @@ export async function getDbClient(c) {
     return c.env.DB;
   }
 
-  // Check if we have DATABASE_URL in env (for Wrangler dev with .env)
-  if (c.env?.DATABASE_URL) {
-    // In Wrangler dev mode, use node-postgres via dynamic import
+  // Check if we have DATABASE_URL in env (for Wrangler dev or local node/bun)
+  const databaseUrl = c.env?.DATABASE_URL || process.env.DATABASE_URL;
+
+  if (databaseUrl) {
+    // In local mode, use node-postgres via dynamic import
     try {
       const pg = await import("pg");
       const { Pool } = pg.default || pg;
 
-      // Create a connection pool using DATABASE_URL from env
+      // Create a connection pool using DATABASE_URL
       const pool = new Pool({
-        connectionString: c.env.DATABASE_URL,
+        connectionString: databaseUrl,
       });
 
       return pool;

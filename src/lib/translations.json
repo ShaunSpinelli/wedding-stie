@@ -1,0 +1,368 @@
+{
+  "en": {
+    "loading": "Loading invitation...",
+    "error_not_found": "Invitation Not Found",
+    "error_check_url": "Please check your URL or contact the organizer.",
+    "landing": {
+      "open_invitation": "Open Invitation",
+      "wedding_of": "The Wedding of"
+    },
+    "wedding": {
+      "title": "The Wedding of Shaun & Manon",
+      "description": "We are getting married and invite you to celebrate this special moment with us.",
+      "groomName": "Shaun",
+      "brideName": "Manon",
+      "parentGroom": "Mr. Groom & Mrs. Groom",
+      "parentBride": "Mr. Bride & Mrs. Bride",
+      "location": "Grand Ballroom, Hotel Majesty",
+      "address": "1st Sudirman St., Jakarta",
+      "displayDate": "December 24, 2024",
+      "displayTime": "4:16 PM - 5:30 PM",
+      "agenda": [
+        {
+          "title": "Wedding Ceremony",
+          "time": "4:16 PM - 5:30 PM",
+          "location": "Grand Ballroom, Hotel Majesty",
+          "address": "1st Sudirman St., Jakarta"
+        },
+        {
+          "title": "Wedding Reception",
+          "time": "6:30 PM - 9:00 PM",
+          "location": "Grand Ballroom, Hotel Majesty",
+          "address": "1st Sudirman St., Jakarta"
+        }
+      ],
+      "timeline": [
+        {
+          "year": "2020",
+          "title": "The First Meeting",
+          "description": "Where our journey began, under the autumn leaves."
+        },
+        {
+          "year": "2022",
+          "title": "The Proposal",
+          "description": "A magical moment by the sea where we said 'Yes' to forever."
+        },
+        {
+          "year": "2024",
+          "title": "The Big Day",
+          "description": "Celebrating our love with all of you."
+        }
+      ],
+      "schedule": [
+        {
+          "day": "Friday",
+          "events": [
+            {
+              "time": "4:00 PM - 6:00 PM",
+              "title": "Arrival & Check-in",
+              "description": "Welcome to the countryside! Settle into your rooms."
+            },
+            {
+              "time": "6:00 PM - 7:00 PM",
+              "title": "Welcome Drinks",
+              "description": "Join us for local wine and appetizers on the terrace."
+            },
+            {
+              "time": "7:00 PM - Late",
+              "title": "BBQ & Festivities",
+              "description": "Casual outdoor dinner and music to kick off the weekend."
+            }
+          ]
+        },
+        {
+          "day": "Saturday",
+          "events": [
+            {
+              "time": "11:00 AM",
+              "title": "Garden Yoga",
+              "description": "Optional morning stretch for early birds."
+            },
+            {
+              "time": "3:30 PM",
+              "title": "Wedding Ceremony",
+              "description": "The main event under the big oak tree."
+            },
+            {
+              "time": "5:00 PM",
+              "title": "Cocktail Hour",
+              "description": "Drinks and music in the courtyard."
+            },
+            {
+              "time": "7:00 PM",
+              "title": "Dinner & Dancing",
+              "description": "Feast, speeches, and plenty of dancing."
+            }
+          ]
+        },
+        {
+          "day": "Sunday",
+          "events": [
+            {
+              "time": "10:00 AM",
+              "title": "Farewell Brunch",
+              "description": "A relaxed morning meal before we say our goodbyes."
+            }
+          ]
+        }
+      ]
+    },
+    "hero": {
+      "save_the_date": "Save the Date",
+      "married_announcement": "We Are Getting Married",
+      "dear": "Dear:",
+      "guest_title": "Our Honored Guest",
+      "guest_name_fallback": "Guest Name",
+      "countdown": {
+        "days": "days",
+        "hours": "hours",
+        "minutes": "minutes",
+        "seconds": "seconds"
+      }
+    },
+    "timeline": {
+      "title": "Our Story",
+      "subtitle": "The Journey of Love"
+    },
+    "schedule": {
+      "title": "Itinerary",
+      "subtitle": "Wedding Weekend"
+    },
+    "events": {
+      "title": "Wedding Event Schedule",
+      "description": "We invite you to celebrate this special day as the beginning of our journey of love",
+      "add_to_calendar": "Add to Calendar"
+    },
+    "location": {
+      "title": "Event Location",
+      "subtitle": "Location",
+      "view_map": "View Map"
+    },
+    "wishes": {
+      "title": "Send Your Best Wishes and Prayers",
+      "subtitle": "Messages & Wishes",
+      "loading": "Loading messages...",
+      "no_messages": "No messages yet. Be the first to send one!",
+      "new_badge": "New",
+      "error_send": "Failed to send message. Please try again.",
+      "error_no_uid": "Invitation not found. Please check your URL.",
+      "form": {
+        "label_name": "Your Name",
+        "placeholder_name": "Enter your name...",
+        "label_attendance": "Will you attend?",
+        "placeholder_attendance": "Select attendance...",
+        "label_message": "Your wishes",
+        "placeholder_message": "Send your wishes and prayers for the couple...",
+        "btn_sending": "Sending...",
+        "btn_send": "Send Wishes"
+      },
+      "attendance": {
+        "attending": "Yes, I will attend",
+        "not_attending": "No, I cannot attend",
+        "maybe": "Maybe, I will confirm later",
+        "status_attending": "Will attend",
+        "status_not_attending": "Cannot attend",
+        "status_maybe": "Might attend"
+      },
+      "success": {
+        "title": "Thank You!",
+        "message": "Your message and wishes have been sent. We really appreciate your words.",
+        "note": "Each guest can only send one message."
+      },
+      "modal": {
+        "close": "Close"
+      }
+    },
+    "nav": {
+      "home": "Home",
+      "story": "Story",
+      "itinerary": "Itinerary",
+      "events": "Events",
+      "location": "Location",
+      "wishes": "Wishes"
+    }
+  },
+  "fr": {
+    "loading": "Chargement de l'invitation...",
+    "error_not_found": "Invitation non trouvée",
+    "error_check_url": "Veuillez vérifier votre URL ou contacter l'organisateur.",
+    "landing": {
+      "open_invitation": "Ouvrir l'invitation",
+      "wedding_of": "Le mariage de"
+    },
+    "wedding": {
+      "title": "Le Mariage de Shaun & Manon",
+      "description": "Nous nous marions et nous vous invitons à célébrer ce moment spécial avec nous.",
+      "groomName": "Shaun",
+      "brideName": "Manon",
+      "parentGroom": "M. Groom & Mme Groom",
+      "parentBride": "M. Bride & Mme Bride",
+      "location": "Grande Salle de Bal, Hôtel Majesty",
+      "address": "1 rue Sudirman, Jakarta",
+      "displayDate": "24 Décembre 2024",
+      "displayTime": "16:16 - 17:30",
+      "agenda": [
+        {
+          "title": "Cérémonie de Mariage",
+          "time": "16:16 - 17:30",
+          "location": "Grande Salle de Bal, Hôtel Majesty",
+          "address": "1 rue Sudirman, Jakarta"
+        },
+        {
+          "title": "Réception de Mariage",
+          "time": "18:30 - 21:00",
+          "location": "Grande Salle de Bal, Hôtel Majesty",
+          "address": "1 rue Sudirman, Jakarta"
+        }
+      ],
+      "timeline": [
+        {
+          "year": "2020",
+          "title": "La Première Rencontre",
+          "description": "Là où notre voyage a commencé, sous les feuilles d'automne."
+        },
+        {
+          "year": "2022",
+          "title": "La Demande",
+          "description": "Un moment magique au bord de la mer où nous avons dit 'Oui' pour toujours."
+        },
+        {
+          "year": "2024",
+          "title": "Le Grand Jour",
+          "description": "Célébrer notre amour avec vous tous."
+        }
+      ],
+      "schedule": [
+        {
+          "day": "Vendredi",
+          "events": [
+            {
+              "time": "16:00 - 18:00",
+              "title": "Arrivée & Installation",
+              "description": "Bienvenue à la campagne ! Installez-vous dans vos chambres."
+            },
+            {
+              "time": "18:00 - 19:00",
+              "title": "Verre de Bienvenue",
+              "description": "Rejoignez-nous pour déguster du vin local et des amuse-bouches sur la terrasse."
+            },
+            {
+              "time": "19:00 - Tard",
+              "title": "BBQ & Festivités",
+              "description": "Dîner décontracté en plein air et musique pour lancer le week-end."
+            }
+          ]
+        },
+        {
+          "day": "Samedi",
+          "events": [
+            {
+              "time": "11:00",
+              "title": "Yoga dans le Jardin",
+              "description": "Étirements matinaux optionnels pour les lève-tôt."
+            },
+            {
+              "time": "15:30",
+              "title": "Cérémonie de Mariage",
+              "description": "L'événement principal sous le grand chêne."
+            },
+            {
+              "time": "17:00",
+              "title": "Cocktail",
+              "description": "Boissons et musique dans la cour."
+            },
+            {
+              "time": "19:00",
+              "title": "Dîner & Danse",
+              "description": "Festin, discours et beaucoup de danse."
+            }
+          ]
+        },
+        {
+          "day": "Dimanche",
+          "events": [
+            {
+              "time": "10:00",
+              "title": "Brunch d'Adieu",
+              "description": "Un repas matinal détendu avant de se dire au revoir."
+            }
+          ]
+        }
+      ]
+    },
+    "hero": {
+      "save_the_date": "Réservez la date",
+      "married_announcement": "Nous nous marions",
+      "dear": "Cher/Chère:",
+      "guest_title": "Notre invité(e) d'honneur",
+      "guest_name_fallback": "Nom de l'invité",
+      "countdown": {
+        "days": "jours",
+        "hours": "heures",
+        "minutes": "minutes",
+        "seconds": "secondes"
+      }
+    },
+    "timeline": {
+      "title": "Notre Histoire",
+      "subtitle": "Le Voyage de l'Amour"
+    },
+    "schedule": {
+      "title": "Itinéraire",
+      "subtitle": "Week-end de Mariage"
+    },
+    "events": {
+      "title": "Programme du mariage",
+      "description": "Nous vous invitons à célébrer ce jour spécial, début de notre voyage amoureux",
+      "add_to_calendar": "Ajouter au calendrier"
+    },
+    "location": {
+      "title": "Lieu de l'événement",
+      "subtitle": "Localisation",
+      "view_map": "Voir la carte"
+    },
+    "wishes": {
+      "title": "Envoyez vos meilleurs vœux",
+      "subtitle": "Messages & Vœux",
+      "loading": "Chargement des messages...",
+      "no_messages": "Pas encore de messages. Soyez le premier !",
+      "new_badge": "Nouveau",
+      "error_send": "Échec de l'envoi du message. Veuillez réessayer.",
+      "error_no_uid": "Invitation non trouvée. Veuillez vérifier votre URL.",
+      "form": {
+        "label_name": "Votre Nom",
+        "placeholder_name": "Entrez votre nom...",
+        "label_attendance": "Serez-vous présent ?",
+        "placeholder_attendance": "Sélectionnez votre réponse...",
+        "label_message": "Vos vœux",
+        "placeholder_message": "Envoyez vos vœux et prières pour le couple...",
+        "btn_sending": "Envoi en cours...",
+        "btn_send": "Envoyer les vœux"
+      },
+      "attendance": {
+        "attending": "Oui, je serai présent",
+        "not_attending": "Non, je ne pourrai pas être présent",
+        "maybe": "Peut-être, je confirmerai plus tard",
+        "status_attending": "Sera présent",
+        "status_not_attending": "Ne pourra pas être présent",
+        "status_maybe": "Sera peut-être présent"
+      },
+      "success": {
+        "title": "Merci !",
+        "message": "Votre message et vos vœux ont été envoyés. Nous apprécions beaucoup vos mots.",
+        "note": "Chaque invité ne peut envoyer qu'un seul message."
+      },
+      "modal": {
+        "close": "Fermer"
+      }
+    },
+    "nav": {
+      "home": "Accueil",
+      "story": "Histoire",
+      "itinerary": "Programme",
+      "events": "Événements",
+      "location": "Lieu",
+      "wishes": "Vœux"
+    }
+  }
+}

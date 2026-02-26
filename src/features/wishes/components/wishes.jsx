@@ -20,10 +20,12 @@ import { formatEventDate } from "@/lib/format-event-date";
 import { useInvitation } from "@/features/invitation";
 import { fetchWishes, createWish, checkWishSubmitted } from "@/services/api";
 import { getGuestName } from "@/lib/invitation-storage";
+import { useLanguage } from "@/lib/language-context";
 
 export default function Wishes() {
   const { uid } = useInvitation();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   const [showConfetti, setShowConfetti] = useState(false);
   const [newWish, setNewWish] = useState("");
   const [guestName, setGuestName] = useState("");
@@ -81,9 +83,9 @@ export default function Wishes() {
   }, [isOpen]);
 
   const options = [
-    { value: "ATTENDING", label: "Yes, I will attend" },
-    { value: "NOT_ATTENDING", label: "No, I cannot attend" },
-    { value: "MAYBE", label: "Maybe, I will confirm later" },
+    { value: "ATTENDING", label: t("wishes.attendance.attending") },
+    { value: "NOT_ATTENDING", label: t("wishes.attendance.not_attending") },
+    { value: "MAYBE", label: t("wishes.attendance.maybe") },
   ];
 
   // Fetch wishes using React Query
@@ -135,7 +137,7 @@ export default function Wishes() {
         setHasSubmittedWish(true);
         setErrorMessage("");
       } else {
-        setErrorMessage("Failed to send message. Please try again.");
+        setErrorMessage(t("wishes.error_send"));
         // Auto-hide error after 5 seconds
         setTimeout(() => setErrorMessage(""), 5000);
       }
@@ -147,7 +149,7 @@ export default function Wishes() {
     if (!newWish.trim() || !guestName.trim()) return;
 
     if (!uid) {
-      setErrorMessage("Invitation not found. Please check your URL.");
+      setErrorMessage(t("wishes.error_no_uid"));
       setTimeout(() => setErrorMessage(""), 5000);
       return;
     }
@@ -196,7 +198,7 @@ export default function Wishes() {
               transition={{ delay: 0.2 }}
               className="inline-block text-theme-main-2 font-medium"
             >
-              Send Your Best Wishes and Prayers
+              {t("wishes.title")}
             </motion.span>
 
             <motion.h2
@@ -205,7 +207,7 @@ export default function Wishes() {
               transition={{ delay: 0.3 }}
               className="text-4xl md:text-5xl font-serif text-theme-accent"
             >
-              Messages & Wishes
+              {t("wishes.subtitle")}
             </motion.h2>
 
             {/* Decorative Divider */}
@@ -227,7 +229,7 @@ export default function Wishes() {
               <div className="flex justify-center items-center py-12">
                 <Loader2 className="w-8 h-8 text-theme-main-2 animate-spin" />
                 <span className="ml-3 text-theme-accent/70">
-                  Loading messages...
+                  {t("wishes.loading")}
                 </span>
               </div>
             )}
@@ -242,7 +244,7 @@ export default function Wishes() {
               <div className="text-center py-12">
                 <MessageCircle className="w-12 h-12 text-theme-support-1/50 mx-auto mb-4" />
                 <p className="text-theme-accent/50">
-                  No messages yet. Be the first to send one!
+                  {t("wishes.no_messages")}
                 </p>
               </div>
             )}
@@ -304,7 +306,7 @@ export default function Wishes() {
                           {Date.now() - new Date(wish.created_at).getTime() <
                             3600000 && (
                             <span className="flex-shrink-0 px-2 py-0.5 rounded-full bg-theme-support-1/20 text-theme-accent text-[10px] font-medium">
-                              New
+                              {t("wishes.new_badge")}
                             </span>
                           )}
                         </div>
@@ -387,11 +389,11 @@ export default function Wishes() {
                           {getAttendanceIcon(selectedWish.attendance)}
                           <span className="text-sm font-medium text-theme-accent/70">
                             {selectedWish.attendance === "ATTENDING" &&
-                              "Will attend"}
+                              t("wishes.attendance.status_attending")}
                             {selectedWish.attendance === "NOT_ATTENDING" &&
-                              "Cannot attend"}
+                              t("wishes.attendance.status_not_attending")}
                             {selectedWish.attendance === "MAYBE" &&
-                              "Might attend"}
+                              t("wishes.attendance.status_maybe")}
                           </span>
                         </div>
                       )}
@@ -412,7 +414,7 @@ export default function Wishes() {
                         onClick={() => setSelectedWish(null)}
                         className="px-6 py-2 bg-theme-main-2 hover:bg-theme-main-2/90 text-white rounded-lg font-medium transition-colors shadow-md"
                       >
-                        Close
+                        {t("wishes.modal.close")}
                       </button>
                     </div>
                   </motion.div>
@@ -433,14 +435,13 @@ export default function Wishes() {
                 <div className="flex flex-col items-center space-y-4">
                   <CheckCircle className="w-16 h-16 text-theme-support-1" />
                   <h3 className="text-2xl font-serif text-theme-accent">
-                    Thank You!
+                    {t("wishes.success.title")}
                   </h3>
                   <p className="text-theme-accent/70">
-                    Your message and wishes have been sent. We really appreciate
-                    your words.
+                    {t("wishes.success.message")}
                   </p>
                   <p className="text-sm text-theme-accent/40 italic">
-                    Each guest can only send one message.
+                    {t("wishes.success.note")}
                   </p>
                 </div>
               </div>
@@ -478,14 +479,16 @@ export default function Wishes() {
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2 text-theme-accent/50 text-sm mb-1">
                         <User className="w-4 h-4" />
-                        <label htmlFor="guest-name">Your Name</label>
+                        <label htmlFor="guest-name">
+                          {t("wishes.form.label_name")}
+                        </label>
                       </div>
                       <input
                         type="text"
                         id="guest-name"
                         name="guestName"
                         autoComplete="name"
-                        placeholder="Enter your name..."
+                        placeholder={t("wishes.form.placeholder_name")}
                         value={guestName}
                         onChange={(e) => {
                           setGuestName(e.target.value);
@@ -510,7 +513,7 @@ export default function Wishes() {
                       <div className="flex items-center space-x-2 text-theme-accent/50 text-sm mb-1">
                         <Calendar className="w-4 h-4" />
                         <label htmlFor="attendance-select">
-                          Will you attend?
+                          {t("wishes.form.label_attendance")}
                         </label>
                       </div>
 
@@ -523,7 +526,9 @@ export default function Wishes() {
                         className="sr-only"
                         aria-hidden="true"
                       >
-                        <option value="">Select attendance...</option>
+                        <option value="">
+                          {t("wishes.form.placeholder_attendance")}
+                        </option>
                         {options.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
@@ -550,7 +555,7 @@ export default function Wishes() {
                           {attendance
                             ? options.find((opt) => opt.value === attendance)
                                 ?.label
-                            : "Select attendance..."}
+                            : t("wishes.form.placeholder_attendance")}
                         </span>
                         <ChevronDown
                           className={`w-5 h-5 text-theme-support-1 transition-transform duration-200 ${
@@ -599,12 +604,14 @@ export default function Wishes() {
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2 text-theme-accent/50 text-sm mb-1">
                         <MessageCircle className="w-4 h-4" />
-                        <label htmlFor="wish-message">Your wishes</label>
+                        <label htmlFor="wish-message">
+                          {t("wishes.form.label_message")}
+                        </label>
                       </div>
                       <textarea
                         id="wish-message"
                         name="message"
-                        placeholder="Send your wishes and prayers for the couple..."
+                        placeholder={t("wishes.form.placeholder_message")}
                         value={newWish}
                         onChange={(e) => setNewWish(e.target.value)}
                         className="w-full h-32 p-4 rounded-xl bg-white/50 border border-theme-support-1/20 focus:border-theme-main-2 focus:ring focus:ring-theme-main-2/20 focus:ring-opacity-50 resize-none transition-all duration-200 placeholder-theme-accent/30 text-theme-accent shadow-sm"
@@ -636,8 +643,8 @@ export default function Wishes() {
                       )}
                       <span>
                         {createWishMutation.isPending
-                          ? "Sending..."
-                          : "Send Wishes"}
+                          ? t("wishes.form.btn_sending")
+                          : t("wishes.form.btn_send")}
                       </span>
                     </motion.button>
                   </div>

@@ -1,12 +1,13 @@
 import { Calendar, Clock, Heart } from "lucide-react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useConfig } from "@/features/invitation/hooks/use-config";
-import { formatEventDate } from "@/lib/format-event-date";
 import { getGuestName } from "@/lib/invitation-storage";
+import { useLanguage } from "@/lib/language-context";
 
 export default function Hero() {
   const config = useConfig(); // Use hook to get config from API or fallback to static
+  const { t } = useLanguage();
   const [guestName, setGuestName] = useState("");
 
   useEffect(() => {
@@ -18,20 +19,26 @@ export default function Hero() {
   }, []);
 
   const CountdownTimer = ({ targetDate }) => {
-    const calculateTimeLeft = () => {
+    const calculateTimeLeft = useCallback(() => {
       const difference = +new Date(targetDate) - +new Date();
       let timeLeft = {};
 
       if (difference > 0) {
         timeLeft = {
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
+          [t("hero.countdown.days")]: Math.floor(
+            difference / (1000 * 60 * 60 * 24),
+          ),
+          [t("hero.countdown.hours")]: Math.floor(
+            (difference / (1000 * 60 * 60)) % 24,
+          ),
+          [t("hero.countdown.minutes")]: Math.floor(
+            (difference / 1000 / 60) % 60,
+          ),
+          [t("hero.countdown.seconds")]: Math.floor((difference / 1000) % 60),
         };
       }
       return timeLeft;
-    };
+    }, [targetDate]);
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
@@ -40,7 +47,7 @@ export default function Hero() {
         setTimeLeft(calculateTimeLeft());
       }, 1000);
       return () => clearInterval(timer);
-    }, [targetDate]);
+    }, [calculateTimeLeft]);
 
     return (
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
@@ -134,7 +141,7 @@ export default function Hero() {
             className="inline-block mx-auto"
           >
             <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-accent rounded-full border border-theme-support-1/20">
-              Save the Date
+              {t("hero.save_the_date")}
             </span>
           </motion.div>
 
@@ -145,7 +152,7 @@ export default function Hero() {
               transition={{ delay: 0.4 }}
               className="text-theme-main-2 font-light italic text-base sm:text-lg"
             >
-              We Are Getting Married
+              {t("hero.married_announcement")}
             </motion.p>
             <motion.h2
               initial={{ scale: 0.8, opacity: 0 }}
@@ -153,7 +160,7 @@ export default function Hero() {
               transition={{ delay: 0.6 }}
               className="text-3xl sm:text-5xl lg:text-7xl font-serif bg-clip-text text-transparent bg-gradient-to-r from-theme-accent via-theme-main-2 to-theme-accent"
             >
-              {config.groomName} & {config.brideName}
+              {t("wedding.groomName")} & {t("wedding.brideName")}
             </motion.h2>
           </div>
 
@@ -180,7 +187,7 @@ export default function Hero() {
                   >
                     <Calendar className="w-4 h-4 text-theme-main-2" />
                     <span className="text-theme-accent font-medium text-sm sm:text-base">
-                      {formatEventDate(config.date, "full")}
+                      {t("wedding.displayDate")}
                     </span>
                   </motion.div>
 
@@ -192,7 +199,7 @@ export default function Hero() {
                   >
                     <Clock className="w-4 h-4 text-theme-main-2" />
                     <span className="text-theme-accent font-medium text-sm sm:text-base">
-                      {config.time}
+                      {t("wedding.displayTime")}
                     </span>
                   </motion.div>
                 </div>
@@ -210,13 +217,13 @@ export default function Hero() {
                   className="space-y-2"
                 >
                   <p className="text-theme-main-2/70 font-serif italic text-sm">
-                    Dear:
+                    {t("hero.dear")}
                   </p>
                   <p className="text-theme-accent font-medium text-sm">
-                    Our Honored Guest
+                    {t("hero.guest_title")}
                   </p>
                   <p className="text-theme-main-2 font-semibold text-lg">
-                    {guestName || "Guest Name"}
+                    {guestName || t("hero.guest_name_fallback")}
                   </p>
                 </motion.div>
               </div>

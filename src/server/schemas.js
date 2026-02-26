@@ -78,6 +78,30 @@ export const uidParamSchema = z.object({
 });
 
 /**
+ * Guest creation and update schemas
+ */
+export const createGuestSchema = z.object({
+  name: z.string().min(1, "Name is required").max(255).trim(),
+  email: z.string().email("Invalid email address").optional().or(z.literal("")),
+  attending: z.enum(["ATTENDING", "NOT_ATTENDING", "MAYBE"]).default("MAYBE"),
+  country: z.string().max(100).optional().or(z.literal("")),
+  features: z.array(z.string()).default([]),
+});
+
+export const updateGuestSchema = createGuestSchema.partial();
+
+/**
+ * Guest ID parameter schema
+ */
+export const guestIdParamSchema = z.object({
+  uid: z.string().min(1),
+  id: z
+    .string()
+    .regex(/^\d+$/, "Guest ID must be a valid number")
+    .transform((val) => parseInt(val, 10)),
+});
+
+/**
  * Wish ID parameter schema
  * Validates wish ID for deletion
  */

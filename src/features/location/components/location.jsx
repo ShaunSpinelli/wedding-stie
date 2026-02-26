@@ -1,10 +1,11 @@
 import { useConfig } from "@/features/invitation/hooks/use-config";
 import { Clock, MapPin, CalendarCheck, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
-import { formatEventDate } from "@/lib/format-event-date";
+import { useLanguage } from "@/lib/language-context";
 
 export default function Location() {
   const config = useConfig(); // Use hook to get config from API or fallback to static
+  const { t } = useLanguage();
 
   return (
     <>
@@ -26,7 +27,7 @@ export default function Location() {
               viewport={{ once: true }}
               className="inline-block text-theme-main-2 font-medium"
             >
-              Event Location
+              {t("location.title")}
             </motion.span>
 
             <motion.h2
@@ -36,7 +37,7 @@ export default function Location() {
               viewport={{ once: true }}
               className="text-4xl md:text-5xl font-serif text-theme-accent"
             >
-              Location
+              {t("location.subtitle")}
             </motion.h2>
 
             {/* Decorative Divider */}
@@ -85,27 +86,29 @@ export default function Location() {
             >
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-theme-support-1/20">
                 <h3 className="text-2xl font-serif text-theme-accent mb-6">
-                  {config.location}
+                  {t("wedding.location")}
                 </h3>
 
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
                     <MapPin className="w-5 h-5 text-theme-main-2 mt-1" />
                     <p className="text-theme-accent/80 flex-1">
-                      {config.address}
+                      {t("wedding.address")}
                     </p>
                   </div>
 
                   <div className="flex items-center space-x-4">
                     <CalendarCheck className="w-5 h-5 text-theme-main-2" />
                     <p className="text-theme-accent/80">
-                      {formatEventDate(config.date)}
+                      {t("wedding.displayDate")}
                     </p>
                   </div>
 
                   <div className="flex items-center space-x-4">
                     <Clock className="w-5 h-5 text-theme-main-2" />
-                    <p className="text-theme-accent/80">{config.time}</p>
+                    <p className="text-theme-accent/80">
+                      {t("wedding.displayTime")}
+                    </p>
                   </div>
 
                   {/* Action Button - Full Width */}
@@ -120,7 +123,7 @@ export default function Location() {
                       className="w-full flex items-center justify-center gap-1.5 bg-theme-main-2 text-white px-4 py-2 rounded-lg transition-colors text-sm font-semibold shadow-md"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      <span>View Map</span>
+                      <span>{t("location.view_map")}</span>
                     </motion.a>
                   </div>
                 </div>

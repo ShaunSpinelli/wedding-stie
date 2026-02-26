@@ -1,10 +1,10 @@
 import EventCards from "@/features/events/components/events-card";
-import { useConfig } from "@/features/invitation/hooks/use-config";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
+import { useLanguage } from "@/lib/language-context";
 
 export default function Events() {
-  const config = useConfig(); // Use hook to get config from API or fallback to static
+  const { t } = useLanguage();
 
   return (
     <>
@@ -32,7 +32,7 @@ export default function Events() {
               transition={{ delay: 0.2 }}
               className="inline-block text-theme-main-2 font-medium mb-2"
             >
-              Save the Date
+              {t("hero.save_the_date")}
             </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -41,7 +41,7 @@ export default function Events() {
               transition={{ delay: 0.3 }}
               className="text-4xl md:text-5xl font-serif text-theme-accent leading-tight"
             >
-              Wedding Event Schedule
+              {t("events.title")}
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -50,8 +50,7 @@ export default function Events() {
               transition={{ delay: 0.4 }}
               className="text-theme-accent/70 max-w-md mx-auto"
             >
-              We invite you to celebrate this special day as the beginning of
-              our journey of love
+              {t("events.description")}
             </motion.p>
             {/* Decorative Line */}
             <motion.div
@@ -66,7 +65,7 @@ export default function Events() {
                 <Heart className="w-4 h-4" fill="currentColor" />
               </div>
               <div className="h-[1px] w-12 bg-theme-support-1/30" />
-            </motion.div>{" "}
+            </motion.div>
           </motion.div>
 
           {/* Events Grid */}
@@ -77,7 +76,7 @@ export default function Events() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="max-w-4xl mx-auto"
           >
-            <EventCards events={config.agenda} />
+            <EventCards events={t("wedding.agenda") || []} />
           </motion.div>
         </motion.div>
       </section>

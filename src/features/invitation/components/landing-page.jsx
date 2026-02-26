@@ -1,10 +1,9 @@
-import { useConfig } from "@/features/invitation/hooks/use-config";
-import { formatEventDate } from "@/lib/format-event-date";
+import { useLanguage } from "@/lib/language-context";
 import { motion } from "framer-motion";
 import { Calendar, Clock } from "lucide-react";
 
 const LandingPage = ({ onOpenInvitation }) => {
-  const config = useConfig(); // Use hook to get config from API or fallback to static
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -45,13 +44,15 @@ const LandingPage = ({ onOpenInvitation }) => {
               <div className="inline-flex flex-col items-center space-y-1 bg-white/90 px-4 sm:px-6 py-2 sm:py-3 rounded-xl min-w-[160px] border border-theme-main-1">
                 <Calendar className="w-5 h-5 text-theme-main-2" />
                 <p className="text-theme-accent font-medium">
-                  {formatEventDate(config.date)}
+                  {t("wedding.displayDate")}
                 </p>
               </div>
 
               <div className="inline-flex flex-col items-center space-y-1 bg-white/90 px-4 sm:px-6 py-2 sm:py-3 rounded-xl min-w-[160px] border border-theme-main-1">
                 <Clock className="w-5 h-5 text-theme-main-2" />
-                <p className="text-theme-accent font-medium">{config.time}</p>
+                <p className="text-theme-accent font-medium">
+                  {t("wedding.displayTime")}
+                </p>
               </div>
             </motion.div>
 
@@ -64,11 +65,11 @@ const LandingPage = ({ onOpenInvitation }) => {
             >
               <div className="space-y-4">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif text-theme-accent leading-tight">
-                  {config.groomName}
+                  {t("wedding.groomName")}
                   <span className="text-theme-main-2 mx-2 sm:mx-3 lg:mx-4">
                     &
                   </span>
-                  {config.brideName}
+                  {t("wedding.brideName")}
                 </h1>
                 <div className="h-px w-16 sm:w-24 lg:w-32 mx-auto bg-theme-main-2/30" />
               </div>
@@ -88,7 +89,7 @@ const LandingPage = ({ onOpenInvitation }) => {
                 className="group relative w-full bg-theme-main-2 text-white px-6 py-3 sm:px-8 sm:py-3 rounded-xl font-medium shadow-lg transition-all duration-200"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
-                  <span>Open Invitation</span>
+                  <span>{t("landing.open_invitation")}</span>
                   <motion.span
                     animate={{ x: [0, 4, 0] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}

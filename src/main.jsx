@@ -21,6 +21,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./app.jsx";
 import "./index.css";
 import { InvitationProvider } from "./features/invitation";
+import { LanguageProvider } from "./lib/language-context";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -38,9 +39,11 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <InvitationProvider>
-          <App />
-        </InvitationProvider>
+        <LanguageProvider>
+          <InvitationProvider>
+            <App />
+          </InvitationProvider>
+        </LanguageProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

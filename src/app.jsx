@@ -20,6 +20,8 @@ import { AnimatePresence } from "framer-motion";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Heart } from "lucide-react";
 import { useInvitation } from "@/features/invitation";
+import { useLanguage } from "@/lib/language-context";
+import { LanguageToggle } from "@/components/ui/language-toggle";
 // import { useAudio } from "@/hooks/use-audio";
 import staticConfig from "@/config/config";
 
@@ -53,6 +55,7 @@ const LandingPage = lazy(
 function App() {
   const [isInvitationOpen, setIsInvitationOpen] = useState(false);
   const { config, isLoading, error } = useInvitation();
+  const { t } = useLanguage();
 
   // Use config from API if available, otherwise fall back to static config
   const activeConfig = config || staticConfig.data;
@@ -77,13 +80,13 @@ function App() {
   // Show loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-50">
+      <div className="min-h-screen flex items-center justify-center bg-theme-support-3">
         <div className="text-center">
           <Heart
-            className="h-12 w-12 text-rose-500 mx-auto mb-4 animate-pulse"
+            className="h-12 w-12 text-theme-main-2 mx-auto mb-4 animate-pulse"
             fill="currentColor"
           />
-          <p className="text-gray-600">Loading invitation...</p>
+          <p className="text-theme-accent">{t("loading")}</p>
         </div>
       </div>
     );
@@ -92,16 +95,14 @@ function App() {
   // Show error state
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-50">
+      <div className="min-h-screen flex items-center justify-center bg-theme-support-3">
         <div className="text-center max-w-md mx-auto p-6">
-          <div className="text-rose-500 text-6xl mb-4">!</div>
-          <h1 className="text-2xl font-serif text-gray-800 mb-2">
-            Invitation Not Found
+          <div className="text-theme-main-3 text-6xl mb-4">!</div>
+          <h1 className="text-2xl font-serif text-theme-accent mb-2">
+            {t("error_not_found")}
           </h1>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <p className="text-sm text-gray-500">
-            Please check your URL or contact the organizer.
-          </p>
+          <p className="text-theme-accent/70 mb-4">{error}</p>
+          <p className="text-sm text-theme-accent/50">{t("error_check_url")}</p>
         </div>
       </div>
     );
@@ -109,11 +110,12 @@ function App() {
 
   return (
     <HelmetProvider>
+      <LanguageToggle />
       <Helmet>
         {/* Primary Meta Tags */}
-        <title>{activeConfig.title}</title>
-        <meta name="title" content={activeConfig.title} />
-        <meta name="description" content={activeConfig.description} />
+        <title>{t("wedding.title")}</title>
+        <meta name="title" content={t("wedding.title")} />
+        <meta name="description" content={t("wedding.description")} />
         {/* Prevent Wayback Machine and Web Archiving */}
         <meta name="robots" content="noindex, nofollow, noarchive, nocache" />
         <meta name="googlebot" content="noindex, nofollow, noarchive" />
@@ -128,16 +130,16 @@ function App() {
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
-        <meta property="og:title" content={activeConfig.title} />
-        <meta property="og:description" content={activeConfig.description} />
+        <meta property="og:title" content={t("wedding.title")} />
+        <meta property="og:description" content={t("wedding.description")} />
         <meta property="og:image" content={activeConfig.ogImage} />
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={window.location.href} />
-        <meta property="twitter:title" content={activeConfig.title} />
+        <meta property="twitter:title" content={t("wedding.title")} />
         <meta
           property="twitter:description"
-          content={activeConfig.description}
+          content={t("wedding.description")}
         />
         <meta property="twitter:image" content={activeConfig.ogImage} />
         {/* Favicon */}
@@ -149,13 +151,13 @@ function App() {
 
       <Suspense
         fallback={
-          <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-50">
+          <div className="min-h-screen flex items-center justify-center bg-theme-support-3">
             <div className="text-center">
               <Heart
-                className="h-12 w-12 text-rose-500 mx-auto mb-4 animate-pulse"
+                className="h-12 w-12 text-theme-main-2 mx-auto mb-4 animate-pulse"
                 fill="currentColor"
               />
-              <p className="text-gray-600">Loading...</p>
+              <p className="text-theme-accent">{t("loading")}</p>
             </div>
           </div>
         }

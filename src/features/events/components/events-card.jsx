@@ -11,7 +11,7 @@ import {
   Apple,
   Calendar as CalendarIcon,
 } from "lucide-react";
-import { formatEventDate } from "@/lib/format-event-date";
+import { useLanguage } from "@/lib/language-context";
 
 const Modal = ({ isOpen, onClose, children }) => {
   return (
@@ -85,6 +85,7 @@ const CalendarButton = ({ icon: Icon, label, onClick, className = "" }) => (
  */
 const SingleEventCard = ({ eventData }) => {
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const { t } = useLanguage();
 
   const googleCalendarLink = () => {
     const startDate = new Date(`${eventData.date}T${eventData.startTime}:00`);
@@ -141,7 +142,7 @@ END:VCALENDAR`;
       >
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-semibold text-theme-accent">
-            {eventData.title.split(" - ")[0]}
+            {eventData.title}
           </h3>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -155,14 +156,11 @@ END:VCALENDAR`;
         <div className="space-y-3 text-theme-accent/70">
           <div className="flex items-center space-x-3">
             <Calendar className="w-5 h-5 text-theme-main-2" />
-            <span>{formatEventDate(eventData.date)}</span>
+            <span>{t("wedding.displayDate")}</span>
           </div>
           <div className="flex items-center space-x-3">
             <Clock className="w-5 h-5 text-theme-main-2" />
-            <span>
-              {eventData.startTime?.substring(0, 5) || eventData.startTime} -{" "}
-              {eventData.endTime?.substring(0, 5) || eventData.endTime}
-            </span>
+            <span>{eventData.time}</span>
           </div>
           <div className="flex items-center space-x-3">
             <MapPin className="w-5 h-5 text-theme-main-2" />
@@ -178,7 +176,7 @@ END:VCALENDAR`;
         <div className="space-y-6 ">
           <div className="flex justify-between  items-center">
             <h3 className="text-xl font-semibold text-theme-accent">
-              Add to Calendar
+              {t("events.add_to_calendar")}
             </h3>
             <motion.button
               whileHover={{ scale: 1.1 }}

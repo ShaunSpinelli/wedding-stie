@@ -66,6 +66,21 @@ CREATE INDEX idx_wishes_created_at ON wishes(created_at DESC);
 CREATE INDEX idx_agenda_invitation_uid ON agenda(invitation_uid);
 CREATE INDEX idx_agenda_order ON agenda(invitation_uid, order_index);
 
+-- Guests table
+CREATE TABLE guests (
+    id SERIAL PRIMARY KEY,
+    invitation_uid VARCHAR(50) NOT NULL REFERENCES invitations(uid) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    attending VARCHAR(20) DEFAULT 'MAYBE' CHECK (attending IN ('ATTENDING', 'NOT_ATTENDING', 'MAYBE')),
+    country VARCHAR(100),
+    features TEXT[] DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_guests_invitation_uid ON guests(invitation_uid);
+
 -- Trigger to auto-update updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$

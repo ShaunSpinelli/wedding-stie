@@ -10,14 +10,25 @@ import {
   Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/language-context";
 
 const menuItems = [
-  { icon: Home, label: "Home", href: "#home", id: "home" },
-  { icon: History, label: "Story", href: "#timeline", id: "timeline" },
-  { icon: Calendar, label: "Itinerary", href: "#schedule", id: "schedule" },
-  { icon: CalendarHeart, label: "Events", href: "#event", id: "event" },
-  { icon: MapPin, label: "Location", href: "#location", id: "location" },
-  { icon: MessageCircleHeart, label: "Wishes", href: "#wishes", id: "wishes" },
+  { icon: Home, labelKey: "nav.home", href: "#home", id: "home" },
+  { icon: History, labelKey: "nav.story", href: "#timeline", id: "timeline" },
+  {
+    icon: Calendar,
+    labelKey: "nav.itinerary",
+    href: "#schedule",
+    id: "schedule",
+  },
+  { icon: CalendarHeart, labelKey: "nav.events", href: "#event", id: "event" },
+  { icon: MapPin, labelKey: "nav.location", href: "#location", id: "location" },
+  {
+    icon: MessageCircleHeart,
+    labelKey: "nav.wishes",
+    href: "#wishes",
+    id: "wishes",
+  },
 ];
 
 /**
@@ -38,6 +49,7 @@ const menuItems = [
  */
 const BottomBar = () => {
   const [active, setActive] = React.useState("home");
+  const { t } = useLanguage();
 
   // Function to handle smooth scrolling when clicking menu items
   const handleMenuClick = useCallback((e, href, id) => {
@@ -110,7 +122,7 @@ const BottomBar = () => {
           <nav className="flex items-center gap-1">
             {menuItems.map((item) => (
               <motion.a
-                key={item.label}
+                key={item.labelKey}
                 href={item.href}
                 className={cn(
                   "flex flex-col items-center justify-center py-2 px-2 rounded-xl transition-all duration-300 ease-in-out",
@@ -150,7 +162,7 @@ const BottomBar = () => {
                   }}
                   transition={{ duration: 0.2 }}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </motion.span>
               </motion.a>
             ))}

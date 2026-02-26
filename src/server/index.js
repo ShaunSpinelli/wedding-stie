@@ -15,6 +15,7 @@ import { zValidator } from "@hono/zod-validator";
 // Feature routes
 import { invitationRoutes } from "./features/invitation/index.js";
 import { wishesRoutes } from "./features/wishes/index.js";
+import { guestsRoutes } from "./features/guests/index.js";
 import { uidParamSchema } from "./schemas.js";
 import { getDbClient } from "./lib/db-client.js";
 
@@ -28,8 +29,12 @@ app.use("*", logger());
 app.use(
   "*",
   cors({
-    origin: ["*"],
-    allowMethods: ["GET", "POST", "PUT", "DELETE"],
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
   }),
 );
 
@@ -40,6 +45,9 @@ api.route("/invitation", invitationRoutes);
 
 // Wishes routes: /api/:uid/wishes/*
 api.route("/:uid/wishes", wishesRoutes);
+
+// Guests routes: /api/:uid/guests/*
+api.route("/:uid/guests", guestsRoutes);
 
 // Stats route (related to wishes but at /:uid level)
 api.get("/:uid/stats", zValidator("param", uidParamSchema), async (c) => {
