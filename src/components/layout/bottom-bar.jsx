@@ -1,27 +1,13 @@
 // src/components/bottom-bar/BottomBar.jsx
-import React, { useEffect, useCallback, useMemo } from "react";
+import React, { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import {
-  Home,
-  CalendarHeart,
-  MapPin,
-  Gift,
-  MessageCircleHeart,
-} from "lucide-react";
+import { Home, CalendarHeart, MapPin, MessageCircleHeart } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useConfig } from "@/features/invitation/hooks/use-config";
 
-const baseMenuItems = [
+const menuItems = [
   { icon: Home, label: "Home", href: "#home", id: "home" },
   { icon: CalendarHeart, label: "Events", href: "#event", id: "event" },
   { icon: MapPin, label: "Location", href: "#location", id: "location" },
-  {
-    icon: Gift,
-    label: "Gifts",
-    href: "#gifts",
-    id: "gifts",
-    requiresBanks: true,
-  },
   { icon: MessageCircleHeart, label: "Wishes", href: "#wishes", id: "wishes" },
 ];
 
@@ -42,19 +28,7 @@ const baseMenuItems = [
  * @returns {JSX.Element} A JSX element containing the animated bottom navigation bar with auto-detection.
  */
 const BottomBar = () => {
-  const config = useConfig();
   const [active, setActive] = React.useState("home");
-
-  // Filter menu items based on config - hide gifts when no banks configured
-  const menuItems = useMemo(() => {
-    const hasBanks = config?.banks && config.banks.length > 0;
-    return baseMenuItems.filter((item) => {
-      if (item.requiresBanks && !hasBanks) {
-        return false;
-      }
-      return true;
-    });
-  }, [config?.banks]);
 
   // Function to handle smooth scrolling when clicking menu items
   const handleMenuClick = useCallback((e, href, id) => {
@@ -86,8 +60,10 @@ const BottomBar = () => {
           const sectionId = entry.target.id;
 
           // Only update if it's a valid menu section
-          const validSection = menuItems.find((item) => item.id === sectionId);
-          if (validSection) {
+          const isValidSection = menuItems.some(
+            (item) => item.id === sectionId,
+          );
+          if (isValidSection) {
             setActive(sectionId);
           }
         }
@@ -111,7 +87,7 @@ const BottomBar = () => {
     return () => {
       observer.disconnect();
     };
-  }, [menuItems]);
+  }, []);
 
   return (
     <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">

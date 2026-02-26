@@ -12,7 +12,7 @@ const invitationRoutes = new Hono();
 
 /**
  * GET /invitation/:uid
- * Get invitation by UID with all related data (agenda, banks)
+ * Get invitation by UID with all related data (agenda)
  */
 invitationRoutes.get(
   "/:uid",
@@ -41,12 +41,6 @@ invitationRoutes.get(
         [uid],
       );
 
-      // Get bank accounts
-      const banksResult = await pool.query(
-        "SELECT id, bank, account_number, account_name FROM banks WHERE invitation_uid = $1 ORDER BY order_index",
-        [uid],
-      );
-
       // Format the response to match frontend config structure
       const data = {
         title: invitation.title,
@@ -72,11 +66,7 @@ invitationRoutes.get(
           location: a.location,
           address: a.address,
         })),
-        banks: banksResult.rows.map((b) => ({
-          bank: b.bank,
-          accountNumber: b.account_number,
-          accountName: b.account_name,
-        })),
+        banks: [],
       };
 
       return c.json({ success: true, data });

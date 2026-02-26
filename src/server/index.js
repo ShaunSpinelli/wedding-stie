@@ -3,7 +3,7 @@
  * Hono-based REST API for wedding invitations
  *
  * Features:
- * - Invitation: Fetch invitation data with agenda and bank accounts
+ * - Invitation: Fetch invitation data with agenda
  * - Wishes: Guest wishes/RSVP management
  */
 

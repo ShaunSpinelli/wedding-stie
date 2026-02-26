@@ -60,24 +60,11 @@ CREATE TABLE agenda (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Banks table (digital envelope accounts)
-CREATE TABLE banks (
-    id SERIAL PRIMARY KEY,
-    invitation_uid VARCHAR(50) NOT NULL REFERENCES invitations(uid) ON DELETE CASCADE,
-    bank VARCHAR(255) NOT NULL,
-    account_number VARCHAR(100) NOT NULL,
-    account_name VARCHAR(255) NOT NULL,
-    order_index INTEGER DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Indexes for faster queries
 CREATE INDEX idx_wishes_invitation_uid ON wishes(invitation_uid);
 CREATE INDEX idx_wishes_created_at ON wishes(created_at DESC);
 CREATE INDEX idx_agenda_invitation_uid ON agenda(invitation_uid);
 CREATE INDEX idx_agenda_order ON agenda(invitation_uid, order_index);
-CREATE INDEX idx_banks_invitation_uid ON banks(invitation_uid);
-CREATE INDEX idx_banks_order ON banks(invitation_uid, order_index);
 
 -- Trigger to auto-update updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()

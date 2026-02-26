@@ -104,21 +104,6 @@ export function createMockAgenda(overrides = {}) {
 }
 
 /**
- * Creates mock bank data
- * @param {Object} overrides - Override default values
- * @returns {Object} Bank data
- */
-export function createMockBank(overrides = {}) {
-  return {
-    id: 1,
-    bank: "Bank Central Asia",
-    account_number: "1234567890",
-    account_name: "Test Groom",
-    ...overrides,
-  };
-}
-
-/**
  * Creates mock stats data
  * @param {Object} overrides - Override default values
  * @returns {Object} Stats data

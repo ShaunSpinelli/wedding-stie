@@ -67,27 +67,8 @@ const config = {
       title: "Fulfilling Humming", // or Nature Sound
       // Whether music plays automatically when website opens
       autoplay: true,
-      // Whether music repeats continuously
       loop: true,
     },
-
-    // List of bank accounts for digital envelope/gifts
-    banks: [
-      {
-        // Bank name
-        bank: "Bank Central Asia",
-        // Account number
-        accountNumber: "1234567890",
-        // Account holder name (all uppercase)
-        accountName: "FULAN",
-      },
-      {
-        bank: "Bank Mandiri",
-        accountNumber: "0987654321",
-        accountName: "FULANA",
-      },
-      // You can add more banks with the same format
-    ],
   },
 };
 

@@ -42,7 +42,7 @@ INSERT INTO invitations (
     'Masjid Al-Ikhlas',                                            -- Venue name
     'Jl. Raya Bogor No. 123, Jakarta Timur',                      -- Full address
     'https://goo.gl/maps/example123',                              -- Google Maps short link
-    'https://www.google.com/maps/embed?pb=!1m18...',              -- Google Maps embed URL (get from Maps ’ Share ’ Embed)
+    'https://www.google.com/maps/embed?pb=!1m18...',              -- Google Maps embed URL (get from Maps  Share  Embed)
     '/images/og-image.jpg',                                        -- Social media preview image
     '/images/favicon.ico',                                         -- Favicon
     '{"src": "/audio/fulfilling-humming.mp3", "title": "Fulfilling Humming", "autoplay": true, "loop": true}'::jsonb -- Audio settings
@@ -52,11 +52,6 @@ INSERT INTO invitations (
 INSERT INTO agenda (invitation_uid, title, date, start_time, end_time, location, address, order_index) VALUES
 ('ahmad-fatimah-2025', 'Akad Nikah', '2025-06-15', '09:00', '10:30', 'Masjid Al-Ikhlas', 'Jl. Raya Bogor No. 123, Jakarta Timur', 1),
 ('ahmad-fatimah-2025', 'Resepsi Nikah', '2025-06-15', '11:00', '14:00', 'Grand Ballroom Hotel Majesty', 'Jl. Sudirman No. 45, Jakarta Pusat', 2);
-
--- Step 3: Insert bank accounts for digital envelope (can have multiple banks)
-INSERT INTO banks (invitation_uid, bank, account_number, account_name, order_index) VALUES
-('ahmad-fatimah-2025', 'Bank Central Asia', '1234567890', 'AHMAD BIN ABDULLAH', 1),
-('ahmad-fatimah-2025', 'Bank Syariah Indonesia', '0987654321', 'FATIMAH BINTI IBRAHIM', 2);
 
 COMMIT;
 
@@ -81,10 +76,6 @@ INSERT INTO invitations (uid, title, description, groom_name, bride_name, parent
 INSERT INTO agenda (invitation_uid, title, date, start_time, end_time, location, address, order_index) VALUES
 ('CHANGE-ME-2025', 'Akad Nikah', '2025-12-31', '09:00', '10:30', 'Venue 1', 'Address 1', 1),
 ('CHANGE-ME-2025', 'Resepsi', '2025-12-31', '11:00', '14:00', 'Venue 2', 'Address 2', 2);
-
-INSERT INTO banks (invitation_uid, bank, account_number, account_name, order_index) VALUES
-('CHANGE-ME-2025', 'Bank Name 1', '1234567890', 'ACCOUNT NAME 1', 1),
-('CHANGE-ME-2025', 'Bank Name 2', '0987654321', 'ACCOUNT NAME 2', 2);
 
 COMMIT;
 

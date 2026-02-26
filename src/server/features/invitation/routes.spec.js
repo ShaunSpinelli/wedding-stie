@@ -10,7 +10,6 @@ import {
   createMockPool,
   createMockInvitation,
   createMockAgenda,
-  createMockBank,
 } from "../../test-utils.js";
 
 // Mock the db-client module
@@ -32,21 +31,16 @@ describe("invitation routes", () => {
   });
 
   describe("GET /invitation/:uid", () => {
-    it("should return invitation with agenda and banks", async () => {
+    it("should return invitation with agenda", async () => {
       const mockInvitation = createMockInvitation();
       const mockAgenda = [
         createMockAgenda({ id: 1, title: "Akad Nikah" }),
         createMockAgenda({ id: 2, title: "Resepsi" }),
       ];
-      const mockBanks = [
-        createMockBank({ id: 1, bank: "BCA" }),
-        createMockBank({ id: 2, bank: "Mandiri" }),
-      ];
 
       mockPool = createMockPool({
         "SELECT * FROM invitations": { rows: [mockInvitation] },
         "SELECT id, title, date, start_time": { rows: mockAgenda },
-        "SELECT id, bank, account_number": { rows: mockBanks },
       });
 
       getDbClient.mockResolvedValue(mockPool);
@@ -59,7 +53,7 @@ describe("invitation routes", () => {
       expect(json.data.groomName).toBe("Test Groom");
       expect(json.data.brideName).toBe("Test Bride");
       expect(json.data.agenda).toHaveLength(2);
-      expect(json.data.banks).toHaveLength(2);
+      expect(json.data.banks).toEqual([]);
     });
 
     it("should format response to match frontend structure", async () => {
@@ -76,7 +70,6 @@ describe("invitation routes", () => {
       mockPool = createMockPool({
         "SELECT * FROM invitations": { rows: [mockInvitation] },
         "SELECT id, title, date, start_time": { rows: [] },
-        "SELECT id, bank, account_number": { rows: [] },
       });
 
       getDbClient.mockResolvedValue(mockPool);
@@ -114,13 +107,12 @@ describe("invitation routes", () => {
       expect(res.status).toBe(400);
     });
 
-    it("should handle empty agenda and banks", async () => {
+    it("should handle empty agenda", async () => {
       const mockInvitation = createMockInvitation();
 
       mockPool = createMockPool({
         "SELECT * FROM invitations": { rows: [mockInvitation] },
         "SELECT id, title, date, start_time": { rows: [] },
-        "SELECT id, bank, account_number": { rows: [] },
       });
 
       getDbClient.mockResolvedValue(mockPool);
@@ -150,7 +142,6 @@ describe("invitation routes", () => {
       mockPool = createMockPool({
         "SELECT * FROM invitations": { rows: [mockInvitation] },
         "SELECT id, title, date, start_time": { rows: mockAgenda },
-        "SELECT id, bank, account_number": { rows: [] },
       });
 
       getDbClient.mockResolvedValue(mockPool);
@@ -165,35 +156,6 @@ describe("invitation routes", () => {
         endTime: "11:00",
         location: "Mosque",
         address: "123 Street",
-      });
-    });
-
-    it("should format bank items correctly", async () => {
-      const mockInvitation = createMockInvitation();
-      const mockBanks = [
-        {
-          id: 1,
-          bank: "BCA",
-          account_number: "1234567890",
-          account_name: "Ahmad",
-        },
-      ];
-
-      mockPool = createMockPool({
-        "SELECT * FROM invitations": { rows: [mockInvitation] },
-        "SELECT id, title, date, start_time": { rows: [] },
-        "SELECT id, bank, account_number": { rows: mockBanks },
-      });
-
-      getDbClient.mockResolvedValue(mockPool);
-
-      const res = await app.request("/invitation/test-wedding");
-      const json = await res.json();
-
-      expect(json.data.banks[0]).toEqual({
-        bank: "BCA",
-        accountNumber: "1234567890",
-        accountName: "Ahmad",
       });
     });
 
