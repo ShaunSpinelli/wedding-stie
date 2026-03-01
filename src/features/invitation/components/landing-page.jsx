@@ -1,109 +1,134 @@
+import { useState } from "react";
 import { useLanguage } from "@/lib/language-context";
-import { motion } from "framer-motion";
-import { Calendar, Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { InvitationCard } from "./invitation-card";
 
 const LandingPage = ({ onOpenInvitation }) => {
   const { t } = useLanguage();
+  const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="min-h-screen relative overflow-hidden bg-theme-main-1"
-    >
+    <div className="fixed inset-0 w-full h-full overflow-hidden bg-theme-main-1 flex items-center justify-center z-0">
       {/* Decorative Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-theme-main-1 via-theme-support-3/50 to-theme-main-1" />
-      <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-theme-main-2/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-theme-support-1/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
+      <div className="absolute inset-0 bg-gradient-to-b from-theme-main-1 via-theme-support-3/50 to-theme-main-1 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-theme-main-2/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-theme-support-1/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none" />
 
-      {/* Main Content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="w-full max-w-md lg:max-w-2xl"
+      {/* Main Content Container */}
+      <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-4">
+        
+        {/* Interaction Area */}
+        <div 
+          className="relative flex flex-col items-center justify-center cursor-pointer select-none"
+          onClick={() => !isEnvelopeOpen && setIsEnvelopeOpen(true)}
         >
-          {/* Card Container */}
-          <div className="backdrop-blur-sm bg-white/60 p-6 sm:p-8 md:p-10 lg:p-16 rounded-3xl border border-theme-support-1/20 shadow-2xl">
-            {/* Top Decorative Line */}
-            <div className="flex items-center justify-center gap-3 mb-6 sm:mb-8">
-              <div className="h-px w-12 sm:w-16 lg:w-24 bg-theme-support-1/30" />
-              <div className="w-2 h-2 rounded-full bg-theme-main-2" />
-              <div className="h-px w-12 sm:w-16 lg:w-24 bg-theme-support-1/30" />
-            </div>
-
-            {/* Date and Time */}
+          {/* Invitation Card Clipping Container */}
+          <div className={`absolute inset-0 z-10 flex items-center justify-center pointer-events-none ${isEnvelopeOpen ? "" : "overflow-hidden"}`}>
+            {/* The Invitation Card */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-col md:flex-row gap-4 mb-6 sm:mb-8 items-center justify-center"
+              initial={{ y: 0, opacity: 0, scale: 0.8, zIndex: 10 }}
+              animate={{
+                y: isEnvelopeOpen 
+                  ? [0, (window.innerWidth < 640 ? -200 : -350), 0] 
+                  : 0,
+                scale: isEnvelopeOpen ? (window.innerWidth < 640 ? 1.2 : 1.1) : 0.8,
+                opacity: isEnvelopeOpen ? 1 : 0,
+                zIndex: isEnvelopeOpen ? 40 : 10,
+              }}
+              transition={{
+                y: { 
+                  duration: 3.5, 
+                  times: [0, 0.5, 1],
+                  ease: "easeInOut",
+                  delay: 0.2 
+                },
+                scale: { duration: 1.5, delay: 0.3 },
+                opacity: { duration: 0.8, delay: 0.3 },
+                zIndex: { delay: isEnvelopeOpen ? 1.2 : 0 }
+              }}
+              className="absolute w-full max-w-[280px] sm:max-w-[360px] md:max-w-[420px] flex items-center justify-center"
             >
-              <div className="inline-flex flex-col items-center space-y-1 bg-white/90 px-4 sm:px-6 py-2 sm:py-3 rounded-xl min-w-[160px] border border-theme-main-1">
-                <Calendar className="w-5 h-5 text-theme-main-2" />
-                <p className="text-theme-accent font-medium">
-                  {t("wedding.displayDate")}
-                </p>
-              </div>
-
-              <div className="inline-flex flex-col items-center space-y-1 bg-white/90 px-4 sm:px-6 py-2 sm:py-3 rounded-xl min-w-[160px] border border-theme-main-1">
-                <Clock className="w-5 h-5 text-theme-main-2" />
-                <p className="text-theme-accent font-medium">
-                  {t("wedding.displayTime")}
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Couple Names */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="text-center space-y-6"
-            >
-              <div className="space-y-4">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif text-theme-accent leading-tight">
-                  {t("wedding.groomName")}
-                  <span className="text-theme-main-2 mx-2 sm:mx-3 lg:mx-4">
-                    &
-                  </span>
-                  {t("wedding.brideName")}
-                </h1>
-                <div className="h-px w-16 sm:w-24 lg:w-32 mx-auto bg-theme-main-2/30" />
-              </div>
-            </motion.div>
-
-            {/* Open Invitation Button */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="mt-6 sm:mt-8"
-            >
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={onOpenInvitation}
-                className="group relative w-full bg-theme-main-2 text-white px-6 py-3 sm:px-8 sm:py-3 rounded-xl font-medium shadow-lg transition-all duration-200"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  <span>{t("landing.open_invitation")}</span>
-                  <motion.span
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                  >
-                    →
-                  </motion.span>
-                </span>
-                <div className="absolute inset-0 bg-theme-main-3 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-              </motion.button>
+              <InvitationCard isEnvelopeOpen={isEnvelopeOpen} />
             </motion.div>
           </div>
-        </motion.div>
+
+          {/* Envelope Image Container */}
+          <motion.div 
+            initial={{ opacity: 1, zIndex: 20 }}
+            animate={{ opacity: isEnvelopeOpen ? 0.2 : 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="relative"
+          >
+            <img 
+              src="/images/green_envelope.png" 
+              alt="Envelope" 
+              className="w-[600px] sm:w-[800px] md:w-[900px] h-auto drop-shadow-2xl max-w-[150vw]"
+            />
+            
+            {/* MS Seal Overlay - Slower peel effect */}
+            <div className="absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+              <motion.div
+                initial={false}
+                animate={isEnvelopeOpen ? {
+                  rotateX: -25,
+                  y: -15,
+                  opacity: 0,
+                  transition: { duration: 1.5, ease: "easeOut" } // Slower peel (1.2s)
+                } : {
+                  rotateX: 0,
+                  y: 0,
+                  opacity: 1
+                }}
+                style={{ 
+                  transformOrigin: "top",
+                  transformStyle: "preserve-3d"
+                }}
+                className="w-32 h-32 sm:w-48 md:w-56 flex items-center justify-center"
+              >
+                <img 
+                  src="/images/ms-seal.png" 
+                  alt="Seal" 
+                  className="w-full h-full object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)]" 
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Proceed Button */}
+          <AnimatePresence>
+            {isEnvelopeOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 4.0, duration: 1, ease: "easeOut" }}
+                className="absolute top-full -mt-8 sm:-mt-12 md:-mt-16 flex flex-col items-center w-full z-50"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpenInvitation();
+                  }}
+                  className="group relative bg-theme-main-2 text-white px-10 py-4 rounded-full font-serif text-lg tracking-wide shadow-2xl transition-all duration-300 whitespace-nowrap border-2 border-white/20"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-3">
+                    <span>{t("landing.open_invitation")}</span>
+                    <motion.span
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                    >
+                      →
+                    </motion.span>
+                  </span>
+                  <div className="absolute inset-0 bg-theme-main-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
