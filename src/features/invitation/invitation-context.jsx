@@ -17,19 +17,20 @@ export function InvitationProvider({ children }) {
 
   const [config, setConfig] = useState(null);
   const [guest, setGuest] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Set to false for FE-only test
   const [error, setError] = useState(null);
 
   // Debug log to check instantiation
   useEffect(() => {
     console.log(
-      "[InvitationProvider] Context instantiated with UID:",
+      "[InvitationProvider] Context instantiated with UID (Fetches disabled):",
       invitationUid,
     );
   }, [invitationUid]);
 
-  // 1. Initial Load: Fetch Wedding Config
+  // 1. Initial Load: Fetch Wedding Config (DISABLED for FE-only deployment)
   useEffect(() => {
+    /*
     const loadInvitation = async () => {
       try {
         const response = await fetchInvitation(invitationUid);
@@ -46,10 +47,13 @@ export function InvitationProvider({ children }) {
     };
 
     loadInvitation();
+    */
+    setIsLoading(false);
   }, [invitationUid]);
 
-  // 2. Guest Identification & Features
+  // 2. Guest Identification & Features (DISABLED for FE-only deployment)
   useEffect(() => {
+    /*
     const identifyGuest = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const guestParam = urlParams.get("guest");
@@ -84,6 +88,8 @@ export function InvitationProvider({ children }) {
     };
 
     identifyGuest();
+    */
+    setIsLoading(false);
   }, [invitationUid]);
 
   // Helper to check if guest has a specific feature tag
