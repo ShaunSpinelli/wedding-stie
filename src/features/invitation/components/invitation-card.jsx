@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { getAssetPath } from "@/utils/asset-path";
 
 export const InvitationCard = ({ isEnvelopeOpen }) => {
   return (
@@ -12,7 +13,7 @@ export const InvitationCard = ({ isEnvelopeOpen }) => {
       >
         {/* Static Image Invitation */}
         <img
-          src="/invitation.png"
+          src={getAssetPath("/invitation.png")}
           alt="Wedding Invitation"
           className="w-full h-full object-cover select-none pointer-events-none"
         />
@@ -21,7 +22,7 @@ export const InvitationCard = ({ isEnvelopeOpen }) => {
         <div 
           className="absolute inset-0 pointer-events-none opacity-[0.15] mix-blend-multiply"
           style={{ 
-            backgroundImage: "url('/textures/oldpaper.webp')",
+            backgroundImage: `url('${getAssetPath("/textures/oldpaper.webp")}')`,
             backgroundSize: "cover",
           }}
         />

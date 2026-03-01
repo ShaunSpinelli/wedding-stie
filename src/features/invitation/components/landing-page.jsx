@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { motion, AnimatePresence } from "framer-motion";
 import { InvitationCard } from "./invitation-card";
+import { getAssetPath } from "@/utils/asset-path";
 
 const LandingPage = ({ onOpenInvitation }) => {
   const { t } = useLanguage();
@@ -60,12 +61,12 @@ const LandingPage = ({ onOpenInvitation }) => {
             className="relative"
           >
             <img 
-              src="/images/green_envelope.png" 
+              src={getAssetPath("/images/green_envelope.png")} 
               alt="Envelope" 
               className="w-[600px] sm:w-[800px] md:w-[900px] h-auto drop-shadow-2xl max-w-[150vw]"
             />
             
-            {/* MS Seal Overlay - Slower peel effect */}
+            {/* MS Seal Overlay */}
             <div className="absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
               <motion.div
                 initial={false}
@@ -73,7 +74,7 @@ const LandingPage = ({ onOpenInvitation }) => {
                   rotateX: -25,
                   y: -15,
                   opacity: 0,
-                  transition: { duration: 1.5, ease: "easeOut" } // Slower peel (1.2s)
+                  transition: { duration: 1.5, ease: "easeOut" }
                 } : {
                   rotateX: 0,
                   y: 0,
@@ -86,7 +87,7 @@ const LandingPage = ({ onOpenInvitation }) => {
                 className="w-32 h-32 sm:w-48 md:w-56 flex items-center justify-center"
               >
                 <img 
-                  src="/images/ms-seal.png" 
+                  src={getAssetPath("/images/ms-seal.png")} 
                   alt="Seal" 
                   className="w-full h-full object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)]" 
                 />
