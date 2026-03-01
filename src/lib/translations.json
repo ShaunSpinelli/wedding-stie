@@ -5,7 +5,8 @@
     "error_check_url": "Please check your URL or contact the organizer.",
     "landing": {
       "open_invitation": "Open Invitation",
-      "wedding_of": "The Wedding of"
+      "wedding_of": "The Wedding of",
+      "click_to_open": "Click to Open"
     },
     "wedding": {
       "title": "The Wedding of Shaun & Manon",
@@ -245,7 +246,8 @@
     "error_check_url": "Veuillez vérifier votre URL ou contacter l'organisateur.",
     "landing": {
       "open_invitation": "Ouvrir l'invitation",
-      "wedding_of": "Le mariage de"
+      "wedding_of": "Le mariage de",
+      "click_to_open": "Cliquer pour ouvrir"
     },
     "wedding": {
       "title": "Le Mariage de Shaun & Manon",
