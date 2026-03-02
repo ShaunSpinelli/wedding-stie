@@ -23,7 +23,7 @@ const LandingPage = ({ onOpenInvitation }) => {
         
         {/* Interaction Area */}
         <div 
-          className="relative flex flex-col items-center justify-center cursor-pointer select-none"
+          className="relative flex flex-col items-center justify-center cursor-pointer select-none max-h-[90vh]"
           onClick={() => !isEnvelopeOpen && setIsEnvelopeOpen(true)}
         >
           {/* Invitation Card Clipping Container */}
@@ -66,7 +66,7 @@ const LandingPage = ({ onOpenInvitation }) => {
             <img 
               src={getAssetPath("/images/green_envelope.png")} 
               alt="Envelope" 
-              className="w-[600px] sm:w-[800px] md:w-[1000px] h-auto drop-shadow-2xl max-w-[150vw]"
+              className="w-[600px] sm:w-[700px] md:w-[800px] h-auto drop-shadow-2xl max-w-[150vw]"
             />
             
             {/* MS Seal Overlay */}
@@ -98,14 +98,14 @@ const LandingPage = ({ onOpenInvitation }) => {
             </div>
           </motion.div>
 
-          {/* Proceed Button */}
+          {/* Proceed Button - Positioned to the right on desktop */}
           <AnimatePresence>
             {isEnvelopeOpen && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 4.0, duration: 1, ease: "easeOut" }}
-                className="absolute top-full -mt-8 sm:-mt-12 md:-mt-16 flex flex-col items-center w-full z-50"
+                className="absolute top-full -mt-12 sm:-mt-24 md:mt-0 md:top-1/2 md:-translate-y-1/2 md:left-[calc(100%+20px)] md:w-auto flex flex-col items-center w-full z-50"
               >
                 <motion.button
                   whileHover={{ scale: 1.05 }}
