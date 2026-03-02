@@ -1,0 +1,12 @@
+:root.theme-cinematic-brick {
+  /* --- THEME: Cinematic Brick (Bold & Dramatic) --- */
+  --theme-main-1: #bc2c1a; /* Brick Ember (Canvas) */
+  --theme-main-2: #2f2f2f; /* Graphite (Hero / Strong Accents) */
+  --theme-main-3: #cad5ca; /* Ash Grey (Primary Text) */
+
+  --theme-support-1: #b09c82; /* Khaki Beige (Dividers) */
+  --theme-support-2: #1a1a1a; /* Deep Charcoal (Surface Grouping) */
+  --theme-support-3: #2f2f2f; /* Graphite (Depth) */
+
+  --theme-accent: #2f2f2f; /* Graphite (Emphasis) */
+}

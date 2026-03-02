@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 
-export default function Playlist() {
+export default function Playlist({ useAltBg = false }) {
   const { t } = useLanguage();
 
   return (
-    <section id="playlist" className="py-20 bg-white overflow-hidden">
+    <section 
+      id="playlist" 
+      className="py-20 overflow-hidden"
+      style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
+    >
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <motion.div
@@ -18,10 +22,10 @@ export default function Playlist() {
           <motion.span className="inline-block text-theme-main-2 font-medium uppercase tracking-widest text-sm">
             {t("playlist.title")}
           </motion.span>
-          <motion.h2 className="text-4xl md:text-5xl font-serif text-theme-accent">
+          <motion.h2 className="text-4xl md:text-5xl font-serif text-theme-main-2">
             {t("playlist.subtitle")}
           </motion.h2>
-          <p className="text-theme-accent/60 max-w-md mx-auto">
+          <p className="text-theme-main-3 max-w-md mx-auto">
             {t("playlist.description")}
           </p>
         </motion.div>

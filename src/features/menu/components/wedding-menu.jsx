@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Utensils, Wheat, Beef, IceCream } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 
-export default function WeddingMenu() {
+export default function WeddingMenu({ useAltBg = false }) {
   const { t } = useLanguage();
 
   const menuSections = [
@@ -12,7 +12,11 @@ export default function WeddingMenu() {
   ];
 
   return (
-    <section id="menu" className="py-20 bg-theme-support-3/5 overflow-hidden">
+    <section 
+      id="menu" 
+      className="py-20 overflow-hidden"
+      style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
+    >
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <motion.div
@@ -25,10 +29,10 @@ export default function WeddingMenu() {
           <motion.span className="inline-block text-theme-main-2 font-medium uppercase tracking-widest text-sm">
             {t("menu.title")}
           </motion.span>
-          <motion.h2 className="text-4xl md:text-5xl font-serif text-theme-accent">
+          <motion.h2 className="text-4xl md:text-5xl font-serif text-theme-main-2">
             {t("menu.subtitle")}
           </motion.h2>
-          <p className="text-theme-accent/60 max-w-md mx-auto">
+          <p className="text-theme-main-3 max-w-md mx-auto">
             {t("menu.description")}
           </p>
         </motion.div>
@@ -44,7 +48,7 @@ export default function WeddingMenu() {
               viewport={{ once: true }}
               className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl border border-theme-support-1/20 shadow-xl text-center space-y-6 flex flex-col items-center"
             >
-              <div className="w-16 h-16 bg-theme-main-1 rounded-full flex items-center justify-center text-theme-main-2">
+              <div className="w-16 h-16 bg-theme-support-3/5 rounded-full flex items-center justify-center text-theme-main-2">
                 <section.icon className="w-8 h-8" />
               </div>
 
@@ -52,14 +56,14 @@ export default function WeddingMenu() {
                 <h3 className="text-xs font-black uppercase tracking-[0.2em] text-theme-main-2">
                   {t(`menu.${section.key}.title`)}
                 </h3>
-                <h4 className="text-xl font-serif font-bold text-theme-accent">
+                <h4 className="text-xl font-serif font-bold text-theme-main-2">
                   {t(`menu.${section.key}.name`)}
                 </h4>
               </div>
 
               <div className="h-[1px] w-12 bg-theme-support-1/20" />
 
-              <p className="text-sm text-theme-accent/60 leading-relaxed italic">
+              <p className="text-sm text-theme-main-3 leading-relaxed italic">
                 {t(`menu.${section.key}.description`)}
               </p>
             </motion.div>

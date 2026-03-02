@@ -22,6 +22,7 @@ import App from "./app.jsx";
 import "./index.css";
 import { InvitationProvider } from "./features/invitation";
 import { LanguageProvider } from "./lib/language-context";
+import { ThemeProvider } from "./lib/theme-context";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -39,11 +40,13 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <LanguageProvider>
-          <InvitationProvider>
-            <App />
-          </InvitationProvider>
-        </LanguageProvider>
+        <ThemeProvider>
+          <LanguageProvider>
+            <InvitationProvider>
+              <App />
+            </InvitationProvider>
+          </LanguageProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

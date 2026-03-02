@@ -1,0 +1,12 @@
+:root.theme-graphite-noir {
+  /* --- THEME: Graphite Noir (Dark & Moody) --- */
+  --theme-main-1: #2f2f2f; /* Graphite (Canvas) */
+  --theme-main-2: #bc2c1a; /* Brick Ember (Hero/Romance) */
+  --theme-main-3: #cad5ca; /* Ash Grey (Primary Text) */
+
+  --theme-support-1: #b09c82; /* Khaki Beige (Dividers) */
+  --theme-support-2: #1a1a1a; /* True Deep (Surface Grouping) */
+  --theme-support-3: #bc2c1a; /* Brick Ember (Depth) */
+
+  --theme-accent: #bc2c1a; /* Brick Ember (Emphasis) */
+}

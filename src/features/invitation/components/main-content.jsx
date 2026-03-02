@@ -5,6 +5,7 @@ import { Location } from "@/features/location";
 import { Timeline, Schedule } from "@/features/timeline";
 import { GuestRSVP } from "@/features/guests";
 import { WeddingMenu } from "@/features/menu";
+import { Wishes } from "@/features/wishes";
 import { FeatureGate } from "@/components/ui/feature-gate";
 import Funny from "@/features/funny/components/funny";
 import Playlist from "@/features/playlist/components/playlist";
@@ -31,15 +32,14 @@ export default function MainContent() {
 
   return (
     <>
-      <Hero />
-      <Timeline />
-      <Schedule />
-      <GuestRSVP />
-      <WeddingMenu />
-      <Events />
+      <Hero useAltBg={false} />
+      <Timeline useAltBg={true} />
+      <Schedule useAltBg={false} />
+      <GuestRSVP useAltBg={true} />
+      <WeddingMenu useAltBg={false} />
+      <Events useAltBg={true} />
       <Location />
-
-      <Playlist />
+      <Playlist useAltBg={true} />
 
       {/* Proof of Concept: Conditional Component based on tags */}
       <FeatureGate feature="funny">

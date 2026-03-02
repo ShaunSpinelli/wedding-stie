@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2024-present mrofisr
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -23,6 +23,7 @@ import { Heart, Settings } from "lucide-react";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { useLanguage } from "@/lib/language-context";
 import { LanguageToggle } from "@/components/ui/language-toggle";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 // import { useAudio } from "@/hooks/use-audio";
 import { getAdminSecret } from "@/services/api";
 import staticConfig from "@/config/config";
@@ -49,7 +50,7 @@ function App() {
   const [isInvitationOpen, setIsInvitationOpen] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] =
     useState(!!getAdminSecret());
-  const { config, isLoading, error } = useInvitation();
+  const { config, error } = useInvitation();
   const { t } = useLanguage();
   const location = useLocation();
 
@@ -66,21 +67,6 @@ function App() {
   const handleAdminLogin = () => {
     setIsAdminAuthenticated(true);
   };
-
-  // Show loading state
-  if (isLoading && !isAdminPath) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-theme-support-3">
-        <div className="text-center">
-          <Heart
-            className="h-12 w-12 text-theme-main-2 mx-auto mb-4 animate-pulse"
-            fill="currentColor"
-          />
-          <p className="text-theme-accent">{t("loading")}</p>
-        </div>
-      </div>
-    );
-  }
 
   // Show error state
   if (error && !isAdminPath) {
@@ -101,6 +87,7 @@ function App() {
   return (
     <HelmetProvider>
       <LanguageToggle />
+      <ThemeToggle />
 
       {/* Admin Toggle Button */}
       {location.pathname !== "/admin" && (
@@ -118,17 +105,6 @@ function App() {
         <title>{t("wedding.title")}</title>
         <meta name="title" content={t("wedding.title")} />
         <meta name="description" content={t("wedding.description")} />
-        {/* Prevent Wayback Machine and Web Archiving */}
-        <meta name="robots" content="noindex, nofollow, noarchive, nocache" />
-        <meta name="googlebot" content="noindex, nofollow, noarchive" />
-        <meta name="bingbot" content="noindex, nofollow, noarchive" />
-        <meta name="archive" content="no" />
-        <meta
-          name="cache-control"
-          content="no-cache, no-store, must-revalidate"
-        />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
@@ -148,20 +124,12 @@ function App() {
         <link rel="icon" type="image/x-icon" href={activeConfig.favicon} />
         {/* Additional Meta Tags */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#FDA4AF" /> {/* Rose-300 color */}
+        <meta name="theme-color" content="#FDA4AF" />
       </Helmet>
 
       <Suspense
         fallback={
-          <div className="min-h-screen flex items-center justify-center bg-theme-support-3">
-            <div className="text-center">
-              <Heart
-                className="h-12 w-12 text-theme-main-2 mx-auto mb-4 animate-pulse"
-                fill="currentColor"
-              />
-              <p className="text-theme-accent">{t("loading")}</p>
-            </div>
-          </div>
+          <div className="min-h-screen bg-theme-main-1" />
         }
       >
         <Routes>

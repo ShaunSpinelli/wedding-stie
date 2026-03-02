@@ -1,0 +1,12 @@
+:root.theme-khaki-romantic {
+  /* --- THEME: Khaki Romantic (Warm & Soft) --- */
+  --theme-main-1: #b09c82; /* Khaki Beige (Canvas) */
+  --theme-main-2: #bc2c1a; /* Brick Ember (Hero/Romance) */
+  --theme-main-3: #2f2f2f; /* Graphite (Primary Text) */
+
+  --theme-support-1: #cad5ca; /* Ash Grey (Dividers) */
+  --theme-support-2: #2f2f2f; /* Graphite (Surface Grouping) */
+  --theme-support-3: #bc2c1a; /* Brick Ember (Depth) */
+
+  --theme-accent: #bc2c1a; /* Brick Ember (Emphasis) */
+}

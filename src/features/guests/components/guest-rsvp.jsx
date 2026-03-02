@@ -17,13 +17,13 @@ import { useInvitation } from "@/features/invitation/invitation-context";
 import { searchGuest, createGuest, updateGuest } from "@/services/api";
 import { getGuestName } from "@/lib/invitation-storage";
 
-export default function GuestRSVP() {
+export default function GuestRSVP({ useAltBg = false }) {
   const { uid, setGuest: setGlobalGuest } = useInvitation();
   const { t } = useLanguage();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); 
   const [saving, setSaving] = useState(false);
-  const [isEditing, setIsEditMode] = useState(false);
+  const [isEditing, setIsEditMode] = useState(true);
   const [guest, setLocalGuest] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -37,105 +37,13 @@ export default function GuestRSVP() {
   const [msg, setMsg] = useState({ type: "", text: "" });
 
   useEffect(() => {
-    const initGuest = async () => {
-      const storedName = getGuestName();
-      if (storedName && uid) {
-        setFormData((prev) => ({ ...prev, name: storedName }));
-        try {
-          const response = await searchGuest(uid, { name: storedName });
-          if (response.success && response.data) {
-            const g = response.data;
-            setLocalGuest(g);
-            setGlobalGuest(g); // Sync to context
-            setFormData({
-              name: g.name || "",
-              email: g.email || "",
-              attending: g.attending || "MAYBE",
-              dietary_requirements: g.dietary_requirements || "",
-              has_plus_one: g.has_plus_one === true,
-              plus_one_name: g.plus_one_name || "",
-              children_count: g.children_count || 0,
-            });
-            setIsEditMode(false);
-          }
-        } catch {
-          setIsEditMode(true);
-        }
-      } else {
-        setIsEditMode(true);
-      }
-      setLoading(false);
-    };
-
-    initGuest();
+    setLoading(false);
+    setIsEditMode(true);
   }, [uid, setGlobalGuest]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSaving(true);
-    setMsg({ type: "", text: "" });
-
-    try {
-      let activeGuest = guest;
-      if (!activeGuest && formData.email) {
-        try {
-          const searchResponse = await searchGuest(uid, {
-            email: formData.email,
-          });
-          if (searchResponse.success && searchResponse.data) {
-            activeGuest = searchResponse.data;
-            setLocalGuest(activeGuest);
-            setGlobalGuest(activeGuest);
-          }
-        } catch {
-          /* proceed */
-        }
-      }
-
-      const payload = {
-        name: formData.name,
-        email: formData.email || "",
-        attending: formData.attending,
-        dietary_requirements: formData.dietary_requirements || "",
-        has_plus_one: formData.has_plus_one,
-        plus_one_name: formData.has_plus_one ? formData.plus_one_name : "",
-        children_count: parseInt(formData.children_count) || 0,
-      };
-
-      if (activeGuest) {
-        const response = await updateGuest(uid, activeGuest.id, payload);
-        if (response.success) {
-          const updated = response.data;
-          setLocalGuest(updated);
-          setGlobalGuest(updated);
-          setMsg({ type: "success", text: t("rsvp.form.success_update") });
-          setIsEditMode(false);
-        }
-      } else {
-        const response = await createGuest(uid, payload);
-        if (response.success) {
-          const created = response.data;
-          setLocalGuest(created);
-          setGlobalGuest(created);
-          setMsg({ type: "success", text: t("rsvp.form.success_create") });
-          setIsEditMode(false);
-        }
-      }
-    } catch {
-      setMsg({
-        type: "error",
-        text: "Something went wrong. Please try again.",
-      });
-    } finally {
-      setSaving(false);
-      setTimeout(
-        () =>
-          setMsg((prev) =>
-            prev.type === "success" ? { type: "", text: "" } : prev,
-          ),
-        5000,
-      );
-    }
+    setMsg({ type: "success", text: "RSVP Test: Form submission mock success!" });
   };
 
   if (loading) {
@@ -149,7 +57,8 @@ export default function GuestRSVP() {
   return (
     <section
       id="rsvp"
-      className="py-20 bg-theme-support-3/10 relative overflow-hidden"
+      className="py-20 relative overflow-hidden"
+      style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
     >
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -162,7 +71,7 @@ export default function GuestRSVP() {
           <motion.span className="inline-block text-theme-main-2 font-medium uppercase tracking-widest text-sm">
             {t("rsvp.title")}
           </motion.span>
-          <motion.h2 className="text-4xl md:text-5xl font-serif text-theme-accent">
+          <motion.h2 className="text-4xl md:text-5xl font-serif text-theme-main-2">
             {t("rsvp.subtitle")}
           </motion.h2>
         </motion.div>
@@ -185,10 +94,10 @@ export default function GuestRSVP() {
                 >
                   <div className="flex justify-between items-start">
                     <div className="space-y-1">
-                      <h3 className="text-2xl font-bold text-theme-accent">
+                      <h3 className="text-2xl font-bold text-theme-main-2">
                         {guest.name}
                       </h3>
-                      <p className="text-theme-main-2 font-medium flex items-center gap-2 italic">
+                      <p className="text-theme-main-3 font-medium flex items-center gap-2 italic">
                         <Sparkles className="w-4 h-4" />
                         {t(
                           `wishes.attendance.${guest.attending.toLowerCase()}`,
@@ -197,15 +106,15 @@ export default function GuestRSVP() {
                     </div>
                     <button
                       onClick={() => setIsEditMode(true)}
-                      className="p-3 rounded-full bg-theme-main-1 text-theme-accent hover:bg-theme-main-2 hover:text-white transition-all shadow-sm"
+                      className="p-3 rounded-full bg-theme-main-1 text-theme-main-2 hover:bg-theme-main-2 hover:text-white transition-all shadow-sm"
                     >
                       <Edit2 className="w-5 h-5" />
                     </button>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-theme-support-1/10 pt-8">
-                    <div className="flex items-center gap-4 text-theme-accent/70">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/50 flex items-center justify-center flex-shrink-0">
+                    <div className="flex items-center gap-4 text-theme-main-3">
+                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
                         <Mail className="w-5 h-5 text-theme-main-2" />
                       </div>
                       <div>
@@ -217,8 +126,8 @@ export default function GuestRSVP() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 text-theme-accent/70">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/50 flex items-center justify-center flex-shrink-0">
+                    <div className="flex items-center gap-4 text-theme-main-3">
+                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
                         <Utensils className="w-5 h-5 text-theme-main-2" />
                       </div>
                       <div>
@@ -230,8 +139,8 @@ export default function GuestRSVP() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 text-theme-accent/70">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/50 flex items-center justify-center flex-shrink-0">
+                    <div className="flex items-center gap-4 text-theme-main-3">
+                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
                         <Users className="w-5 h-5 text-theme-main-2" />
                       </div>
                       <div>
@@ -243,8 +152,8 @@ export default function GuestRSVP() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 text-theme-accent/70">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/50 flex items-center justify-center flex-shrink-0">
+                    <div className="flex items-center gap-4 text-theme-main-3">
+                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
                         <Baby className="w-5 h-5 text-theme-main-2" />
                       </div>
                       <div>
@@ -258,12 +167,11 @@ export default function GuestRSVP() {
                     </div>
                   </div>
 
-                  {/* Feedback Message */}
                   {msg.text && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`p-4 rounded-xl flex items-center gap-3 ${msg.type === "success" ? "bg-theme-support-1/10 text-theme-accent" : "bg-theme-main-3/10 text-theme-main-3"}`}
+                      className={`p-4 rounded-xl flex items-center gap-3 ${msg.type === "success" ? "bg-theme-support-1/10 text-theme-main-2" : "bg-theme-main-3/10 text-theme-main-3"}`}
                     >
                       {msg.type === "success" ? (
                         <CheckCircle className="w-5 h-5" />
@@ -285,7 +193,7 @@ export default function GuestRSVP() {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-accent/70 text-sm font-medium">
+                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
                         <User className="w-4 h-4" />
                         {t("rsvp.form.label_name")}
                       </label>
@@ -296,12 +204,12 @@ export default function GuestRSVP() {
                         onChange={(e) =>
                           setFormData({ ...formData, name: e.target.value })
                         }
-                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-accent"
+                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
                         placeholder={t("rsvp.form.placeholder_name")}
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-accent/70 text-sm font-medium">
+                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
                         <Mail className="w-4 h-4" />
                         {t("rsvp.form.label_email")}
                       </label>
@@ -311,14 +219,14 @@ export default function GuestRSVP() {
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
                         }
-                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-accent"
+                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
                         placeholder={t("rsvp.form.placeholder_email")}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-theme-accent/70 text-sm font-medium">
+                    <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
                       <Utensils className="w-4 h-4" />
                       {t("rsvp.form.label_dietary")}
                     </label>
@@ -330,14 +238,14 @@ export default function GuestRSVP() {
                           dietary_requirements: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-accent resize-none h-20"
+                      className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2 resize-none h-20"
                       placeholder={t("rsvp.form.placeholder_dietary")}
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-accent/70 text-sm font-medium">
+                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
                         <Users className="w-4 h-4" />
                         {t("rsvp.form.label_plus_one")}
                       </label>
@@ -349,7 +257,7 @@ export default function GuestRSVP() {
                             onClick={() =>
                               setFormData({ ...formData, has_plus_one: val })
                             }
-                            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${formData.has_plus_one === val ? "bg-theme-main-2 text-white shadow-sm" : "text-theme-accent/40"}`}
+                            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${formData.has_plus_one === val ? "bg-theme-main-2 text-white shadow-sm" : "text-theme-main-3/40"}`}
                           >
                             {val ? "YES" : "NO"}
                           </button>
@@ -357,7 +265,7 @@ export default function GuestRSVP() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-accent/70 text-sm font-medium">
+                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
                         <Baby className="w-4 h-4" />
                         {t("rsvp.form.label_children")}
                       </label>
@@ -371,7 +279,7 @@ export default function GuestRSVP() {
                             children_count: parseInt(e.target.value) || 0,
                           })
                         }
-                        className="w-full px-4 py-2 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-accent"
+                        className="w-full px-4 py-2 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
                       />
                     </div>
                   </div>
@@ -382,7 +290,7 @@ export default function GuestRSVP() {
                       animate={{ opacity: 1, height: "auto" }}
                       className="space-y-2"
                     >
-                      <label className="flex items-center gap-2 text-theme-accent/70 text-sm font-medium">
+                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
                         <User className="w-4 h-4 opacity-50" />
                         {t("rsvp.form.label_plus_one_name")}
                       </label>
@@ -395,14 +303,14 @@ export default function GuestRSVP() {
                             plus_one_name: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-accent"
+                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
                         placeholder={t("rsvp.form.placeholder_plus_one_name")}
                       />
                     </motion.div>
                   )}
 
                   <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-theme-accent/70 text-sm font-medium">
+                    <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
                       <CheckCircle className="w-4 h-4" />
                       {t("rsvp.form.label_attendance")}
                     </label>
@@ -414,7 +322,7 @@ export default function GuestRSVP() {
                           onClick={() =>
                             setFormData({ ...formData, attending: status })
                           }
-                          className={`px-4 py-3 rounded-xl text-xs font-bold border transition-all ${formData.attending === status ? "bg-theme-main-2 border-theme-main-2 text-white shadow-md" : "bg-white border-theme-support-1/20 text-theme-accent/60 hover:border-theme-main-2/30"}`}
+                          className={`px-4 py-3 rounded-xl text-xs font-bold border transition-all ${formData.attending === status ? "bg-theme-main-2 border-theme-main-2 text-white shadow-md" : "bg-white border-theme-support-1/20 text-theme-main-3/60 hover:border-theme-main-2/30"}`}
                         >
                           {t(`wishes.attendance.${status.toLowerCase()}`)}
                         </button>
@@ -438,7 +346,7 @@ export default function GuestRSVP() {
                     <button
                       type="submit"
                       disabled={saving}
-                      className="w-full bg-theme-accent text-white py-4 rounded-xl font-bold shadow-lg hover:bg-theme-accent/90 disabled:bg-theme-support-1/50 transition-all flex justify-center items-center gap-2"
+                      className="w-full bg-theme-main-2 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-theme-main-2/90 disabled:bg-theme-support-1/50 transition-all flex justify-center items-center gap-2"
                     >
                       {saving ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -451,7 +359,7 @@ export default function GuestRSVP() {
                       <button
                         type="button"
                         onClick={() => setIsEditMode(false)}
-                        className="w-full text-theme-accent/50 text-sm font-medium hover:text-theme-accent transition-colors"
+                        className="w-full text-theme-main-3/50 text-sm font-medium hover:text-theme-main-3 transition-colors"
                       >
                         Cancel
                       </button>

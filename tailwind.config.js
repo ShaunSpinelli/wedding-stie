@@ -65,6 +65,7 @@ export default {
             3: "var(--theme-support-3)",
           },
           accent: "var(--theme-accent)",
+          romantic: "var(--theme-romantic)",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

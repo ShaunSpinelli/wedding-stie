@@ -1,0 +1,12 @@
+:root.theme-buttercream {
+  /* --- THEME: Buttercream & Sage (Original) --- */
+  --theme-main-1: #f6e6b4; /* Buttercream */
+  --theme-main-2: #e0a93b; /* Honey */
+  --theme-main-3: #c76b4f; /* Terracotta */
+
+  --theme-support-1: #a3b18a; /* Sage */
+  --theme-support-2: #a9c5d3; /* Sky blue */
+  --theme-support-3: #efe6da; /* Natural linen */
+
+  --theme-accent: #5f6b3c; /* Deep olive */
+}

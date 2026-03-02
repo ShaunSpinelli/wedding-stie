@@ -5,13 +5,12 @@ import { useConfig } from "@/features/invitation/hooks/use-config";
 import { getGuestName } from "@/lib/invitation-storage";
 import { useLanguage } from "@/lib/language-context";
 
-export default function Hero() {
-  const config = useConfig(); // Use hook to get config from API or fallback to static
+export default function Hero({ useAltBg = false }) {
+  const config = useConfig(); 
   const { t } = useLanguage();
   const [guestName, setGuestName] = useState("");
 
   useEffect(() => {
-    // Get guest name from localStorage
     const storedGuestName = getGuestName();
     if (storedGuestName) {
       setGuestName(storedGuestName);
@@ -56,12 +55,12 @@ export default function Hero() {
             key={interval}
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="flex flex-col items-center p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-rose-100"
+            className="flex flex-col items-center p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-theme-support-1/20"
           >
-            <span className="text-xl sm:text-2xl font-bold text-rose-600">
+            <span className="text-xl sm:text-2xl font-bold text-theme-accent">
               {timeLeft[interval]}
             </span>
-            <span className="text-xs text-gray-500 capitalize">{interval}</span>
+            <span className="text-xs text-theme-main-3 capitalize">{interval}</span>
           </motion.div>
         ))}
       </div>
@@ -74,10 +73,10 @@ export default function Hero() {
         size: Math.floor(Math.random() * 2) + 8,
         color:
           i % 3 === 0
-            ? "text-theme-main-2/40"
+            ? "text-theme-romantic/40"
             : i % 3 === 1
-              ? "text-theme-support-1/40"
-              : "text-theme-accent/20",
+              ? "text-theme-main-2/40"
+              : "text-theme-main-3/20",
         initialX: Math.random() * 100,
         animateX: Math.random() * 100,
       })),
@@ -126,7 +125,8 @@ export default function Hero() {
     <>
       <section
         id="home"
-        className="min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20 text-center relative overflow-hidden bg-theme-support-3/20"
+        className="min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20 text-center relative overflow-hidden"
+        style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -140,7 +140,7 @@ export default function Hero() {
             transition={{ delay: 0.2 }}
             className="inline-block mx-auto"
           >
-            <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-accent rounded-full border border-theme-support-1/20">
+            <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-main-2 rounded-full border border-theme-support-1/20">
               {t("hero.save_the_date")}
             </span>
           </motion.div>
@@ -158,7 +158,7 @@ export default function Hero() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="text-3xl sm:text-5xl lg:text-7xl font-serif bg-clip-text text-transparent bg-gradient-to-r from-theme-accent via-theme-main-2 to-theme-accent"
+              className="text-3xl sm:text-5xl lg:text-7xl font-serif text-theme-main-2"
             >
               {t("wedding.groomName")} & {t("wedding.brideName")}
             </motion.h2>
@@ -174,7 +174,7 @@ export default function Hero() {
 
             <div className="relative px-4 sm:px-8 py-8 sm:py-10 rounded-2xl border border-theme-support-1/20">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-px">
-                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-theme-main-2/30 to-transparent" />
+                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-theme-support-1/30 to-transparent" />
               </div>
 
               <div className="space-y-6 text-center">
@@ -185,8 +185,8 @@ export default function Hero() {
                     transition={{ delay: 0.9 }}
                     className="flex items-center justify-center space-x-2"
                   >
-                    <Calendar className="w-4 h-4 text-theme-main-2" />
-                    <span className="text-theme-accent font-medium text-sm sm:text-base">
+                    <Calendar className="w-4 h-4 text-theme-accent" />
+                    <span className="text-theme-main-3 font-medium text-sm sm:text-base">
                       {t("wedding.displayDate")}
                     </span>
                   </motion.div>
@@ -197,8 +197,8 @@ export default function Hero() {
                     transition={{ delay: 1 }}
                     className="flex items-center justify-center space-x-2"
                   >
-                    <Clock className="w-4 h-4 text-theme-main-2" />
-                    <span className="text-theme-accent font-medium text-sm sm:text-base">
+                    <Clock className="w-4 h-4 text-theme-accent" />
+                    <span className="text-theme-main-3 font-medium text-sm sm:text-base">
                       {t("wedding.displayTime")}
                     </span>
                   </motion.div>
@@ -206,7 +206,7 @@ export default function Hero() {
 
                 <div className="flex items-center justify-center gap-3">
                   <div className="h-px w-8 sm:w-12 bg-theme-support-1/30" />
-                  <div className="w-2 h-2 rounded-full bg-theme-main-2" />
+                  <div className="w-2 h-2 rounded-full bg-theme-accent" />
                   <div className="h-px w-8 sm:w-12 bg-theme-support-1/30" />
                 </div>
 
@@ -216,10 +216,10 @@ export default function Hero() {
                   transition={{ delay: 1.1 }}
                   className="space-y-2"
                 >
-                  <p className="text-theme-main-2/70 font-serif italic text-sm">
+                  <p className="text-theme-main-3 font-serif italic text-sm">
                     {t("hero.dear")}
                   </p>
-                  <p className="text-theme-accent font-medium text-sm">
+                  <p className="text-theme-main-2 font-medium text-sm">
                     {t("hero.guest_title")}
                   </p>
                   <p className="text-theme-main-2 font-semibold text-lg">
@@ -229,12 +229,9 @@ export default function Hero() {
               </div>
 
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-px">
-                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-theme-main-2/30 to-transparent" />
+                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-theme-support-1/30 to-transparent" />
               </div>
             </div>
-
-            <div className="absolute -top-2 -right-2 w-16 sm:w-24 h-16 sm:h-24 bg-theme-support-1/10 rounded-full blur-xl" />
-            <div className="absolute -bottom-2 -left-2 w-16 sm:w-24 h-16 sm:h-24 bg-theme-main-1/20 rounded-full blur-xl" />
           </motion.div>
 
           <CountdownTimer targetDate={config.date} />
@@ -253,7 +250,7 @@ export default function Hero() {
               }}
             >
               <Heart
-                className="w-10 sm:w-12 h-10 sm:h-12 text-theme-main-2 mx-auto"
+                className="w-10 sm:w-12 h-10 sm:h-12 text-theme-romantic mx-auto"
                 fill="currentColor"
               />
             </motion.div>

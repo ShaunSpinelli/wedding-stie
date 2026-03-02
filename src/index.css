@@ -1,3 +1,10 @@
+/* Import Theme Files must be at the very top */
+@import "./styles/themes/buttercream.css";
+@import "./styles/themes/ember-ash.css";
+@import "./styles/themes/khaki-romantic.css";
+@import "./styles/themes/graphite-noir.css";
+@import "./styles/themes/cinematic-brick.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,17 +17,16 @@
 }
 
 @layer base {
+  /* Default Fallback Variables (Buttercream) */
   :root {
-    /* Theme Config - Change these to swap themes! */
-    --theme-main-1: #f6e6b4; /* Buttercream */
-    --theme-main-2: #e0a93b; /* Honey */
-    --theme-main-3: #c76b4f; /* Terracotta */
-
-    --theme-support-1: #a3b18a; /* Sage */
-    --theme-support-2: #a9c5d3; /* Sky blue */
-    --theme-support-3: #efe6da; /* Natural linen */
-
-    --theme-accent: #5f6b3c; /* Deep olive */
+    --theme-main-1: #f6e6b4;
+    --theme-main-2: #e0a93b;
+    --theme-main-3: #c76b4f;
+    --theme-support-1: #a3b18a;
+    --theme-support-2: #a9c5d3;
+    --theme-support-3: #efe6da;
+    --theme-accent: #6B6B6B;
+    --theme-romantic: #bc2c1a; /* Brick Ember Red for hearts */
 
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -48,6 +54,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -75,6 +82,7 @@
     --chart-5: 340 75% 55%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;

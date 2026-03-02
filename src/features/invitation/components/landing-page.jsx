@@ -9,11 +9,14 @@ const LandingPage = ({ onOpenInvitation }) => {
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
 
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden bg-theme-main-1 flex items-center justify-center z-0">
+    <div 
+      className="fixed inset-0 w-full h-full overflow-hidden flex items-center justify-center z-0"
+      style={{ backgroundColor: "#F4F1EC" }} // Matches the section background color
+    >
       {/* Decorative Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-theme-main-1 via-theme-support-3/50 to-theme-main-1 pointer-events-none" />
-      <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-theme-main-2/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-theme-support-1/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/5 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-white/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-black/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none" />
 
       {/* Main Content Container */}
       <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-4">
@@ -63,7 +66,7 @@ const LandingPage = ({ onOpenInvitation }) => {
             <img 
               src={getAssetPath("/images/green_envelope.png")} 
               alt="Envelope" 
-              className="w-[600px] sm:w-[800px] md:w-[900px] h-auto drop-shadow-2xl max-w-[150vw]"
+              className="w-[600px] sm:w-[800px] md:w-[1000px] h-auto drop-shadow-2xl max-w-[150vw]"
             />
             
             {/* MS Seal Overlay */}
@@ -122,7 +125,8 @@ const LandingPage = ({ onOpenInvitation }) => {
                       →
                     </motion.span>
                   </span>
-                  <div className="absolute inset-0 bg-theme-main-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {/* Hover effect using Romantic color (Red) */}
+                  <div className="absolute inset-0 bg-theme-romantic rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </motion.button>
               </motion.div>
             )}

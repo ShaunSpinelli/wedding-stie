@@ -13,7 +13,7 @@ export const InvitationCard = ({ isEnvelopeOpen }) => {
       >
         {/* Static Image Invitation */}
         <img
-          src={getAssetPath("/invitation.png")}
+          src={getAssetPath("/save-the-date.jpg")}
           alt="Wedding Invitation"
           className="w-full h-full object-cover select-none pointer-events-none"
         />

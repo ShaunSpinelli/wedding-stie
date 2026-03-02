@@ -3,13 +3,17 @@ import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 
-export default function Events() {
+export default function Events({ useAltBg = false }) {
   const { t } = useLanguage();
 
   return (
     <>
       {/* Event Section */}
-      <section id="event" className="min-h-screen relative overflow-hidden">
+      <section 
+        id="event" 
+        className="min-h-screen relative overflow-hidden"
+        style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
+      >
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -39,7 +43,7 @@ export default function Events() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="text-4xl md:text-5xl font-serif text-theme-accent leading-tight"
+              className="text-4xl md:text-5xl font-serif text-theme-main-2 leading-tight"
             >
               {t("events.title")}
             </motion.h2>
@@ -48,7 +52,7 @@ export default function Events() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="text-theme-accent/70 max-w-md mx-auto"
+              className="text-theme-main-3 max-w-md mx-auto"
             >
               {t("events.description")}
             </motion.p>
