@@ -129,7 +129,13 @@
         "btn_save": "Save Details",
         "btn_saving": "Saving...",
         "success_update": "Your details have been updated successfully!",
-        "success_create": "You have been added to the guest list!"
+        "success_create": "You have been added to the guest list!",
+        "feedback": {
+          "happy": "We're thrilled you're coming! Get ready for a magical day.",
+          "sad": "We'll definitely miss you, but we appreciate you letting us know.",
+          "confused": "We understand! Life gets busy. Take your time to decide.",
+          "btn_continue": "Continue RSVP"
+        }
       }
     },
     "menu": {
@@ -370,7 +376,13 @@
         "btn_save": "Enregistrer les détails",
         "btn_saving": "Enregistrement...",
         "success_update": "Vos détails ont été mis à jour avec succès !",
-        "success_create": "Vous avez été ajouté à la liste des invités !"
+        "success_create": "Vous avez été ajouté à la liste des invités !",
+        "feedback": {
+          "happy": "Nous sommes ravis que vous veniez ! Préparez-vous pour une journée magique.",
+          "sad": "Vous nous manquerez certainement, mais nous vous remercions de nous avoir prévenus.",
+          "confused": "Nous comprenons ! La vie est bien remplie. Prenez votre temps pour décider.",
+          "btn_continue": "Continuer l'RSVP"
+        }
       }
     },
     "menu": {

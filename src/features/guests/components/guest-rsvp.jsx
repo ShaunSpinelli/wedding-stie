@@ -11,11 +11,17 @@ import {
   Users,
   Baby,
   AlertCircle,
+  X,
 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation/invitation-context";
-import { searchGuest, createGuest, updateGuest } from "@/services/api";
 import { getGuestName } from "@/lib/invitation-storage";
+
+const FEEDBACK_GIFS = {
+  happy: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG95YTRlM3RqeXFvZW14MHljb3cwNnpwNnMxdmdjc25lcWw0dGdjZCZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/OfkGZ5H2H3f8Y/giphy.gif",
+  sad: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3FuaDhzYWV0eG9vcXp1NHl0NmI1OXducTl0ZWJobm81MWNtNWt0biZlcD12MV9naWZzX3NlYXJjaCZjdD1n/H6cmWzp6LGFvqjidB7/giphy.gif",
+  confused: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGM4cHhuamVuOTd6ZmRleHQ4a3JpandjMGllaHk0eDVocTBranozaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ji6zzUZwNIuLS/giphy.gif"
+};
 
 export default function GuestRSVP({ useAltBg = false }) {
   const { uid, setGuest: setGlobalGuest } = useInvitation();
@@ -25,6 +31,9 @@ export default function GuestRSVP({ useAltBg = false }) {
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditMode] = useState(true);
   const [guest, setLocalGuest] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState("");
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,6 +49,16 @@ export default function GuestRSVP({ useAltBg = false }) {
     setLoading(false);
     setIsEditMode(true);
   }, [uid, setGlobalGuest]);
+
+  const handleAttendanceClick = (status) => {
+    setFormData({ ...formData, attending: status });
+    
+    if (status === "ATTENDING") setModalType("happy");
+    else if (status === "NOT_ATTENDING") setModalType("sad");
+    else setModalType("confused");
+    
+    setShowModal(true);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,61 +145,7 @@ export default function GuestRSVP({ useAltBg = false }) {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 text-theme-main-3">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                        <Utensils className="w-5 h-5 text-theme-main-2" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                          {t("rsvp.form.label_dietary")}
-                        </p>
-                        <p className="font-medium truncate max-w-[180px]">
-                          {guest.dietary_requirements || "None"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 text-theme-main-3">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                        <Users className="w-5 h-5 text-theme-main-2" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                          {t("rsvp.form.label_plus_one")}
-                        </p>
-                        <p className="font-medium">
-                          {guest.has_plus_one ? guest.plus_one_name : "No"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 text-theme-main-3">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                        <Baby className="w-5 h-5 text-theme-main-2" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                          {t("rsvp.form.label_children")}
-                        </p>
-                        <p className="font-medium">
-                          {guest.children_count || 0}
-                        </p>
-                      </div>
-                    </div>
                   </div>
-
-                  {msg.text && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={`p-4 rounded-xl flex items-center gap-3 ${msg.type === "success" ? "bg-theme-support-1/10 text-theme-main-2" : "bg-theme-main-3/10 text-theme-main-3"}`}
-                    >
-                      {msg.type === "success" ? (
-                        <CheckCircle className="w-5 h-5" />
-                      ) : (
-                        <AlertCircle className="w-5 h-5" />
-                      )}
-                      <p className="text-sm font-medium">{msg.text}</p>
-                    </motion.div>
-                  )}
                 </motion.div>
               ) : (
                 <motion.form
@@ -227,90 +192,6 @@ export default function GuestRSVP({ useAltBg = false }) {
 
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                      <Utensils className="w-4 h-4" />
-                      {t("rsvp.form.label_dietary")}
-                    </label>
-                    <textarea
-                      value={formData.dietary_requirements}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          dietary_requirements: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2 resize-none h-20"
-                      placeholder={t("rsvp.form.placeholder_dietary")}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                        <Users className="w-4 h-4" />
-                        {t("rsvp.form.label_plus_one")}
-                      </label>
-                      <div className="flex gap-4 p-1 bg-theme-support-3/30 rounded-xl">
-                        {[true, false].map((val) => (
-                          <button
-                            key={val.toString()}
-                            type="button"
-                            onClick={() =>
-                              setFormData({ ...formData, has_plus_one: val })
-                            }
-                            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${formData.has_plus_one === val ? "bg-theme-main-2 text-white shadow-sm" : "text-theme-main-3/40"}`}
-                          >
-                            {val ? "YES" : "NO"}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                        <Baby className="w-4 h-4" />
-                        {t("rsvp.form.label_children")}
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        value={formData.children_count}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            children_count: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="w-full px-4 py-2 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                      />
-                    </div>
-                  </div>
-
-                  {formData.has_plus_one && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      className="space-y-2"
-                    >
-                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                        <User className="w-4 h-4 opacity-50" />
-                        {t("rsvp.form.label_plus_one_name")}
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.plus_one_name}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            plus_one_name: e.target.value,
-                          })
-                        }
-                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                        placeholder={t("rsvp.form.placeholder_plus_one_name")}
-                      />
-                    </motion.div>
-                  )}
-
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
                       <CheckCircle className="w-4 h-4" />
                       {t("rsvp.form.label_attendance")}
                     </label>
@@ -319,9 +200,7 @@ export default function GuestRSVP({ useAltBg = false }) {
                         <button
                           key={status}
                           type="button"
-                          onClick={() =>
-                            setFormData({ ...formData, attending: status })
-                          }
+                          onClick={() => handleAttendanceClick(status)}
                           className={`px-4 py-3 rounded-xl text-xs font-bold border transition-all ${formData.attending === status ? "bg-theme-main-2 border-theme-main-2 text-white shadow-md" : "bg-white border-theme-support-1/20 text-theme-main-3/60 hover:border-theme-main-2/30"}`}
                         >
                           {t(`wishes.attendance.${status.toLowerCase()}`)}
@@ -330,40 +209,13 @@ export default function GuestRSVP({ useAltBg = false }) {
                     </div>
                   </div>
 
-                  {/* Form Feedback Message */}
-                  {msg.text && msg.type === "error" && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="p-4 rounded-xl bg-theme-main-3/10 text-theme-main-3 flex items-center gap-3"
-                    >
-                      <AlertCircle className="w-5 h-5" />
-                      <p className="text-sm font-medium">{msg.text}</p>
-                    </motion.div>
-                  )}
-
-                  <div className="pt-4 space-y-3">
+                  <div className="pt-4">
                     <button
                       type="submit"
-                      disabled={saving}
-                      className="w-full bg-theme-main-2 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-theme-main-2/90 disabled:bg-theme-support-1/50 transition-all flex justify-center items-center gap-2"
+                      className="w-full bg-theme-main-2 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-theme-main-2/90 transition-all flex justify-center items-center gap-2"
                     >
-                      {saving ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : null}
-                      {saving
-                        ? t("rsvp.form.btn_saving")
-                        : t("rsvp.form.btn_save")}
+                      {t("rsvp.form.btn_save")}
                     </button>
-                    {guest && (
-                      <button
-                        type="button"
-                        onClick={() => setIsEditMode(false)}
-                        className="w-full text-theme-main-3/50 text-sm font-medium hover:text-theme-main-3 transition-colors"
-                      >
-                        Cancel
-                      </button>
-                    )}
                   </div>
                 </motion.form>
               )}
@@ -371,6 +223,54 @@ export default function GuestRSVP({ useAltBg = false }) {
           </div>
         </motion.div>
       </div>
+
+      {/* Visual Feedback Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-white rounded-3xl p-2 max-w-sm w-full relative overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setShowModal(false)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/10 hover:bg-black/20 transition-colors z-10"
+              >
+                <X className="w-5 h-5 text-black" />
+              </button>
+              
+              <div className="aspect-video w-full rounded-2xl overflow-hidden bg-white flex items-center justify-center relative">
+                <img 
+                  src={FEEDBACK_GIFS[modalType]}
+                  alt={modalType}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              
+              <div className="p-6 text-center">
+                <p className="text-theme-main-3 text-sm mb-6">
+                  {t(`rsvp.form.feedback.${modalType}`)}
+                </p>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="w-full py-3 bg-theme-main-2 text-white rounded-xl font-bold shadow-md hover:bg-theme-main-2/90 transition-all"
+                >
+                  {t("rsvp.form.feedback.btn_continue")}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
