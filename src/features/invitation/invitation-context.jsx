@@ -51,31 +51,46 @@ export function InvitationProvider({ children }) {
   // 2. Guest Identification & Features
   useEffect(() => {
     const identifyGuest = async () => {
+      console.log("[InvitationProvider] Identifying guest...");
       setIsLoading(true);
       const urlParams = new URLSearchParams(window.location.search);
       const guestParam = urlParams.get("guest");
       let nameToSearch = getGuestName();
 
+      console.log(
+        "[InvitationProvider] Guest param:",
+        guestParam,
+        "Stored name:",
+        nameToSearch,
+      );
+
       if (guestParam) {
         try {
-          // guestParam might be URL encoded, though URLSearchParams handles basic encoding
           const decodedName = safeBase64.decode(guestParam);
+          console.log("[InvitationProvider] Decoded name:", decodedName);
           if (decodedName) {
             nameToSearch = decodedName;
             storeGuestName(decodedName);
-            // Clean URL after capturing guest name
-            window.history.replaceState({}, "", window.location.pathname);
+
+            // Clean ONLY the guest param from the URL while keeping others
+            urlParams.delete("guest");
+            const newSearch = urlParams.toString();
+            const newPath =
+              window.location.pathname + (newSearch ? `?${newSearch}` : "");
+            window.history.replaceState({}, "", newPath);
           }
         } catch (e) {
-          console.error("Error decoding guest name", e);
+          console.error("[InvitationProvider] Error decoding guest name", e);
         }
       }
 
       if (nameToSearch) {
+        console.log("[InvitationProvider] Searching for guest:", nameToSearch);
         try {
           const response = await searchGuest(invitationUid, {
             name: nameToSearch,
           });
+          console.log("[InvitationProvider] Search response:", response);
           if (response.success) {
             setGuest(response.data);
             // Auto-set language if guest has a preference
@@ -83,8 +98,8 @@ export function InvitationProvider({ children }) {
               toggleLanguage(response.data.language);
             }
           }
-        } catch {
-          console.log("Guest record not found for:", nameToSearch);
+        } catch (err) {
+          console.error("[InvitationProvider] Guest search failed:", err);
         }
       }
       setIsLoading(false);
