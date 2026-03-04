@@ -25,12 +25,15 @@ export class WeddingStack extends cdk.Stack {
       environment: {
         DATABASE_URL: process.env.DATABASE_URL || "",
         ADMIN_SECRET: process.env.ADMIN_SECRET || "",
-        PORT: "3001", // Default Hono port internal
+        PORT: "3001",
       },
       bundling: {
         minify: true,
         sourceMap: true,
-        externalModules: ["pg-native"], // pg-native doesn't bundle well
+        externalModules: ["pg-native"],
+        format: lambda.OutputFormat.ESM,
+        banner:
+          "import { createRequire } from 'module'; const require = createRequire(import.meta.url);", // Needed for some commonjs modules in ESM
       },
     });
 
