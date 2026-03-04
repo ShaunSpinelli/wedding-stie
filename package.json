@@ -45,6 +45,7 @@
     "aws:synth": "dotenv -- cdk synth",
     "aws:destroy": "dotenv -- cdk destroy",
     "aws:bootstrap": "dotenv -- cdk bootstrap",
+    "aws:whoami": "dotenv -- aws sts get-caller-identity",
     "prepare": "husky"
   },
   "dependencies": {
