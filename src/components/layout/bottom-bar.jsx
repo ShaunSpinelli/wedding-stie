@@ -1,33 +1,14 @@
 // src/components/bottom-bar/BottomBar.jsx
 import React, { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import {
-  Home,
-  CalendarHeart,
-  MapPin,
-  History,
-  Calendar,
-  HeartHandshake,
-  Music,
-  Utensils,
-} from "lucide-react";
+import { Home, HeartHandshake, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-context";
 
 const menuItems = [
   { icon: Home, labelKey: "nav.home", href: "#home", id: "home" },
-  { icon: History, labelKey: "nav.story", href: "#timeline", id: "timeline" },
-  {
-    icon: Calendar,
-    labelKey: "nav.itinerary",
-    href: "#schedule",
-    id: "schedule",
-  },
   { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
-  { icon: Utensils, labelKey: "nav.menu", href: "#menu", id: "menu" },
-  { icon: CalendarHeart, labelKey: "nav.events", href: "#event", id: "event" },
   { icon: MapPin, labelKey: "nav.location", href: "#location", id: "location" },
-  { icon: Music, labelKey: "nav.playlist", href: "#playlist", id: "playlist" },
 ];
 
 /**

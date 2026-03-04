@@ -26,7 +26,7 @@ INSERT INTO invitations (
     'Manon',
     'Mr. Groom & Mrs. Groom',
     'Mr. Bride & Mrs. Bride',
-    '2027-06-20',
+    '2027-05-22',
     '4:00 PM - Late',
     'The French Countryside',
     '123 Provence Lane, France',
@@ -38,8 +38,8 @@ INSERT INTO invitations (
 
 -- Insert agenda (Ceremony and Reception)
 INSERT INTO agenda (invitation_uid, title, date, start_time, end_time, location, address, order_index) VALUES
-('shaun-manon-2027', 'Wedding Ceremony', '2027-06-20', '15:30', '17:00', 'Under the Oak Tree', '123 Provence Lane, France', 1),
-('shaun-manon-2027', 'Cocktail Hour', '2027-06-20', '17:00', '19:00', 'The Courtyard', '123 Provence Lane, France', 2),
-('shaun-manon-2027', 'Dinner & Dancing', '2027-06-20', '19:00', '02:00', 'The Main Barn', '123 Provence Lane, France', 3);
+('shaun-manon-2027', 'Wedding Ceremony', '2027-05-22', '15:30', '17:00', 'Under the Oak Tree', '123 Provence Lane, France', 1),
+('shaun-manon-2027', 'Cocktail Hour', '2027-05-22', '17:00', '19:00', 'The Courtyard', '123 Provence Lane, France', 2),
+('shaun-manon-2027', 'Dinner & Dancing', '2027-05-22', '19:00', '02:00', 'The Main Barn', '123 Provence Lane, France', 3);
 
 COMMIT;

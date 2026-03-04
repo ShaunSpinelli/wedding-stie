@@ -191,17 +191,19 @@ export default function Hero({ useAltBg = false }) {
                     </span>
                   </motion.div>
 
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
-                    className="flex items-center justify-center space-x-2"
-                  >
-                    <Clock className="w-4 h-4 text-theme-accent" />
-                    <span className="text-theme-main-3 font-medium text-sm sm:text-base">
-                      {t("wedding.displayTime")}
-                    </span>
-                  </motion.div>
+                  {t("wedding.displayTime") && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1 }}
+                      className="flex items-center justify-center space-x-2"
+                    >
+                      <Clock className="w-4 h-4 text-theme-accent" />
+                      <span className="text-theme-main-3 font-medium text-sm sm:text-base">
+                        {t("wedding.displayTime")}
+                      </span>
+                    </motion.div>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-center gap-3">

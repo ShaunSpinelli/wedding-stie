@@ -1,7 +1,7 @@
 const config = {
   data: {
     // Technical date for countdown logic (YYYY-MM-DD)
-    date: "2024-12-24",
+    date: "2027-05-22",
     // External links
     maps_url: "https://goo.gl/maps/abcdef",
     maps_embed:

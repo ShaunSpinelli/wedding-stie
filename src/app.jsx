@@ -23,7 +23,6 @@ import { Settings } from "lucide-react";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { useLanguage } from "@/lib/language-context";
 import { LanguageToggle } from "@/components/ui/language-toggle";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 // import { useAudio } from "@/hooks/use-audio";
 import { getAdminSecret } from "@/services/api";
 import staticConfig from "@/config/config";
@@ -91,7 +90,6 @@ function App() {
   return (
     <HelmetProvider>
       <LanguageToggle />
-      <ThemeToggle />
 
       {/* Admin Toggle Button */}
       {!isAdminPath && (
