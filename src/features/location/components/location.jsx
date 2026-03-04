@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation/invitation-context";
+import { getAssetPath } from "@/utils/asset-path";
 
 export default function Location() {
   const { t } = useLanguage();
@@ -54,8 +55,17 @@ export default function Location() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="space-y-8"
+              className="space-y-8 flex flex-col items-center"
             >
+              {/* Venue Image */}
+              <div className="w-full max-w-xs rounded-2xl overflow-hidden">
+                <img
+                  src={getAssetPath("/comptoir-saint-hilaire.png")}
+                  alt="Comptoir Saint-Hilaire Venue"
+                  className="w-full h-auto"
+                />
+              </div>
+
               {/* Map Iframe Wrapper */}
               <div className="aspect-video w-full rounded-3xl overflow-hidden shadow-2xl border border-theme-support-1/20 relative group">
                 <iframe
@@ -72,7 +82,7 @@ export default function Location() {
               </div>
 
               {/* Address Card */}
-              <div className="flex items-start gap-6 p-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-theme-support-1/20 shadow-xl">
+              <div className="w-full flex items-start gap-6 p-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-theme-support-1/20 shadow-xl">
                 <div className="w-12 h-12 rounded-2xl bg-theme-main-1 flex items-center justify-center flex-shrink-0 text-theme-main-2 shadow-sm">
                   <MapPin className="w-6 h-6" />
                 </div>
