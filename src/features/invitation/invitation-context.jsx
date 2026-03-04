@@ -14,6 +14,7 @@ import { useLanguage } from "@/lib/language-context";
 const InvitationContext = createContext();
 
 export function InvitationProvider({ children }) {
+  console.log("[InvitationProvider] Rendering Provider component");
   const invitationUid = "shaun-manon-2027";
   const { toggleLanguage } = useLanguage();
 
@@ -21,6 +22,19 @@ export function InvitationProvider({ children }) {
   const [guest, setGuest] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Safety fallback: if everything hangs, stop loading after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoading) {
+        console.warn(
+          "[InvitationProvider] Safety timeout reached, forcing isLoading to false",
+        );
+        setIsLoading(false);
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [isLoading]);
 
   // Debug log to check instantiation
   useEffect(() => {
