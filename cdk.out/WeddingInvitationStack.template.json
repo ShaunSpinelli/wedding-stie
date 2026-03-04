@@ -1,0 +1,211 @@
+{
+  "Resources": {
+    "WeddingApiServiceRole051B32C3": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "WeddingInvitationStack/WeddingApi/ServiceRole/Resource"
+      }
+    },
+    "WeddingApiF0BD2C37": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-977367227068-us-west-1",
+          "S3Key": "2658871c56a286f3007459c9a536a4e6c0bfab9c719dcefd2f9fecc4152933dd.zip"
+        },
+        "Environment": {
+          "Variables": {
+            "DATABASE_URL": "postgresql://neondb_owner:npg_W27BzaPSjGlL@ep-soft-rain-akuv235z-pooler.c-3.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+            "ADMIN_SECRET": "french-countryside-2027",
+            "PORT": "3001"
+          }
+        },
+        "Handler": "index.handler",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": ["WeddingApiServiceRole051B32C3", "Arn"]
+        },
+        "Runtime": "nodejs20.x",
+        "Timeout": 30
+      },
+      "DependsOn": ["WeddingApiServiceRole051B32C3"],
+      "Metadata": {
+        "aws:cdk:path": "WeddingInvitationStack/WeddingApi/Resource",
+        "aws:asset:path": "asset.2658871c56a286f3007459c9a536a4e6c0bfab9c719dcefd2f9fecc4152933dd",
+        "aws:asset:is-bundled": true,
+        "aws:asset:property": "Code"
+      }
+    },
+    "WeddingHttpApi2CB16E36": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "CorsConfiguration": {
+          "AllowHeaders": ["Content-Type", "Authorization"],
+          "AllowMethods": ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+          "AllowOrigins": ["*"]
+        },
+        "Description": "Wedding Invitation API",
+        "Name": "WeddingHttpApi",
+        "ProtocolType": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "WeddingInvitationStack/WeddingHttpApi/Resource"
+      }
+    },
+    "WeddingHttpApiDefaultStage28E0E67E": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WeddingHttpApi2CB16E36"
+        },
+        "AutoDeploy": true,
+        "StageName": "$default"
+      },
+      "Metadata": {
+        "aws:cdk:path": "WeddingInvitationStack/WeddingHttpApi/DefaultStage/Resource"
+      }
+    },
+    "WeddingHttpApiANYproxyApiIntegration9F7790BC": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WeddingHttpApi2CB16E36"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": ["WeddingApiF0BD2C37", "Arn"]
+        },
+        "PayloadFormatVersion": "2.0"
+      },
+      "Metadata": {
+        "aws:cdk:path": "WeddingInvitationStack/WeddingHttpApi/ANY--{proxy+}/ApiIntegration/Resource"
+      }
+    },
+    "WeddingHttpApiANYproxyApiIntegrationPermission54153FAB": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": ["WeddingApiF0BD2C37", "Arn"]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-1:977367227068:",
+              {
+                "Ref": "WeddingHttpApi2CB16E36"
+              },
+              "/*/*/{proxy+}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "WeddingInvitationStack/WeddingHttpApi/ANY--{proxy+}/ApiIntegration-Permission"
+      }
+    },
+    "WeddingHttpApiANYproxyEFB063D3": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WeddingHttpApi2CB16E36"
+        },
+        "AuthorizationType": "NONE",
+        "RouteKey": "ANY /{proxy+}",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "WeddingHttpApiANYproxyApiIntegration9F7790BC"
+              }
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "WeddingInvitationStack/WeddingHttpApi/ANY--{proxy+}/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/12PTW6DQAyFz5L94KbQHiBBqtJNE5EDIAcGZH48CHuCqhF3rwbULrr6/KznZzuF9O0VjgdcJKnqPhnoAeGuWPUGFynDgOOjxpJdbTuBrw0fnislx4ZwhFC4wZq84cjVSFaiiFWBU4SRDM6+6q2eUazZ0yDkDf+F5A3f7DySCDleDU7UotoFv58phIvqdJoomiKivCu228K9iK3Ced2rT1bbzvgb/E9uvnU122lxnLiN/avXyetq4pfQycszzeAdjodOiJLZs9Joodj5Ax6cdMkxAQAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "WeddingInvitationStack/CDKMetadata/Default"
+      }
+    }
+  },
+  "Outputs": {
+    "ApiUrl": {
+      "Description": "The URL of the API Gateway",
+      "Value": {
+        "Fn::GetAtt": ["WeddingHttpApi2CB16E36", "ApiEndpoint"]
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  ["1", "2", "3", "4", "5"],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}
