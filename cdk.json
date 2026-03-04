@@ -1,0 +1,20 @@
+{
+  "app": "node infra/cdk.js",
+  "watch": {
+    "include": ["**"],
+    "exclude": [
+      "README.md",
+      "cdk*.json",
+      "node_modules",
+      "package*.json",
+      "yarn.lock",
+      "dist",
+      "src/features",
+      "src/components"
+    ]
+  },
+  "context": {
+    "@aws-cdk/core:stackRelativeExports": true,
+    "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true
+  }
+}
