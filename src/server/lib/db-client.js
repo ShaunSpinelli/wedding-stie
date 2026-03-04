@@ -3,6 +3,8 @@
  * Supports both Cloudflare Workers (Hyperdrive) and Node.js/Bun environments
  */
 
+let _pool = null;
+
 /**
  * Get database client based on environment
  * @param {import('hono').Context} c - Hono context
@@ -14,6 +16,8 @@ export async function getDbClient(c) {
     return c.env.DB;
   }
 
+  if (_pool) return _pool;
+
   // Check if we have DATABASE_URL in env (for Wrangler dev or local node/bun)
   const databaseUrl = c.env?.DATABASE_URL || process.env.DATABASE_URL;
 
@@ -24,11 +28,16 @@ export async function getDbClient(c) {
       const { Pool } = pg.default || pg;
 
       // Create a connection pool using DATABASE_URL
-      const pool = new Pool({
+      // Enable SSL for Neon in production
+      const isLocal =
+        databaseUrl.includes("localhost") || databaseUrl.includes("127.0.0.1");
+
+      _pool = new Pool({
         connectionString: databaseUrl,
+        ssl: isLocal ? false : { rejectUnauthorized: false },
       });
 
-      return pool;
+      return _pool;
     } catch (error) {
       console.error("Failed to create database connection:", error);
       throw new Error(
