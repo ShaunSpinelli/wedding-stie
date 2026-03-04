@@ -71,18 +71,17 @@ export function InvitationProvider({ children }) {
       const guestParam = urlParams.get("guest");
       let nameToSearch = getGuestName();
 
-      console.log(
-        "[InvitationProvider] Guest param:",
-        guestParam,
-        "Stored name:",
-        nameToSearch,
-      );
+      console.log("[InvitationProvider] URL guestParam:", guestParam);
 
       if (guestParam) {
         try {
           const decodedName = safeBase64.decode(guestParam);
-          console.log("[InvitationProvider] Decoded name:", decodedName);
+          console.log(
+            "[InvitationProvider] Decoded name from URL:",
+            decodedName,
+          );
           if (decodedName) {
+            // URL parameter ALWAYS wins over localStorage
             nameToSearch = decodedName;
             storeGuestName(decodedName);
 
@@ -97,6 +96,8 @@ export function InvitationProvider({ children }) {
           console.error("[InvitationProvider] Error decoding guest name", e);
         }
       }
+
+      console.log("[InvitationProvider] Final name to search:", nameToSearch);
 
       if (nameToSearch) {
         console.log("[InvitationProvider] Searching for guest:", nameToSearch);
