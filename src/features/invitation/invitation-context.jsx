@@ -68,9 +68,21 @@ export function InvitationProvider({ children }) {
       console.log("[InvitationProvider] Identifying guest...");
       setIsLoading(true);
       const urlParams = new URLSearchParams(window.location.search);
-      const guestParam = urlParams.get("guest");
-      let nameToSearch = getGuestName();
 
+      // Support both standard ?guest= and GH Pages hack ?q=guest=
+      let guestParam = urlParams.get("guest");
+      const nestedParams = urlParams.get("q");
+
+      if (!guestParam && nestedParams) {
+        const subParams = new URLSearchParams(nestedParams);
+        guestParam = subParams.get("guest");
+        console.log(
+          "[InvitationProvider] Found nested guest param in 'q':",
+          guestParam,
+        );
+      }
+
+      let nameToSearch = getGuestName();
       console.log("[InvitationProvider] URL guestParam:", guestParam);
 
       if (guestParam) {
@@ -85,8 +97,24 @@ export function InvitationProvider({ children }) {
             nameToSearch = decodedName;
             storeGuestName(decodedName);
 
-            // Clean ONLY the guest param from the URL while keeping others
+            // Clean ONLY the guest param from the URL
             urlParams.delete("guest");
+
+            // Also clean from nested 'q' if it exists
+            const nested = urlParams.get("q");
+            if (nested) {
+              const sub = new URLSearchParams(nested);
+              if (sub.has("guest")) {
+                sub.delete("guest");
+                const cleanSub = sub.toString();
+                if (cleanSub) {
+                  urlParams.set("q", cleanSub);
+                } else {
+                  urlParams.delete("q");
+                }
+              }
+            }
+
             const newSearch = urlParams.toString();
             const newPath =
               window.location.pathname + (newSearch ? `?${newSearch}` : "");
