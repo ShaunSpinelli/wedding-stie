@@ -201,6 +201,83 @@
       "subtitle": "Location",
       "view_map": "View Map"
     },
+    "travel": {
+      "title": "Getting Here",
+      "subtitle": "Travel Options",
+      "steps": {
+        "country": "1. Select your country",
+        "city": "2. Select your departure city",
+        "route": "3. Choose a travel route"
+      },
+      "labels": {
+        "from": "Route From",
+        "est": "Est.",
+        "reset": "Reset",
+        "via": "via",
+        "arrival": "Arrival"
+      },
+      "countries": {
+        "australia": "Australia",
+        "canada": "Canada",
+        "uk": "United Kingdom",
+        "netherlands": "Netherlands",
+        "portugal": "Portugal",
+        "usa": "USA",
+        "panama": "Panama",
+        "south_africa": "South Africa"
+      },
+      "cities": {
+        "brisbane": "Brisbane",
+        "adelaide": "Adelaide",
+        "perth": "Perth",
+        "melbourne": "Melbourne",
+        "toronto": "Toronto",
+        "london": "London",
+        "amsterdam": "Amsterdam",
+        "lisbon": "Lisbon",
+        "cleveland": "Cleveland",
+        "panama_city": "Panama City",
+        "cape_town": "Cape Town"
+      },
+      "options": {
+        "option1": "Option 1 – Direct to Paris",
+        "option2": "Option 2 – Direct to South of France"
+      },
+      "modes": {
+        "plane": "plane",
+        "train": "train",
+        "car": "car",
+        "plane_train": "plane / train"
+      },
+      "destinations": {
+        "sin_dxb": "Singapore / Dubai",
+        "paris_cdg": "Paris (CDG)",
+        "nimes_tgv": "Nîmes (TGV)",
+        "venue": "Saint-Hilaire-de-Brethmas",
+        "dxb": "Dubai",
+        "nice_mrs": "Nice or Marseille",
+        "nimes": "Nîmes",
+        "dxb_doh": "Dubai / Doha",
+        "paris": "Paris",
+        "doh_dxb": "Doha / Dubai",
+        "doh": "Doha",
+        "paris_direct": "Paris (Direct)",
+        "yul_lon": "Montreal / London",
+        "paris_eurostar": "Paris (Eurostar)",
+        "nice_mrs_direct": "Nice or Marseille (Direct)",
+        "paris_train_flight": "Paris (Train or Direct Flight)",
+        "nyc": "New York",
+        "mad": "Madrid",
+        "dxb_ist": "Dubai / Istanbul"
+      },
+      "details": {
+        "pickup": "Let us know of your arrival and we will arrange a pickup"
+      }
+    },
+    "coming_soon": {
+      "title": "More Information",
+      "message": "More details about the weekend will be shared soon. Stay tuned!"
+    },
     "wishes": {
       "title": "Send Your Best Wishes and Prayers",
       "subtitle": "Messages & Wishes",
@@ -239,6 +316,7 @@
     "nav": {
       "home": "Home",
       "rsvp": "RSVP",
+      "travel": "Travel",
       "story": "Story",
       "itinerary": "Itinerary",
       "events": "Events",
@@ -450,6 +528,83 @@
       "subtitle": "Localisation",
       "view_map": "Voir la carte"
     },
+    "travel": {
+      "title": "Comment s'y rendre",
+      "subtitle": "Options de voyage",
+      "steps": {
+        "country": "1. Sélectionnez votre pays",
+        "city": "2. Sélectionnez votre ville de départ",
+        "route": "3. Choisissez un itinéraire"
+      },
+      "labels": {
+        "from": "Itinéraire depuis",
+        "est": "Est.",
+        "reset": "Réinitialiser",
+        "via": "via",
+        "arrival": "Arrivée"
+      },
+      "countries": {
+        "australia": "Australie",
+        "canada": "Canada",
+        "uk": "Royaume-Uni",
+        "netherlands": "Pays-Bas",
+        "portugal": "Portugal",
+        "usa": "États-Unis",
+        "panama": "Panama",
+        "south_africa": "Afrique du Sud"
+      },
+      "cities": {
+        "brisbane": "Brisbane",
+        "adelaide": "Adélaïde",
+        "perth": "Perth",
+        "melbourne": "Melbourne",
+        "toronto": "Toronto",
+        "london": "Londres",
+        "amsterdam": "Amsterdam",
+        "lisbon": "Lisbonne",
+        "cleveland": "Cleveland",
+        "panama_city": "Panama City",
+        "cape_town": "Le Cap"
+      },
+      "options": {
+        "option1": "Option 1 – Direct vers Paris",
+        "option2": "Option 2 – Direct vers le Sud de la France"
+      },
+      "modes": {
+        "plane": "avion",
+        "train": "train",
+        "car": "voiture",
+        "plane_train": "avion / train"
+      },
+      "destinations": {
+        "sin_dxb": "Singapour / Dubaï",
+        "paris_cdg": "Paris (CDG)",
+        "nimes_tgv": "Nîmes (TGV)",
+        "venue": "Saint-Hilaire-de-Brethmas",
+        "dxb": "Dubaï",
+        "nice_mrs": "Nice ou Marseille",
+        "nimes": "Nîmes",
+        "dxb_doh": "Dubaï / Doha",
+        "paris": "Paris",
+        "doh_dxb": "Doha / Dubaï",
+        "doh": "Doha",
+        "paris_direct": "Paris (Direct)",
+        "yul_lon": "Montréal / Londres",
+        "paris_eurostar": "Paris (Eurostar)",
+        "nice_mrs_direct": "Nice ou Marseille (Direct)",
+        "paris_train_flight": "Paris (Train ou Vol Direct)",
+        "nyc": "New York",
+        "mad": "Madrid",
+        "dxb_ist": "Dubaï / Istanbul"
+      },
+      "details": {
+        "pickup": "Informez-nous de votre arrivée et nous organiserons une prise en charge"
+      }
+    },
+    "coming_soon": {
+      "title": "Plus d'informations",
+      "message": "Plus de détails sur le week-end seront partagés prochainement. Restez à l'écoute !"
+    },
     "wishes": {
       "title": "Envoyez vos meilleurs vœux",
       "subtitle": "Messages & Vœux",
@@ -488,6 +643,7 @@
     "nav": {
       "home": "Accueil",
       "rsvp": "RSVP",
+      "travel": "Voyage",
       "story": "Histoire",
       "itinerary": "Programme",
       "events": "Événements",

@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import Hero from "@/features/invitation/components/hero";
 import { Location } from "@/features/location";
+import TravelInfo from "@/features/location/components/travel-info";
 import { GuestRSVP } from "@/features/guests";
+import ComingSoon from "@/features/invitation/components/coming-soon";
 import { FeatureGate } from "@/components/ui/feature-gate";
 import Funny from "@/features/funny/components/funny";
 import FunnyCaptcha from "@/features/funny/components/funny-captcha";
@@ -28,8 +30,10 @@ export default function MainContent() {
   return (
     <>
       <Hero useAltBg={false} />
-      <GuestRSVP useAltBg={true} />
       <Location />
+      <TravelInfo />
+      <GuestRSVP useAltBg={true} />
+      <ComingSoon />
 
       {/* Proof of Concept: Conditional Component based on tags */}
       <FeatureGate feature="funny">
