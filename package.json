@@ -41,6 +41,9 @@
     "test:unit": "vitest run src/server/**/*.spec.js",
     "test:e2e": "vitest run e2e/**/*.e2e.spec.js",
     "test:coverage": "vitest run --coverage",
+    "aws:deploy": "cdk deploy --app 'node infra/cdk.js'",
+    "aws:synth": "cdk synth --app 'node infra/cdk.js'",
+    "aws:destroy": "cdk destroy --app 'node infra/cdk.js'",
     "prepare": "husky"
   },
   "dependencies": {
@@ -71,7 +74,12 @@
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "^2.1.0",
     "autoprefixer": "^10.4.20",
+    "aws-cdk": "^2.1108.0",
+    "aws-cdk-lib": "^2.241.0",
     "concurrently": "^8.2.0",
+    "constructs": "^10.5.1",
+    "dotenv": "^17.3.1",
+    "esbuild": "^0.27.3",
     "eslint": "^9.17.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
