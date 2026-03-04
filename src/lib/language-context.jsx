@@ -6,11 +6,18 @@ const LanguageContext = createContext();
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState("en");
 
-  // Load language from localStorage if available
+  // Initialize language from localStorage or browser locale
   useEffect(() => {
     const savedLang = localStorage.getItem("wedding_lang");
     if (savedLang && (savedLang === "en" || savedLang === "fr")) {
       setLanguage(savedLang);
+    } else {
+      // Check browser locale
+      const browserLang = navigator.language || navigator.userLanguage || "en";
+      const defaultLang = browserLang.toLowerCase().startsWith("fr")
+        ? "fr"
+        : "en";
+      setLanguage(defaultLang);
     }
   }, []);
 
