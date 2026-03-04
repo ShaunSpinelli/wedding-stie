@@ -1,21 +1,19 @@
 import { Calendar, Clock, Heart } from "lucide-react";
 import { motion } from "framer-motion";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useConfig } from "@/features/invitation/hooks/use-config";
 import { getGuestName } from "@/lib/invitation-storage";
 import { useLanguage } from "@/lib/language-context";
+import { useInvitation } from "@/features/invitation/invitation-context";
 
 export default function Hero({ useAltBg = false }) {
-  const config = useConfig(); 
+  const config = useConfig();
   const { t } = useLanguage();
-  const [guestName, setGuestName] = useState("");
+  const { guest } = useInvitation();
 
-  useEffect(() => {
-    const storedGuestName = getGuestName();
-    if (storedGuestName) {
-      setGuestName(storedGuestName);
-    }
-  }, []);
+  const guestName = useMemo(() => {
+    return guest?.name || getGuestName() || "";
+  }, [guest]);
 
   const CountdownTimer = ({ targetDate }) => {
     const calculateTimeLeft = useCallback(() => {
@@ -60,7 +58,9 @@ export default function Hero({ useAltBg = false }) {
             <span className="text-xl sm:text-2xl font-bold text-theme-accent">
               {timeLeft[interval]}
             </span>
-            <span className="text-xs text-theme-main-3 capitalize">{interval}</span>
+            <span className="text-xs text-theme-main-3 capitalize">
+              {interval}
+            </span>
           </motion.div>
         ))}
       </div>
