@@ -9,28 +9,29 @@ import {
 import { storeGuestName, getGuestName } from "@/lib/invitation-storage";
 import { safeBase64 } from "@/lib/base64";
 import { fetchInvitation, searchGuest } from "@/services/api";
+import { useLanguage } from "@/lib/language-context";
 
 const InvitationContext = createContext();
 
 export function InvitationProvider({ children }) {
   const invitationUid = "shaun-manon-2027";
+  const { toggleLanguage } = useLanguage();
 
   const [config, setConfig] = useState(null);
   const [guest, setGuest] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Set to false for FE-only test
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Debug log to check instantiation
   useEffect(() => {
     console.log(
-      "[InvitationProvider] Context instantiated with UID (Fetches disabled):",
+      "[InvitationProvider] Context instantiated with UID:",
       invitationUid,
     );
   }, [invitationUid]);
 
-  // 1. Initial Load: Fetch Wedding Config (DISABLED for FE-only deployment)
+  // 1. Initial Load: Fetch Wedding Config
   useEffect(() => {
-    /*
     const loadInvitation = async () => {
       try {
         const response = await fetchInvitation(invitationUid);
@@ -41,30 +42,28 @@ export function InvitationProvider({ children }) {
         }
       } catch {
         setError("Invitation not found");
-      } finally {
-        if (!getGuestName()) setIsLoading(false);
       }
     };
 
     loadInvitation();
-    */
-    setIsLoading(false);
   }, [invitationUid]);
 
-  // 2. Guest Identification & Features (DISABLED for FE-only deployment)
+  // 2. Guest Identification & Features
   useEffect(() => {
-    /*
     const identifyGuest = async () => {
+      setIsLoading(true);
       const urlParams = new URLSearchParams(window.location.search);
       const guestParam = urlParams.get("guest");
       let nameToSearch = getGuestName();
 
       if (guestParam) {
         try {
+          // guestParam might be URL encoded, though URLSearchParams handles basic encoding
           const decodedName = safeBase64.decode(guestParam);
           if (decodedName) {
             nameToSearch = decodedName;
             storeGuestName(decodedName);
+            // Clean URL after capturing guest name
             window.history.replaceState({}, "", window.location.pathname);
           }
         } catch (e) {
@@ -79,6 +78,10 @@ export function InvitationProvider({ children }) {
           });
           if (response.success) {
             setGuest(response.data);
+            // Auto-set language if guest has a preference
+            if (response.data.language) {
+              toggleLanguage(response.data.language);
+            }
           }
         } catch {
           console.log("Guest record not found for:", nameToSearch);
@@ -88,9 +91,7 @@ export function InvitationProvider({ children }) {
     };
 
     identifyGuest();
-    */
-    setIsLoading(false);
-  }, [invitationUid]);
+  }, [invitationUid, toggleLanguage]);
 
   // Helper to check if guest has a specific feature tag
   const hasFeature = useCallback(

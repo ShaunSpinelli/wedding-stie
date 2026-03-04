@@ -19,7 +19,7 @@ import { useState, lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Heart, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { useLanguage } from "@/lib/language-context";
 import { LanguageToggle } from "@/components/ui/language-toggle";
@@ -54,7 +54,11 @@ function App() {
   const { t } = useLanguage();
   const location = useLocation();
 
-  const isAdminPath = location.pathname === "/admin";
+  // Check if we are on the admin path (handle both with and without basename)
+  const isAdminPath =
+    location.pathname === "/admin" ||
+    location.pathname === `${import.meta.env.BASE_URL}admin` ||
+    location.pathname === "admin";
 
   // Use config from API if available, otherwise fall back to static config
   const activeConfig = config || staticConfig.data;
@@ -90,7 +94,7 @@ function App() {
       <ThemeToggle />
 
       {/* Admin Toggle Button */}
-      {location.pathname !== "/admin" && (
+      {!isAdminPath && (
         <Link
           to="/admin"
           className="fixed top-4 right-4 z-[100] flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 border border-theme-support-1/30 shadow-lg text-theme-accent hover:bg-theme-main-1/50 transition-all text-xs font-bold"
@@ -127,11 +131,7 @@ function App() {
         <meta name="theme-color" content="#FDA4AF" />
       </Helmet>
 
-      <Suspense
-        fallback={
-          <div className="min-h-screen bg-theme-main-1" />
-        }
-      >
+      <Suspense fallback={<div className="min-h-screen bg-theme-main-1" />}>
         <Routes>
           <Route
             path="/admin"

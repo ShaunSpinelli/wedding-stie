@@ -128,6 +128,8 @@
         "label_children": "Number of Children",
         "btn_save": "Save Details",
         "btn_saving": "Saving...",
+        "btn_update_info": "Update your information",
+        "success_msg": "Thank you! Your RSVP has been saved.",
         "success_update": "Your details have been updated successfully!",
         "success_create": "You have been added to the guest list!",
         "feedback": {
@@ -375,6 +377,8 @@
         "label_children": "Nombre d'enfants",
         "btn_save": "Enregistrer les détails",
         "btn_saving": "Enregistrement...",
+        "btn_update_info": "Mettre à jour vos informations",
+        "success_msg": "Merci ! Votre réponse a été enregistrée avec succès.",
         "success_update": "Vos détails ont été mis à jour avec succès !",
         "success_create": "Vous avez été ajouté à la liste des invités !",
         "feedback": {

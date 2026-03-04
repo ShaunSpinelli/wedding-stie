@@ -88,6 +88,7 @@ export const createGuestSchema = z.object({
     .optional()
     .nullable()
     .or(z.literal("")),
+  language: z.enum(["en", "fr"]).default("en"),
   attending: z.enum(["ATTENDING", "NOT_ATTENDING", "MAYBE"]).default("MAYBE"),
   country: z.string().max(100).optional().nullable().or(z.literal("")),
   features: z.array(z.string()).default([]),

@@ -15,11 +15,22 @@ import {
   Edit2,
   X,
   Save,
+  Trash2,
+  Globe,
+  Link as LinkIcon,
+  Check,
 } from "lucide-react";
 import { useInvitation } from "@/features/invitation/invitation-context";
-import { fetchGuests, setAdminSecret, updateGuest } from "@/services/api";
+import {
+  fetchGuests,
+  setAdminSecret,
+  updateGuest,
+  createGuest,
+  deleteGuest,
+} from "@/services/api";
 import { useLanguage } from "@/lib/language-context";
 import { Link, useNavigate } from "react-router-dom";
+import { generateInvitationLink } from "@/utils/generate-invitation-link";
 
 export default function AdminDashboard() {
   const { uid } = useInvitation();
@@ -27,10 +38,19 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const [guests, setGuests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [copiedId, setCopiedId] = useState(null);
 
   // Admin Editing States
   const [editingGuest, setEditingGuest] = useState(null);
   const [editForm, setEditForm] = useState(null);
+  const [isAddingGuest, setIsAddingGuest] = useState(false);
+  const [addForm, setAddForm] = useState({
+    name: "",
+    email: "",
+    language: "en",
+    attending: "MAYBE",
+    features: "",
+  });
   const [saving, setSaving] = useState(false);
 
   const loadGuests = async () => {
@@ -89,6 +109,58 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleAddGuest = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const payload = {
+        ...addForm,
+        features: addForm.features
+          .split(",")
+          .map((f) => f.trim())
+          .filter(Boolean),
+      };
+      const response = await createGuest(uid, payload);
+      if (response.success) {
+        // Refresh guest list
+        const refreshed = await fetchGuests(uid);
+        if (refreshed.success) setGuests(refreshed.data);
+        setIsAddingGuest(false);
+        setAddForm({
+          name: "",
+          email: "",
+          language: "en",
+          attending: "MAYBE",
+          features: "",
+        });
+      }
+    } catch {
+      alert("Failed to create guest");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteGuest = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this guest?")) return;
+
+    try {
+      const response = await deleteGuest(uid, id);
+      if (response.success) {
+        setGuests(guests.filter((g) => g.id !== id));
+      }
+    } catch {
+      alert("Failed to delete guest");
+    }
+  };
+
+  const handleCopyLink = (guest) => {
+    const link = generateInvitationLink(uid, guest.name);
+    navigator.clipboard.writeText(link);
+    setCopiedId(guest.id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   const getStatusIcon = (status) => {
     switch (status) {
       case "ATTENDING":
@@ -129,13 +201,22 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-theme-main-3 hover:bg-theme-main-3 hover:text-white transition-all border border-theme-main-3/20 shadow-sm text-sm font-bold"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsAddingGuest(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-theme-accent text-white hover:bg-theme-accent/90 transition-all shadow-sm text-sm font-bold"
+            >
+              <UserPlus className="w-4 h-4" />
+              Add Guest
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-theme-main-3 hover:bg-theme-main-3 hover:text-white transition-all border border-theme-main-3/20 shadow-sm text-sm font-bold"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -205,6 +286,7 @@ export default function AdminDashboard() {
                   <th className="px-6 py-5">Dietary</th>
                   <th className="px-6 py-5">Plus One</th>
                   <th className="px-6 py-5">Kids</th>
+                  <th className="px-6 py-5">Lang</th>
                   <th className="px-6 py-5">Origin / Tags</th>
                   <th className="px-6 py-5 text-center">Action</th>
                 </tr>
@@ -272,6 +354,14 @@ export default function AdminDashboard() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
+                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-theme-support-3/30 border border-theme-support-1/10 w-fit">
+                        <Globe className="w-3 h-3 opacity-40" />
+                        <span className="text-[10px] font-black uppercase">
+                          {guest.language || "en"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
                       <div className="flex flex-col">
                         <span className="opacity-70">
                           {guest.country || "Unknown"}
@@ -288,13 +378,36 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => startEdit(guest)}
-                        className="p-2 rounded-lg bg-theme-main-1 text-theme-accent hover:bg-theme-main-2 hover:text-white transition-all shadow-sm"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleCopyLink(guest)}
+                          title="Copy Invitation Link"
+                          className={`p-2 rounded-lg transition-all shadow-sm border ${
+                            copiedId === guest.id
+                              ? "bg-emerald-500 text-white border-emerald-500"
+                              : "bg-white text-theme-accent hover:bg-theme-main-1 border-theme-support-1/10"
+                          }`}
+                        >
+                          {copiedId === guest.id ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <LinkIcon className="w-4 h-4" />
+                          )}
+                        </button>
+                        <button
+                          onClick={() => startEdit(guest)}
+                          className="p-2 rounded-lg bg-theme-main-1 text-theme-accent hover:bg-theme-main-2 hover:text-white transition-all shadow-sm"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteGuest(guest.id)}
+                          className="p-2 rounded-lg bg-white text-theme-main-3 hover:bg-theme-main-3 hover:text-white transition-all border border-theme-main-3/10 shadow-sm"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </motion.tr>
                 ))}
@@ -306,6 +419,132 @@ export default function AdminDashboard() {
 
       {/* Admin Edit Modal */}
       <AnimatePresence>
+        {isAddingGuest && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsAddingGuest(false)}
+              className="absolute inset-0 bg-theme-accent/40 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-theme-support-1/20 overflow-hidden"
+            >
+              <div className="p-6 border-b border-theme-support-1/10 flex justify-between items-center bg-theme-main-1/30">
+                <h2 className="text-xl font-serif font-bold">
+                  Admin: Add New Guest
+                </h2>
+                <button
+                  onClick={() => setIsAddingGuest(false)}
+                  className="p-2 hover:bg-white rounded-full transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleAddGuest} className="p-8 space-y-6">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase opacity-40">
+                    Guest Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={addForm.name}
+                    onChange={(e) =>
+                      setAddForm({ ...addForm, name: e.target.value })
+                    }
+                    className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    placeholder="Full name of guest"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase opacity-40">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={addForm.email}
+                    onChange={(e) =>
+                      setAddForm({ ...addForm, email: e.target.value })
+                    }
+                    className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    placeholder="guest@example.com (optional)"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Language
+                    </label>
+                    <select
+                      value={addForm.language}
+                      onChange={(e) =>
+                        setAddForm({ ...addForm, language: e.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    >
+                      <option value="en">English (EN)</option>
+                      <option value="fr">French (FR)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Initial Status
+                    </label>
+                    <select
+                      value={addForm.attending}
+                      onChange={(e) =>
+                        setAddForm({ ...addForm, attending: e.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    >
+                      <option value="MAYBE">Maybe</option>
+                      <option value="ATTENDING">Attending</option>
+                      <option value="NOT_ATTENDING">Not Attending</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase opacity-40">
+                    Tags (Comma separated)
+                  </label>
+                  <input
+                    type="text"
+                    value={addForm.features}
+                    onChange={(e) =>
+                      setAddForm({ ...addForm, features: e.target.value })
+                    }
+                    className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    placeholder="VIP, FAMILY, VEGETARIAN"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="w-full bg-theme-accent text-white py-4 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-theme-accent/90 transition-all"
+                >
+                  {saving ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <UserPlus className="w-5 h-5" />
+                  )}
+                  Create Guest Record
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+
         {editingGuest && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
             <motion.div
@@ -363,6 +602,21 @@ export default function AdminDashboard() {
                       }
                       className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
                     />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Language
+                    </label>
+                    <select
+                      value={editForm.language}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, language: e.target.value })
+                      }
+                      className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    >
+                      <option value="en">English (EN)</option>
+                      <option value="fr">French (FR)</option>
+                    </select>
                   </div>
                   <div className="space-y-1">
                     <label className="text-[10px] font-black uppercase opacity-40">

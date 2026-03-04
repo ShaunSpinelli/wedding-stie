@@ -229,3 +229,22 @@ export async function updateGuest(uid, id, updates) {
   }
   return response.json();
 }
+
+/**
+ * Delete a guest
+ * @param {string} uid - Invitation UID
+ * @param {string} id - Guest ID (UUID)
+ * @returns {Promise<object>} Success response
+ */
+export async function deleteGuest(uid, id) {
+  const response = await fetch(`${API_URL}/api/${uid}/guests/${id}`, {
+    method: "DELETE",
+    headers: getHeaders(),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to delete guest");
+  }
+  return response.json();
+}

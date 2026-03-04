@@ -58,6 +58,7 @@ guestsRoutes.get("/search", zValidator("param", uidParamSchema), async (c) => {
       id: guest.id,
       name: guest.name,
       email: guest.email,
+      language: guest.language,
       attending: guest.attending,
       country: guest.country,
       features: guest.features,
@@ -98,6 +99,7 @@ guestsRoutes.get(
         id: guest.id,
         name: guest.name,
         email: guest.email,
+        language: guest.language,
         attending: guest.attending,
         country: guest.country,
         features: guest.features,
@@ -132,13 +134,14 @@ guestsRoutes.post(
     try {
       const pool = await getDbClient(c);
       const result = await pool.query(
-        `INSERT INTO guests (invitation_uid, name, email, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, children_count)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, children_count)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
          RETURNING *`,
         [
           uid,
           guestData.name,
           guestData.email || null,
+          guestData.language || "en",
           guestData.attending,
           guestData.country || null,
           guestData.features || [],
@@ -157,6 +160,7 @@ guestsRoutes.post(
             id: guest.id,
             name: guest.name,
             email: guest.email,
+            language: guest.language,
             attending: guest.attending,
             country: guest.country,
             features: guest.features,
@@ -200,6 +204,7 @@ guestsRoutes.get("/:id", zValidator("param", guestIdParamSchema), async (c) => {
         id: guest.id,
         name: guest.name,
         email: guest.email,
+        language: guest.language,
         attending: guest.attending,
         country: guest.country,
         features: guest.features,
@@ -231,6 +236,7 @@ guestsRoutes.patch(
     const fieldMapping = {
       name: "name",
       email: "email",
+      language: "language",
       attending: "attending",
       country: "country",
       features: "features",
@@ -288,6 +294,7 @@ guestsRoutes.patch(
           id: guest.id,
           name: guest.name,
           email: guest.email,
+          language: guest.language,
           attending: guest.attending,
           country: guest.country,
           features: guest.features,
