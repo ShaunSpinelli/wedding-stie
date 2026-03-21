@@ -3,6 +3,10 @@
     "loading": "Loading invitation...",
     "error_not_found": "Invitation Not Found",
     "error_check_url": "Please check your URL or contact the organizer.",
+    "common": {
+      "yes": "Yes",
+      "no": "No"
+    },
     "landing": {
       "open_invitation": "Open Invitation",
       "wedding_of": "The Wedding of",
@@ -116,15 +120,17 @@
       "loading_guest": "Fetching your details...",
       "not_found": "We couldn't find you on the guest list, but you can register here!",
       "form": {
+        "guest_one": "Guest One",
+        "guest_two": "Guest Two",
         "label_name": "Full Name",
-        "placeholder_name": "Enter your full name...",
+        "placeholder_name": "Enter full name...",
         "label_email": "Email Address",
         "placeholder_email": "your@email.com",
         "label_attendance": "Attendance Status",
         "label_dietary": "Dietary Requirements",
         "placeholder_dietary": "Allergies, vegetarian, etc...",
-        "label_plus_one": "Will you bring a plus one?",
-        "label_plus_one_name": "Plus One Name",
+        "label_plus_one": "Will there be a second guest?",
+        "label_plus_one_name": "Guest Two - Full Name",
         "placeholder_plus_one_name": "Their full name...",
         "label_children": "Number of Children",
         "btn_save": "Save Details",
@@ -300,8 +306,11 @@
       },
       "attendance": {
         "attending": "Yes, I will attend",
+        "attending_we": "Yes, we will attend",
         "not_attending": "No, I cannot attend",
+        "not_attending_we": "No, we cannot attend",
         "maybe": "Maybe, I will confirm later",
+        "maybe_we": "Maybe, we will confirm later",
         "status_attending": "Will attend",
         "status_not_attending": "Cannot attend",
         "status_maybe": "Might attend"
@@ -389,6 +398,10 @@
     "loading": "Chargement de l'invitation...",
     "error_not_found": "Invitation non trouvée",
     "error_check_url": "Veuillez vérifier votre URL ou contacter l'organisateur.",
+    "common": {
+      "yes": "Oui",
+      "no": "Non"
+    },
     "landing": {
       "open_invitation": "Ouvrir l'invitation",
       "wedding_of": "Le mariage de",
@@ -502,6 +515,8 @@
       "loading_guest": "Récupération de vos détails...",
       "not_found": "Nous ne vous avons pas trouvé sur la liste des invités, mais vous pouvez vous inscrire ici !",
       "form": {
+        "guest_one": "Invité 1",
+        "guest_two": "Invité 2",
         "label_name": "Nom Complet",
         "placeholder_name": "Entrez votre nom complet...",
         "label_email": "Adresse E-mail",
@@ -509,8 +524,8 @@
         "label_attendance": "Statut de Présence",
         "label_dietary": "Régime Alimentaire",
         "placeholder_dietary": "Allergies, végétarien, etc...",
-        "label_plus_one": "Serez-vous accompagné ?",
-        "label_plus_one_name": "Nom de l'accompagnateur",
+        "label_plus_one": "Y aura-t-il un deuxième invité ?",
+        "label_plus_one_name": "Invité 2 - Nom Complet",
         "placeholder_plus_one_name": "Son nom complet...",
         "label_children": "Nombre d'enfants",
         "btn_save": "Enregistrer les détails",
@@ -686,8 +701,11 @@
       },
       "attendance": {
         "attending": "Oui, je serai présent",
+        "attending_we": "Oui, nous serons présents",
         "not_attending": "Non, je ne pourrai pas être présent",
+        "not_attending_we": "Non, nous ne pourrons pas être présents",
         "maybe": "Peut-être, je confirmerai plus tard",
+        "maybe_we": "Peut-être, nous confirmerons plus tard",
         "status_attending": "Sera présent",
         "status_not_attending": "Ne pourra pas être présent",
         "status_maybe": "Sera peut-être présent"

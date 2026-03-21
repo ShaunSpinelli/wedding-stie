@@ -27,7 +27,12 @@ const FEEDBACK_GIFS = {
 };
 
 export default function GuestRSVP({ useAltBg = false }) {
-  const { uid, guest: globalGuest, setGuest: setGlobalGuest } = useInvitation();
+  const {
+    uid,
+    guest: globalGuest,
+    setGuest: setGlobalGuest,
+    hasFeature,
+  } = useInvitation();
   const { t } = useLanguage();
 
   const [saving, setSaving] = useState(false);
@@ -174,19 +179,30 @@ export default function GuestRSVP({ useAltBg = false }) {
                 >
                   <div className="flex justify-between items-start">
                     <div className="space-y-1">
-                      <h3 className="text-2xl font-bold text-theme-main-2">
-                        {guest.name}
-                      </h3>
                       <p className="text-theme-main-3 font-medium flex items-center gap-2 italic">
                         <Sparkles className="w-4 h-4" />
                         {t(
-                          `wishes.attendance.${guest.attending.toLowerCase()}`,
+                          `wishes.attendance.${guest.attending.toLowerCase()}${guest.has_plus_one ? "_we" : ""}`,
                         )}
                       </p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-theme-support-1/10 pt-8 flex-1">
+                    <div className="flex items-center gap-4 text-theme-main-3">
+                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
+                        <User className="w-5 h-5 text-theme-main-2" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
+                          {t("rsvp.form.guest_one")}
+                        </p>
+                        <p className="font-medium truncate max-w-[180px]">
+                          {guest.name}
+                        </p>
+                      </div>
+                    </div>
+
                     <div className="flex items-center gap-4 text-theme-main-3">
                       <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
                         <Mail className="w-5 h-5 text-theme-main-2" />
@@ -201,35 +217,37 @@ export default function GuestRSVP({ useAltBg = false }) {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-theme-main-3">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                        <Users className="w-5 h-5 text-theme-main-2" />
+                    {guest.has_plus_one && (
+                      <div className="flex items-center gap-4 text-theme-main-3">
+                        <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
+                          <Users className="w-5 h-5 text-theme-main-2" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
+                            {t("rsvp.form.guest_two")}
+                          </p>
+                          <p className="font-medium">
+                            {guest.plus_one_name || "Yes"}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                          Plus One
-                        </p>
-                        <p className="font-medium">
-                          {guest.has_plus_one
-                            ? guest.plus_one_name || "Yes"
-                            : "No"}
-                        </p>
-                      </div>
-                    </div>
+                    )}
 
-                    <div className="flex items-center gap-4 text-theme-main-3">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                        <Baby className="w-5 h-5 text-theme-main-2" />
+                    {hasFeature("children") && (
+                      <div className="flex items-center gap-4 text-theme-main-3">
+                        <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
+                          <Baby className="w-5 h-5 text-theme-main-2" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
+                            {t("rsvp.form.label_children")}
+                          </p>
+                          <p className="font-medium">
+                            {guest.children_count || 0}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                          Children
-                        </p>
-                        <p className="font-medium">
-                          {guest.children_count || 0}
-                        </p>
-                      </div>
-                    </div>
+                    )}
 
                     <div className="flex items-center gap-4 text-theme-main-3">
                       <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
@@ -266,36 +284,85 @@ export default function GuestRSVP({ useAltBg = false }) {
                   className="space-y-6 flex-1"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                        <User className="w-4 h-4" />
-                        {t("rsvp.form.label_name")}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
-                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                        placeholder={t("rsvp.form.placeholder_name")}
-                      />
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
+                          <User className="w-4 h-4" />
+                          {t("rsvp.form.guest_one")}
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={formData.name}
+                          onChange={(e) =>
+                            setFormData({ ...formData, name: e.target.value })
+                          }
+                          className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
+                          placeholder={t("rsvp.form.placeholder_name")}
+                        />
+                      </div>
+
+                      {globalGuest?.has_plus_one && (
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
+                            <Users className="w-4 h-4" />
+                            {t("rsvp.form.guest_two")}
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.plus_one_name}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                plus_one_name: e.target.value,
+                              })
+                            }
+                            className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
+                            placeholder={t(
+                              "rsvp.form.placeholder_plus_one_name",
+                            )}
+                          />
+                        </div>
+                      )}
                     </div>
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                        <Mail className="w-4 h-4" />
-                        {t("rsvp.form.label_email")}
-                      </label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
-                        className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                        placeholder={t("rsvp.form.placeholder_email")}
-                      />
+
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
+                          <Mail className="w-4 h-4" />
+                          {t("rsvp.form.label_email")}
+                        </label>
+                        <input
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) =>
+                            setFormData({ ...formData, email: e.target.value })
+                          }
+                          className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
+                          placeholder={t("rsvp.form.placeholder_email")}
+                        />
+                      </div>
+
+                      {hasFeature("children") && (
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
+                            <Baby className="w-4 h-4" />
+                            {t("rsvp.form.label_children")}
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={formData.children_count}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                children_count: parseInt(e.target.value) || 0,
+                              })
+                            }
+                            className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -312,81 +379,11 @@ export default function GuestRSVP({ useAltBg = false }) {
                           onClick={() => handleAttendanceClick(status)}
                           className={`px-4 py-3 rounded-xl text-xs font-bold border transition-all ${formData.attending === status ? "bg-theme-main-2 border-theme-main-2 text-white shadow-md" : "bg-white border-theme-support-1/20 text-theme-main-3/60 hover:border-theme-main-2/30"}`}
                         >
-                          {t(`wishes.attendance.${status.toLowerCase()}`)}
+                          {t(
+                            `wishes.attendance.${status.toLowerCase()}${globalGuest?.has_plus_one ? "_we" : ""}`,
+                          )}
                         </button>
                       ))}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                        <Users className="w-4 h-4" />
-                        Plus One
-                      </label>
-                      <div className="grid grid-cols-2 gap-3">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setFormData({ ...formData, has_plus_one: true })
-                          }
-                          className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${formData.has_plus_one ? "bg-theme-main-2 border-theme-main-2 text-white shadow-md" : "bg-white border-theme-support-1/20 text-theme-main-3/60 hover:border-theme-main-2/30"}`}
-                        >
-                          Yes
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setFormData({
-                              ...formData,
-                              has_plus_one: false,
-                              plus_one_name: "",
-                            })
-                          }
-                          className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${!formData.has_plus_one ? "bg-theme-main-2 border-theme-main-2 text-white shadow-md" : "bg-white border-theme-support-1/20 text-theme-main-3/60 hover:border-theme-main-2/30"}`}
-                        >
-                          No
-                        </button>
-                      </div>
-                      {formData.has_plus_one && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="mt-2"
-                        >
-                          <input
-                            type="text"
-                            value={formData.plus_one_name}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                plus_one_name: e.target.value,
-                              })
-                            }
-                            className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-sm text-theme-main-2"
-                            placeholder="Partner's Name"
-                          />
-                        </motion.div>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                        <Baby className="w-4 h-4" />
-                        Children Count
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        value={formData.children_count}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            children_count: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="w-full px-4 py-2 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                      />
                     </div>
                   </div>
 
