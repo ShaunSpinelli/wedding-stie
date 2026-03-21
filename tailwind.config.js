@@ -54,6 +54,7 @@ export default {
           50: "#fff1f2",
         },
         theme: {
+          alt: "#F4F1EC",
           main: {
             1: "var(--theme-main-1)",
             2: "var(--theme-main-2)",

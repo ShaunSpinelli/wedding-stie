@@ -2,48 +2,58 @@ import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "react-confetti";
 import Marquee from "@/components/ui/marquee";
 import {
-  Calendar,
-  Clock,
-  ChevronDown,
   User,
   MessageCircle,
   Send,
   CheckCircle,
   XCircle,
   HelpCircle,
-  Loader2,
-  AlertCircle,
+  Clock,
 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { formatEventDate } from "@/lib/format-event-date";
-import { useInvitation } from "@/features/invitation";
-import { fetchWishes, createWish, checkWishSubmitted } from "@/services/api";
 import { getGuestName } from "@/lib/invitation-storage";
 import { useLanguage } from "@/lib/language-context";
 
 // Mock wishes for FE-only test
 const MOCK_WISHES = [
-  { id: 1, name: "Shaun", message: "Can't wait for the big day! It's going to be amazing.", attendance: "ATTENDING", created_at: new Date().toISOString() },
-  { id: 2, name: "Manon", message: "So happy for us! ❤️", attendance: "ATTENDING", created_at: new Date().toISOString() },
-  { id: 3, name: "Family Friend", message: "Congratulations to the beautiful couple!", attendance: "ATTENDING", created_at: new Date(Date.now() - 86400000).toISOString() },
-  { id: 4, name: "Best Man", message: "Preparing the speech already. You guys are the best.", attendance: "ATTENDING", created_at: new Date(Date.now() - 3600000).toISOString() }
+  {
+    id: 1,
+    name: "Shaun",
+    message: "Can't wait for the big day! It's going to be amazing.",
+    attendance: "ATTENDING",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 2,
+    name: "Manon",
+    message: "So happy for us! ❤️",
+    attendance: "ATTENDING",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 3,
+    name: "Family Friend",
+    message: "Congratulations to the beautiful couple!",
+    attendance: "ATTENDING",
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: 4,
+    name: "Best Man",
+    message: "Preparing the speech already. You guys are the best.",
+    attendance: "ATTENDING",
+    created_at: new Date(Date.now() - 3600000).toISOString(),
+  },
 ];
 
 export default function Wishes({ useAltBg = false }) {
-  const { uid } = useInvitation();
-  const queryClient = useQueryClient();
   const { t } = useLanguage();
   const [showConfetti, setShowConfetti] = useState(false);
   const [newWish, setNewWish] = useState("");
   const [guestName, setGuestName] = useState("");
-  const [attendance, setAttendance] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
   const [isNameFromInvitation, setIsNameFromInvitation] = useState(false);
   const [hasSubmittedWish, setHasSubmittedWish] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [selectedWish, setSelectedWish] = useState(null);
 
   // Get guest name from localStorage
   useEffect(() => {
@@ -54,54 +64,19 @@ export default function Wishes({ useAltBg = false }) {
     }
   }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
-
-  const options = [
-    { value: "ATTENDING", label: t("wishes.attendance.attending") },
-    { value: "NOT_ATTENDING", label: t("wishes.attendance.not_attending") },
-    { value: "MAYBE", label: t("wishes.attendance.maybe") },
-  ];
-
   // Fetch wishes (DISABLED for FE-only deployment - Using MOCK_WISHES)
-  const {
-    data: wishes = MOCK_WISHES,
-    isLoading = false,
-    error = null,
-  } = { data: MOCK_WISHES, isLoading: false, error: null };
-
-  const createWishMutation = { 
-    isPending: false, 
-    mutate: (data) => {
-      setHasSubmittedWish(true);
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
-    }
+  const { data: wishes = MOCK_WISHES, isLoading = false } = {
+    data: MOCK_WISHES,
+    isLoading: false,
   };
 
   const handleSubmitWish = async (e) => {
     e.preventDefault();
     if (!newWish.trim() || !guestName.trim()) return;
 
-    createWishMutation.mutate({
-      name: guestName.trim(),
-      message: newWish.trim(),
-      attendance: attendance || "MAYBE",
-    });
+    setHasSubmittedWish(true);
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 3000);
   };
 
   const getAttendanceIcon = (status) => {
@@ -127,7 +102,7 @@ export default function Wishes({ useAltBg = false }) {
         style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
       >
         {showConfetti && <Confetti recycle={false} numberOfPieces={200} />}
-        <div className="container mx-auto px-4 py-20 relative z-10">
+        <div className="container mx-auto px-4 py-10 relative z-10">
           {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -183,7 +158,6 @@ export default function Wishes({ useAltBg = false }) {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
                       className="group relative w-[300px] h-[160px] flex-shrink-0 cursor-pointer"
-                      onClick={() => setSelectedWish(wish)}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >

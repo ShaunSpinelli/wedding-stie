@@ -9,8 +9,8 @@ export default function Events({ useAltBg = false }) {
   return (
     <>
       {/* Event Section */}
-      <section 
-        id="event" 
+      <section
+        id="event"
         className="min-h-screen relative overflow-hidden"
         style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
       >
@@ -19,7 +19,7 @@ export default function Events({ useAltBg = false }) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="relative z-10 container mx-auto px-4 py-20"
+          className="relative z-10 container mx-auto px-4 py-10"
         >
           {/* Section Header */}
           <motion.div

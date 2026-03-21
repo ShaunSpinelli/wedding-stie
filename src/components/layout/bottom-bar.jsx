@@ -1,7 +1,7 @@
 // src/components/bottom-bar/BottomBar.jsx
 import React, { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Home, HeartHandshake, MapPin, Plane } from "lucide-react";
+import { Home, HeartHandshake, MapPin, Plane, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-context";
 
@@ -10,6 +10,7 @@ const menuItems = [
   { icon: MapPin, labelKey: "nav.location", href: "#location", id: "location" },
   { icon: Plane, labelKey: "nav.travel", href: "#travel", id: "travel" },
   { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
+  { icon: HelpCircle, labelKey: "nav.faq", href: "#faq", id: "faq" },
 ];
 
 /**

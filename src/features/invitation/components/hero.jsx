@@ -125,7 +125,7 @@ export default function Hero({ useAltBg = false }) {
     <>
       <section
         id="home"
-        className="min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-20 text-center relative overflow-hidden"
+        className="min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-10 text-center relative overflow-hidden"
         style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
       >
         <motion.div
@@ -140,28 +140,28 @@ export default function Hero({ useAltBg = false }) {
             transition={{ delay: 0.2 }}
             className="inline-block mx-auto"
           >
-            <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-main-2 rounded-full border border-theme-support-1/20">
+            <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-main-2 rounded-full border border-theme-support-1/20 font-serif italic">
               {t("hero.save_the_date")}
             </span>
           </motion.div>
 
           <div className="space-y-4">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-theme-main-2 font-light italic text-base sm:text-lg"
-            >
-              {t("hero.married_announcement")}
-            </motion.p>
             <motion.h2
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="text-3xl sm:text-5xl lg:text-7xl font-serif text-theme-main-2"
+              transition={{ delay: 0.4 }}
+              className="text-4xl sm:text-6xl lg:text-8xl font-serif text-theme-main-2"
             >
               {t("wedding.groomName")} & {t("wedding.brideName")}
             </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-theme-main-2 font-light italic text-xl sm:text-2xl"
+            >
+              {t("hero.married_announcement")}
+            </motion.p>
           </div>
 
           <motion.div
@@ -216,16 +216,16 @@ export default function Hero({ useAltBg = false }) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.1 }}
-                  className="space-y-2"
+                  className="space-y-3"
                 >
-                  <p className="text-theme-main-3 font-serif italic text-sm">
+                  <p className="text-theme-main-3 font-serif italic text-base">
                     {t("hero.dear")}
                   </p>
-                  <p className="text-theme-main-2 font-medium text-sm">
-                    {t("hero.guest_title")}
-                  </p>
-                  <p className="text-theme-main-2 font-semibold text-lg">
+                  <p className="text-theme-main-2 font-semibold text-2xl">
                     {guestName || t("hero.guest_name_fallback")}
+                  </p>
+                  <p className="text-theme-main-3 text-sm sm:text-base leading-relaxed max-w-[250px] mx-auto">
+                    {t("hero.invitation_message")}
                   </p>
                 </motion.div>
               </div>

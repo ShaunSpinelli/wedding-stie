@@ -48,7 +48,7 @@ export default function TravelInfo() {
       onClick={onClick}
       className={`p-4 sm:p-6 rounded-2xl border transition-all text-center flex flex-col items-center justify-center gap-1 ${
         isSelected
-          ? "border-theme-main-2 bg-theme-main-1 text-theme-main-2 shadow-sm"
+          ? "border-theme-main-2 bg-theme-alt text-theme-main-2 shadow-sm"
           : "border-theme-support-1/10 bg-theme-support-3/5 hover:border-theme-main-1 text-theme-accent"
       }`}
     >
@@ -67,7 +67,7 @@ export default function TravelInfo() {
   );
 
   return (
-    <section id="travel" className="py-20 bg-white">
+    <section id="travel" className="py-10 bg-white">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -75,12 +75,15 @@ export default function TravelInfo() {
           viewport={{ once: true }}
           className="text-center space-y-4 mb-12"
         >
-          <span className="inline-block text-theme-main-2 font-medium uppercase tracking-widest text-sm">
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-4xl md:text-5xl font-serif text-theme-main-2"
+          >
             {t("travel.title") || "Getting Here"}
-          </span>
-          <h2 className="text-4xl md:text-5xl font-serif text-theme-accent">
-            {t("travel.subtitle") || "Travel Options"}
-          </h2>
+          </motion.h2>
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-12">
@@ -175,7 +178,7 @@ export default function TravelInfo() {
               >
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 border-b border-theme-support-1/10 pb-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-theme-main-1 flex items-center justify-center text-theme-main-2">
+                    <div className="w-12 h-12 rounded-2xl bg-theme-alt flex items-center justify-center text-theme-main-2">
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>
@@ -214,7 +217,7 @@ export default function TravelInfo() {
                 </div>
 
                 <div className="relative space-y-8">
-                  <div className="absolute left-[23px] top-2 bottom-2 w-0.5 bg-theme-main-1/50" />
+                  <div className="absolute left-[23px] top-2 bottom-2 w-0.5 bg-theme-alt" />
 
                   {travelData[selectedCountry].cities[selectedCity].options[
                     selectedOptionIndex
@@ -228,7 +231,7 @@ export default function TravelInfo() {
                         transition={{ delay: index * 0.1 }}
                         className="relative pl-16 flex items-center group"
                       >
-                        <div className="absolute left-0 w-12 h-12 rounded-full bg-white border-2 border-theme-main-1 flex items-center justify-center text-theme-main-2 shadow-sm z-10 group-hover:scale-110 transition-transform">
+                        <div className="absolute left-0 w-12 h-12 rounded-full bg-white border-2 border-theme-alt flex items-center justify-center text-theme-main-2 shadow-sm z-10 group-hover:scale-110 transition-transform">
                           <StepIcon className="w-5 h-5" />
                         </div>
 

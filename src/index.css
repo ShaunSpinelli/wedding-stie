@@ -17,15 +17,15 @@
 }
 
 @layer base {
-  /* Default Fallback Variables (Buttercream) */
+  /* Default Fallback Variables (Ember Ash) */
   :root {
-    --theme-main-1: #f6e6b4;
-    --theme-main-2: #e0a93b;
-    --theme-main-3: #c76b4f;
-    --theme-support-1: #a3b18a;
-    --theme-support-2: #a9c5d3;
-    --theme-support-3: #efe6da;
-    --theme-accent: #6B6B6B;
+    --theme-main-1: #cad5ca; /* Ash Grey (Canvas) */
+    --theme-main-2: #bc2c1a; /* Brick Ember (Hero/Romance) */
+    --theme-main-3: #2f2f2f; /* Graphite (Primary Text) */
+    --theme-support-1: #b09c82; /* Khaki Beige (Dividers) */
+    --theme-support-2: #2f2f2f; /* Graphite (Surface Grouping) */
+    --theme-support-3: #bc2c1a; /* Brick Ember (Depth) */
+    --theme-accent: #bc2c1a; /* Brick Ember (Emphasis) */
     --theme-romantic: #bc2c1a; /* Brick Ember Red for hearts */
 
     --background: 0 0% 100%;

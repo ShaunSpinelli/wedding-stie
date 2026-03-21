@@ -123,7 +123,7 @@ export default function GuestRSVP({ useAltBg = false }) {
   return (
     <section
       id="rsvp"
-      className="py-20 relative overflow-hidden"
+      className="py-10 relative overflow-hidden"
       style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
     >
       <div className="container mx-auto px-4 relative z-10">
@@ -134,11 +134,14 @@ export default function GuestRSVP({ useAltBg = false }) {
           viewport={{ once: true }}
           className="text-center space-y-4 mb-12"
         >
-          <motion.span className="inline-block text-theme-main-2 font-medium uppercase tracking-widest text-sm">
-            {t("rsvp.title")}
-          </motion.span>
-          <motion.h2 className="text-4xl md:text-5xl font-serif text-theme-main-2">
-            {guest ? "Your Guest Details" : t("rsvp.subtitle")}
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-4xl md:text-5xl font-serif text-theme-main-2"
+          >
+            {guest ? "Your Guest Details" : t("rsvp.title")}
           </motion.h2>
         </motion.div>
 

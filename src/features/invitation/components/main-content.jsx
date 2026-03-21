@@ -8,6 +8,7 @@ import { FeatureGate } from "@/components/ui/feature-gate";
 import Funny from "@/features/funny/components/funny";
 import FunnyCaptcha from "@/features/funny/components/funny-captcha";
 import { useInvitation } from "@/features/invitation/invitation-context";
+import { FAQSection } from "@/features/faq";
 
 // Main Invitation Content
 export default function MainContent() {
@@ -45,6 +46,8 @@ export default function MainContent() {
         isOpen={isCaptchaOpen}
         onClose={() => setIsCaptchaOpen(false)}
       />
+
+      <FAQSection useAltBg={true} />
     </>
   );
 }

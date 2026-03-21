@@ -5,9 +5,9 @@ export default function Playlist({ useAltBg = false }) {
   const { t } = useLanguage();
 
   return (
-    <section 
-      id="playlist" 
-      className="py-20 overflow-hidden"
+    <section
+      id="playlist"
+      className="py-10 overflow-hidden"
       style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
     >
       <div className="container mx-auto px-4 relative z-10">

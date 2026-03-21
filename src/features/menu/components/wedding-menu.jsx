@@ -12,9 +12,9 @@ export default function WeddingMenu({ useAltBg = false }) {
   ];
 
   return (
-    <section 
-      id="menu" 
-      className="py-20 overflow-hidden"
+    <section
+      id="menu"
+      className="py-10 overflow-hidden"
       style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
     >
       <div className="container mx-auto px-4 relative z-10">

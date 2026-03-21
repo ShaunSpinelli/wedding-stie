@@ -9,7 +9,7 @@ export default function Timeline({ useAltBg = false }) {
   return (
     <section
       id="timeline"
-      className="min-h-screen relative overflow-hidden py-20"
+      className="min-h-screen relative overflow-hidden py-10"
       style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
     >
       <div className="container mx-auto px-4 relative z-10">
@@ -66,9 +66,11 @@ export default function Timeline({ useAltBg = false }) {
 
                   {/* Dot */}
                   <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center z-20">
-                    <div 
+                    <div
                       className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-theme-romantic flex items-center justify-center shadow-md"
-                      style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
+                      style={{
+                        backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF",
+                      }}
                     >
                       <Heart
                         className="w-4 h-4 md:w-5 md:h-5 text-theme-romantic"

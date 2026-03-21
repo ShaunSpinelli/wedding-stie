@@ -15,11 +15,8 @@ export default function Location() {
   return (
     <>
       {/* Map & Venue Section */}
-      <section
-        id="location"
-        className="min-h-screen relative overflow-hidden bg-white"
-      >
-        <div className="container mx-auto px-4 py-20 relative z-10">
+      <section id="location" className="relative overflow-hidden bg-white">
+        <div className="container mx-auto px-4 py-10 relative z-10">
           {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -28,23 +25,14 @@ export default function Location() {
             transition={{ duration: 0.8 }}
             className="text-center space-y-4 mb-16"
           >
-            <motion.span
+            <motion.h2
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="inline-block text-theme-main-2 font-medium"
+              className="text-4xl md:text-5xl font-serif text-theme-main-2"
             >
               {t("location.title")}
-            </motion.span>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="text-4xl md:text-5xl font-serif text-theme-accent"
-            >
-              {t("location.subtitle")}
             </motion.h2>
           </motion.div>
 
@@ -83,7 +71,7 @@ export default function Location() {
 
               {/* Address Card */}
               <div className="w-full flex items-start gap-6 p-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-theme-support-1/20 shadow-xl">
-                <div className="w-12 h-12 rounded-2xl bg-theme-main-1 flex items-center justify-center flex-shrink-0 text-theme-main-2 shadow-sm">
+                <div className="w-12 h-12 rounded-2xl bg-theme-alt flex items-center justify-center flex-shrink-0 text-theme-main-2 shadow-sm">
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div>

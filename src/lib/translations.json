@@ -17,7 +17,7 @@
       "parentBride": "Mr. Bride & Mrs. Bride",
       "location": "Comptoir St Hilaire",
       "address": "Chem. du Mas de la Rouquette, 30560 Saint-Hilaire-de-Brethmas, France",
-      "displayDate": "May 22, 2027",
+      "displayDate": "Weekend of 21, 22, 23 May",
       "displayTime": "",
       "agenda": [
         {
@@ -167,10 +167,11 @@
     },
     "hero": {
       "save_the_date": "Save the Date",
-      "married_announcement": "We Are Getting Married",
+      "married_announcement": "Are getting married",
       "dear": "Dear:",
       "guest_title": "Our Honored Guest",
       "guest_name_fallback": "Guest Name",
+      "invitation_message": "We would love to celebrate this special day with you.",
       "countdown": {
         "days": "days",
         "hours": "hours",
@@ -323,7 +324,64 @@
       "location": "Location",
       "wishes": "Wishes",
       "playlist": "Playlist",
-      "menu": "Menu"
+      "menu": "Menu",
+      "faq": "FAQ"
+    },
+    "faq": {
+      "title": "FAQ",
+      "subtitle": "Everything you need to know",
+      "items": [
+        {
+          "question": "Where and when will the wedding take place?",
+          "answer": "TODO: Add answer",
+          "tags": []
+        },
+        {
+          "question": "What time should guests arrive?",
+          "answer": "TODO: Add answer (arrival time vs ceremony time)",
+          "tags": []
+        },
+        {
+          "question": "Are the wedding and reception at the same location?",
+          "answer": "TODO: Add answer",
+          "tags": []
+        },
+        {
+          "question": "Is there accommodation available for the weekend?",
+          "answer": "TODO: Add answer (on-site or Airbnb nearby)",
+          "tags": []
+        },
+        {
+          "question": "How do I get to the wedding venue?",
+          "answer": "TODO: Add answer (airport, train station, car recommended)",
+          "tags": []
+        },
+        {
+          "question": "Is there a dress code?",
+          "answer": "TODO: Add answer",
+          "tags": []
+        },
+        {
+          "question": "Will the wedding be in French, English, or bilingual?",
+          "answer": "TODO: Add answer",
+          "tags": []
+        },
+        {
+          "question": "Are children invited?",
+          "answer": "TODO: Add answer",
+          "tags": []
+        },
+        {
+          "question": "When is the RSVP deadline?",
+          "answer": "TODO: Add answer",
+          "tags": []
+        },
+        {
+          "question": "Will there be other events during the weekend?",
+          "answer": "TODO: Add answer (e.g., welcome BBQ, farewell brunch)",
+          "tags": []
+        }
+      ]
     }
   },
   "fr": {
@@ -344,7 +402,7 @@
       "parentBride": "M. Bride & Mme Bride",
       "location": "Comptoir St Hilaire",
       "address": "Chem. du Mas de la Rouquette, 30560 Saint-Hilaire-de-Brethmas, France",
-      "displayDate": "22 Mai 2027",
+      "displayDate": "Week-end du 21, 22, 23 Mai",
       "displayTime": "",
       "agenda": [
         {
@@ -494,10 +552,11 @@
     },
     "hero": {
       "save_the_date": "Réservez la date",
-      "married_announcement": "Nous nous marions",
+      "married_announcement": "Se marient",
       "dear": "Cher/Chère:",
       "guest_title": "Notre invité(e) d'honneur",
       "guest_name_fallback": "Nom de l'invité",
+      "invitation_message": "Nous serions ravis de célébrer cette journée spéciale avec vous.",
       "countdown": {
         "days": "jours",
         "hours": "heures",
@@ -650,7 +709,64 @@
       "location": "Lieu",
       "wishes": "Vœux",
       "playlist": "Playlist",
-      "menu": "Menu"
+      "menu": "Menu",
+      "faq": "FAQ"
+    },
+    "faq": {
+      "title": "Foire Aux Questions",
+      "subtitle": "Tout ce que vous devez savoir",
+      "items": [
+        {
+          "question": "Où et quand aura lieu le mariage ?",
+          "answer": "TODO: Ajouter la réponse",
+          "tags": []
+        },
+        {
+          "question": "À quelle heure les invités doivent-ils arriver ?",
+          "answer": "TODO: Ajouter la réponse (heure d’arrivée vs heure de cérémonie)",
+          "tags": []
+        },
+        {
+          "question": "Le mariage et la réception sont-ils au même endroit ?",
+          "answer": "TODO: Ajouter la réponse",
+          "tags": []
+        },
+        {
+          "question": "Y a-t-il des logements disponibles pour le week-end ?",
+          "answer": "TODO: Ajouter la réponse (sur place ou Airbnb autour)",
+          "tags": []
+        },
+        {
+          "question": "Comment se rendre au lieu du mariage ?",
+          "answer": "TODO: Ajouter la réponse (aéroport, gare, voiture recommandée)",
+          "tags": []
+        },
+        {
+          "question": "Y a-t-il un dress code ?",
+          "answer": "TODO: Ajouter la réponse",
+          "tags": []
+        },
+        {
+          "question": "Le mariage sera-t-il en français, en anglais ou bilingue ?",
+          "answer": "TODO: Ajouter la réponse",
+          "tags": []
+        },
+        {
+          "question": "Les enfants sont-ils invités ?",
+          "answer": "TODO: Ajouter la réponse",
+          "tags": []
+        },
+        {
+          "question": "Jusqu’à quand devons-nous confirmer notre présence (RSVP) ?",
+          "answer": "TODO: Ajouter la réponse",
+          "tags": []
+        },
+        {
+          "question": "Y aura-t-il des événements pendant le week-end ?",
+          "answer": "TODO: Ajouter la réponse (par exemple : welcome BBQ, brunch du lendemain)",
+          "tags": []
+        }
+      ]
     }
   }
 }
