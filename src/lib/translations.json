@@ -111,6 +111,7 @@
     "rsvp": {
       "title": "RSVP",
       "subtitle": "Guest Details",
+      "your_details": "Your Details",
       "description": "Please confirm your attendance and provide your contact details.",
       "loading_guest": "Fetching your details...",
       "not_found": "We couldn't find you on the guest list, but you can register here!",
@@ -496,6 +497,7 @@
     "rsvp": {
       "title": "RSVP",
       "subtitle": "Détails de l'invité",
+      "your_details": "Vos Détails",
       "description": "Veuillez confirmer votre présence et fournir vos coordonnées.",
       "loading_guest": "Récupération de vos détails...",
       "not_found": "Nous ne vous avons pas trouvé sur la liste des invités, mais vous pouvez vous inscrire ici !",

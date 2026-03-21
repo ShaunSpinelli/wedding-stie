@@ -141,8 +141,19 @@ export default function GuestRSVP({ useAltBg = false }) {
             transition={{ delay: 0.2 }}
             className="text-4xl md:text-5xl font-serif text-theme-main-2"
           >
-            {guest ? "Your Guest Details" : t("rsvp.title")}
+            {t("rsvp.title")}
           </motion.h2>
+          {guest && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="text-theme-main-3 font-medium italic"
+            >
+              {t("rsvp.your_details")}
+            </motion.p>
+          )}
         </motion.div>
 
         <motion.div
@@ -238,7 +249,7 @@ export default function GuestRSVP({ useAltBg = false }) {
                   <div className="pt-8 border-t border-theme-support-1/10">
                     <button
                       onClick={() => setIsEditMode(true)}
-                      className="w-full py-4 bg-theme-main-1 text-theme-main-2 rounded-xl font-bold shadow-sm hover:bg-theme-main-2 hover:text-white transition-all flex items-center justify-center gap-2"
+                      className="w-full py-4 bg-theme-alt text-theme-main-2 rounded-xl font-bold shadow-sm hover:bg-theme-main-2 hover:text-white transition-all flex items-center justify-center gap-2"
                     >
                       <Edit2 className="w-4 h-4" />
                       {t("rsvp.form.btn_update_info")}
