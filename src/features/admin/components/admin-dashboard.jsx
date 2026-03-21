@@ -50,6 +50,10 @@ export default function AdminDashboard() {
     language: "en",
     attending: "MAYBE",
     features: "",
+    country: "",
+    children_count: 0,
+    has_plus_one: false,
+    plus_one_name: "",
   });
   const [saving, setSaving] = useState(false);
 
@@ -119,6 +123,7 @@ export default function AdminDashboard() {
           .split(",")
           .map((f) => f.trim())
           .filter(Boolean),
+        children_count: parseInt(addForm.children_count) || 0,
       };
       const response = await createGuest(uid, payload);
       if (response.success) {
@@ -132,6 +137,10 @@ export default function AdminDashboard() {
           language: "en",
           attending: "MAYBE",
           features: "",
+          country: "",
+          children_count: 0,
+          has_plus_one: false,
+          plus_one_name: "",
         });
       }
     } catch {
@@ -447,38 +456,38 @@ export default function AdminDashboard() {
               </div>
 
               <form onSubmit={handleAddGuest} className="p-8 space-y-6">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase opacity-40">
-                    Guest Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={addForm.name}
-                    onChange={(e) =>
-                      setAddForm({ ...addForm, name: e.target.value })
-                    }
-                    className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
-                    placeholder="Full name of guest"
-                  />
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Guest Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={addForm.name}
+                      onChange={(e) =>
+                        setAddForm({ ...addForm, name: e.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                      placeholder="Full name of guest"
+                    />
+                  </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase opacity-40">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={addForm.email}
-                    onChange={(e) =>
-                      setAddForm({ ...addForm, email: e.target.value })
-                    }
-                    className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
-                    placeholder="guest@example.com (optional)"
-                  />
-                </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={addForm.email}
+                      onChange={(e) =>
+                        setAddForm({ ...addForm, email: e.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                      placeholder="guest@example.com (optional)"
+                    />
+                  </div>
 
-                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <label className="text-[10px] font-black uppercase opacity-40">
                       Language
@@ -511,6 +520,39 @@ export default function AdminDashboard() {
                       <option value="NOT_ATTENDING">Not Attending</option>
                     </select>
                   </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Country
+                    </label>
+                    <input
+                      type="text"
+                      value={addForm.country}
+                      onChange={(e) =>
+                        setAddForm({ ...addForm, country: e.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                      placeholder="e.g. France, USA"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Kids Count
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={addForm.children_count}
+                      onChange={(e) =>
+                        setAddForm({
+                          ...addForm,
+                          children_count: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1">
@@ -526,6 +568,37 @@ export default function AdminDashboard() {
                     className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
                     placeholder="VIP, FAMILY, VEGETARIAN"
                   />
+                </div>
+
+                <div className="flex items-center gap-4 p-4 bg-theme-support-3/20 rounded-2xl">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={addForm.has_plus_one}
+                      onChange={(e) =>
+                        setAddForm({
+                          ...addForm,
+                          has_plus_one: e.target.checked,
+                        })
+                      }
+                      className="w-4 h-4 accent-theme-main-2"
+                    />
+                    <span className="text-sm font-bold">Has Plus One?</span>
+                  </label>
+                  {addForm.has_plus_one && (
+                    <input
+                      type="text"
+                      value={addForm.plus_one_name}
+                      onChange={(e) =>
+                        setAddForm({
+                          ...addForm,
+                          plus_one_name: e.target.value,
+                        })
+                      }
+                      className="flex-1 px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                      placeholder="Plus One Name"
+                    />
+                  )}
                 </div>
 
                 <button
@@ -646,6 +719,22 @@ export default function AdminDashboard() {
                       }
                       className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
                     />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      RSVP Status
+                    </label>
+                    <select
+                      value={editForm.attending}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, attending: e.target.value })
+                      }
+                      className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    >
+                      <option value="MAYBE">Maybe</option>
+                      <option value="ATTENDING">Attending</option>
+                      <option value="NOT_ATTENDING">Not Attending</option>
+                    </select>
                   </div>
                 </div>
 

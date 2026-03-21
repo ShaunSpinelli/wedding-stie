@@ -11,9 +11,14 @@ export default function Hero({ useAltBg = false }) {
   const { t } = useLanguage();
   const { guest } = useInvitation();
 
-  const guestName = useMemo(() => {
-    return guest?.name || getGuestName() || "";
-  }, [guest]);
+  const displayName = useMemo(() => {
+    const mainName =
+      guest?.name || getGuestName() || t("hero.guest_name_fallback");
+    if (guest?.has_plus_one && guest?.plus_one_name) {
+      return `${mainName} & ${guest.plus_one_name}`;
+    }
+    return mainName;
+  }, [guest, t]);
 
   const CountdownTimer = ({ targetDate }) => {
     const calculateTimeLeft = useCallback(() => {
@@ -222,7 +227,7 @@ export default function Hero({ useAltBg = false }) {
                     {t("hero.dear")}
                   </p>
                   <p className="text-theme-main-2 font-semibold text-2xl">
-                    {guestName || t("hero.guest_name_fallback")}
+                    {displayName}
                   </p>
                   <p className="text-theme-main-3 text-sm sm:text-base leading-relaxed max-w-[250px] mx-auto">
                     {t("hero.invitation_message")}
