@@ -16,7 +16,7 @@
 
 // src/App.jsx
 import { useState, lazy, Suspense } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Settings } from "lucide-react";
@@ -27,20 +27,18 @@ import { LanguageToggle } from "@/components/ui/language-toggle";
 import { getAdminSecret } from "@/services/api";
 import staticConfig from "@/config/config";
 
-// Lazy load components for better performance
-const Layout = lazy(() => import("@/components/layout/layout"));
-const MainContent = lazy(
-  () => import("@/features/invitation/components/main-content"),
-);
-const LandingPage = lazy(
-  () => import("@/features/invitation/components/landing-page"),
-);
+// Lazy load admin components only
 const AdminDashboard = lazy(
   () => import("@/features/admin/components/admin-dashboard"),
 );
 const AdminLogin = lazy(
   () => import("@/features/admin/components/admin-login"),
 );
+
+// Import primary components directly to ensure smooth transitions
+import Layout from "@/components/layout/layout";
+import MainContent from "@/features/invitation/components/main-content";
+import LandingPage from "@/features/invitation/components/landing-page";
 
 /**
  * App component serves as the root of the application.
@@ -143,13 +141,24 @@ function App() {
           <Route
             path="/*"
             element={
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 {!isInvitationOpen ? (
-                  <LandingPage onOpenInvitation={handleOpenInvitation} />
+                  <LandingPage
+                    key="landing-page"
+                    onOpenInvitation={handleOpenInvitation}
+                  />
                 ) : (
-                  <Layout>
-                    <MainContent />
-                  </Layout>
+                  <motion.div
+                    key="main-invitation"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="relative z-10"
+                  >
+                    <Layout>
+                      <MainContent />
+                    </Layout>
+                  </motion.div>
                 )}
               </AnimatePresence>
             }

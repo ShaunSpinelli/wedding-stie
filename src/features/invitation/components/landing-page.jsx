@@ -1,17 +1,28 @@
 import { useState } from "react";
-import { useLanguage } from "@/lib/language-context";
-import { motion, AnimatePresence } from "framer-motion";
-import { InvitationCard } from "./invitation-card";
+import { motion } from "framer-motion";
 import { getAssetPath } from "@/utils/asset-path";
 
 const LandingPage = ({ onOpenInvitation }) => {
-  const { t } = useLanguage();
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
 
+  const handleEnvelopeClick = () => {
+    if (!isEnvelopeOpen) {
+      setIsEnvelopeOpen(true);
+      // Immediately start the transition to the main invitation
+      // A small delay (100ms) to ensure the envelope "opening" state is set and animations begin
+      setTimeout(() => {
+        onOpenInvitation();
+      }, 100);
+    }
+  };
+
   return (
-    <div 
-      className="fixed inset-0 w-full h-full overflow-hidden flex items-center justify-center z-0"
-      style={{ backgroundColor: "#F4F1EC" }} // Matches the section background color
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1.2, ease: "easeInOut" }}
+      className="fixed inset-0 w-full h-full overflow-hidden flex items-center justify-center z-[100]"
+      style={{ backgroundColor: "#F4F1EC" }}
     >
       {/* Decorative Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/5 pointer-events-none" />
@@ -20,120 +31,60 @@ const LandingPage = ({ onOpenInvitation }) => {
 
       {/* Main Content Container */}
       <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-4">
-        
         {/* Interaction Area */}
-        <div 
+        <motion.div
           className="relative flex flex-col items-center justify-center cursor-pointer select-none max-h-[90vh]"
-          onClick={() => !isEnvelopeOpen && setIsEnvelopeOpen(true)}
+          onClick={handleEnvelopeClick}
+          animate={{
+            opacity: isEnvelopeOpen ? 0 : 1,
+            scale: isEnvelopeOpen ? 1.1 : 1,
+            filter: isEnvelopeOpen ? "blur(10px)" : "blur(0px)",
+          }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
-          {/* Invitation Card Clipping Container */}
-          <div className={`absolute inset-0 z-10 flex items-center justify-center pointer-events-none ${isEnvelopeOpen ? "" : "overflow-hidden"}`}>
-            {/* The Invitation Card */}
-            <motion.div
-              initial={{ y: 0, opacity: 0, scale: 0.8, zIndex: 10 }}
-              animate={{
-                y: isEnvelopeOpen 
-                  ? [0, (window.innerWidth < 640 ? -200 : -350), 0] 
-                  : 0,
-                scale: isEnvelopeOpen ? (window.innerWidth < 640 ? 1.2 : 1.1) : 0.8,
-                opacity: isEnvelopeOpen ? 1 : 0,
-                zIndex: isEnvelopeOpen ? 40 : 10,
-              }}
-              transition={{
-                y: { 
-                  duration: 3.5, 
-                  times: [0, 0.5, 1],
-                  ease: "easeInOut",
-                  delay: 0.2 
-                },
-                scale: { duration: 1.5, delay: 0.3 },
-                opacity: { duration: 0.8, delay: 0.3 },
-                zIndex: { delay: isEnvelopeOpen ? 1.2 : 0 }
-              }}
-              className="absolute w-full max-w-[280px] sm:max-w-[360px] md:max-w-[420px] flex items-center justify-center"
-            >
-              <InvitationCard isEnvelopeOpen={isEnvelopeOpen} />
-            </motion.div>
-          </div>
-
           {/* Envelope Image Container */}
-          <motion.div 
-            initial={{ opacity: 1, zIndex: 20 }}
-            animate={{ opacity: isEnvelopeOpen ? 0.2 : 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative"
-          >
-            <img 
-              src={getAssetPath("/images/green_envelope.png")} 
-              alt="Envelope" 
+          <div className="relative">
+            <img
+              src={getAssetPath("/images/green_envelope.png")}
+              alt="Envelope"
               className="w-[600px] sm:w-[700px] md:w-[800px] h-auto drop-shadow-2xl max-w-[150vw]"
             />
-            
+
             {/* MS Seal Overlay */}
             <div className="absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
               <motion.div
                 initial={false}
-                animate={isEnvelopeOpen ? {
-                  rotateX: -25,
-                  y: -15,
-                  opacity: 0,
-                  transition: { duration: 1.5, ease: "easeOut" }
-                } : {
-                  rotateX: 0,
-                  y: 0,
-                  opacity: 1
-                }}
-                style={{ 
+                animate={
+                  isEnvelopeOpen
+                    ? {
+                        rotateX: -45,
+                        y: -20,
+                        opacity: 0,
+                        transition: { duration: 0.6, ease: "easeOut" },
+                      }
+                    : {
+                        rotateX: 0,
+                        y: 0,
+                        opacity: 1,
+                      }
+                }
+                style={{
                   transformOrigin: "top",
-                  transformStyle: "preserve-3d"
+                  transformStyle: "preserve-3d",
                 }}
                 className="w-32 h-32 sm:w-48 md:w-56 flex items-center justify-center"
               >
-                <img 
-                  src={getAssetPath("/images/ms-seal.png")} 
-                  alt="Seal" 
-                  className="w-full h-full object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)]" 
+                <img
+                  src={getAssetPath("/images/ms-seal.png")}
+                  alt="Seal"
+                  className="w-full h-full object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)]"
                 />
               </motion.div>
             </div>
-          </motion.div>
-
-          {/* Proceed Button - Positioned to the right on desktop */}
-          <AnimatePresence>
-            {isEnvelopeOpen && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 4.0, duration: 1, ease: "easeOut" }}
-                className="absolute top-full -mt-12 sm:-mt-24 md:mt-0 md:top-1/2 md:-translate-y-1/2 md:left-[calc(100%+20px)] md:w-auto flex flex-col items-center w-full z-50"
-              >
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onOpenInvitation();
-                  }}
-                  className="group relative bg-theme-main-2 text-white px-10 py-4 rounded-full font-serif text-lg tracking-wide shadow-2xl transition-all duration-300 whitespace-nowrap border-2 border-white/20"
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-3">
-                    <span>{t("landing.open_invitation")}</span>
-                    <motion.span
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ repeat: Infinity, duration: 2 }}
-                    >
-                      →
-                    </motion.span>
-                  </span>
-                  {/* Hover effect using Romantic color (Red) */}
-                  <div className="absolute inset-0 bg-theme-romantic rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

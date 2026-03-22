@@ -1,10 +1,11 @@
-import { Calendar, Clock, Heart } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useConfig } from "@/features/invitation/hooks/use-config";
 import { getGuestName } from "@/lib/invitation-storage";
 import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation/invitation-context";
+import { getAssetPath } from "@/utils/asset-path";
 
 export default function Hero({ useAltBg = false }) {
   const config = useConfig();
@@ -58,12 +59,12 @@ export default function Hero({ useAltBg = false }) {
             key={interval}
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="flex flex-col items-center p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-theme-support-1/20"
+            className="flex flex-col items-center p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 shadow-lg"
           >
-            <span className="text-xl sm:text-2xl font-bold text-theme-accent">
+            <span className="text-xl sm:text-2xl font-bold text-theme-main-2 drop-shadow-sm">
               {timeLeft[interval]}
             </span>
-            <span className="text-xs text-theme-main-3 capitalize">
+            <span className="text-xs text-theme-main-2/70 capitalize font-medium">
               {interval}
             </span>
           </motion.div>
@@ -72,6 +73,7 @@ export default function Hero({ useAltBg = false }) {
     );
   };
 
+  /*
   const FloatingHearts = () => {
     const [hearts] = useState(() =>
       [...Array(8)].map((_, i) => ({
@@ -125,14 +127,32 @@ export default function Hero({ useAltBg = false }) {
       </div>
     );
   };
+  */
 
   return (
     <>
       <section
         id="home"
-        className="min-h-screen flex flex-col items-center justify-center px-4 py-16 sm:py-10 text-center relative overflow-hidden"
+        className="min-h-[120vh] flex flex-col items-center justify-start px-4 pt-20 pb-40 sm:pt-32 sm:pb-60 text-center relative overflow-hidden"
         style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
       >
+        {/* Background Image with fixed 160vh height to preserve perspective */}
+        <div className="absolute top-0 left-0 right-0 h-[160vh] z-0 pointer-events-none">
+          <img
+            src={getAssetPath("/images/hero-bg.jpg")}
+            alt="Hero Background"
+            className="w-full h-full object-cover opacity-30"
+            style={{
+              objectPosition: "center top",
+              maskImage:
+                "linear-gradient(to bottom, black 50%, transparent 75%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, black 50%, transparent 75%)",
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white pointer-events-none" />
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -145,7 +165,7 @@ export default function Hero({ useAltBg = false }) {
             transition={{ delay: 0.2 }}
             className="inline-block mx-auto"
           >
-            <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-main-2 rounded-full border border-theme-support-1/20 font-serif italic">
+            <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-main-2 rounded-full border border-theme-support-1/20 font-serif italic backdrop-blur-sm">
               {t("hero.save_the_date")}
             </span>
           </motion.div>
@@ -155,7 +175,7 @@ export default function Hero({ useAltBg = false }) {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-4xl sm:text-6xl lg:text-8xl font-serif text-theme-main-2"
+              className="text-4xl sm:text-6xl lg:text-8xl font-serif text-theme-main-2 drop-shadow-sm"
             >
               {t("wedding.groomName")} & {t("wedding.brideName")}
             </motion.h2>
@@ -163,7 +183,7 @@ export default function Hero({ useAltBg = false }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="text-theme-main-2 font-light italic text-xl sm:text-2xl"
+              className="text-theme-main-2 font-light italic text-xl sm:text-2xl drop-shadow-sm"
             >
               {t("hero.married_announcement")}
             </motion.p>
@@ -175,23 +195,24 @@ export default function Hero({ useAltBg = false }) {
             transition={{ delay: 0.8 }}
             className="relative max-w-md lg:max-w-2xl mx-auto"
           >
-            <div className="absolute inset-0 bg-white/60 backdrop-blur-md rounded-2xl" />
+            {/* Transparent background with lighter blur */}
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-md rounded-2xl" />
 
-            <div className="relative px-4 sm:px-8 py-8 sm:py-10 rounded-2xl border border-theme-support-1/20">
+            <div className="relative px-4 sm:px-8 py-8 sm:py-10 rounded-2xl border border-white/20 shadow-xl">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-px">
-                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-theme-support-1/30 to-transparent" />
+                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
               </div>
 
-              <div className="space-y-6 text-center">
-                <div className="space-y-3">
+              <div className="space-y-0 text-center">
+                <div className="space-y-3 mb-6">
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.9 }}
                     className="flex items-center justify-center space-x-2"
                   >
-                    <Calendar className="w-4 h-4 text-theme-accent" />
-                    <span className="text-theme-main-3 font-medium text-sm sm:text-base">
+                    <Calendar className="w-4 h-4 text-theme-main-2" />
+                    <span className="text-theme-main-2 font-medium text-sm sm:text-base">
                       {t("wedding.displayDate")}
                     </span>
                   </motion.div>
@@ -203,40 +224,40 @@ export default function Hero({ useAltBg = false }) {
                       transition={{ delay: 1 }}
                       className="flex items-center justify-center space-x-2"
                     >
-                      <Clock className="w-4 h-4 text-theme-accent" />
-                      <span className="text-theme-main-3 font-medium text-sm sm:text-base">
+                      <Clock className="w-4 h-4 text-theme-main-2" />
+                      <span className="text-theme-main-2 font-medium text-sm sm:text-base">
                         {t("wedding.displayTime")}
                       </span>
                     </motion.div>
                   )}
                 </div>
 
-                <div className="flex items-center justify-center gap-3">
-                  <div className="h-px w-8 sm:w-12 bg-theme-support-1/30" />
-                  <div className="w-2 h-2 rounded-full bg-theme-accent" />
-                  <div className="h-px w-8 sm:w-12 bg-theme-support-1/30" />
+                <div className="flex items-center justify-center mb-6">
+                  <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-theme-main-2/20 to-transparent" />
                 </div>
 
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.1 }}
-                  className="space-y-3"
+                  className="space-y-0"
                 >
-                  <p className="text-theme-main-3 font-serif italic text-base">
+                  <p className="text-theme-main-2 font-serif italic text-base opacity-80">
                     {t("hero.dear")}
                   </p>
-                  <p className="text-theme-main-2 font-semibold text-2xl">
-                    {displayName}
-                  </p>
-                  <p className="text-theme-main-3 text-sm sm:text-base leading-relaxed max-w-[250px] mx-auto">
-                    {t("hero.invitation_message")}
-                  </p>
+                  <div className="space-y-2">
+                    <p className="text-theme-main-2 font-semibold text-2xl drop-shadow-sm">
+                      {displayName}
+                    </p>
+                    <p className="text-theme-main-2 text-sm sm:text-base leading-relaxed max-w-[250px] mx-auto opacity-90">
+                      {t("hero.invitation_message")}
+                    </p>
+                  </div>
                 </motion.div>
               </div>
 
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-px">
-                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-theme-support-1/30 to-transparent" />
+                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
               </div>
             </div>
           </motion.div>
@@ -244,7 +265,8 @@ export default function Hero({ useAltBg = false }) {
           <CountdownTimer targetDate={config.date} />
 
           <div className="pt-6 relative">
-            <FloatingHearts />
+            {/* <FloatingHearts /> */}
+            {/* 
             <motion.div
               animate={{
                 scale: [1, 1.1, 1],
@@ -261,6 +283,7 @@ export default function Hero({ useAltBg = false }) {
                 fill="currentColor"
               />
             </motion.div>
+            */}
           </div>
         </motion.div>
       </section>
