@@ -53,7 +53,7 @@ export default function Hero({ useAltBg = false }) {
     }, [calculateTimeLeft]);
 
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {Object.keys(timeLeft).map((interval) => (
           <motion.div
             key={interval}
@@ -133,11 +133,11 @@ export default function Hero({ useAltBg = false }) {
     <>
       <section
         id="home"
-        className="min-h-[120vh] flex flex-col items-center justify-start px-4 pt-20 pb-40 sm:pt-32 sm:pb-60 text-center relative overflow-hidden"
+        className="min-h-[120vh] flex flex-col items-center justify-start px-4 pt-10 pb-20 sm:pt-32 sm:pb-32 text-center relative overflow-hidden"
         style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
       >
         {/* Background Image with fixed 160vh height to preserve perspective */}
-        <div className="absolute top-0 left-0 right-0 h-[160vh] z-0 pointer-events-none">
+        <div className="absolute -top-40 left-0 right-0 h-[160vh] z-0 pointer-events-none">
           <img
             src={getAssetPath("/images/hero-bg.jpg")}
             alt="Hero Background"
@@ -262,30 +262,12 @@ export default function Hero({ useAltBg = false }) {
             </div>
           </motion.div>
 
-          <CountdownTimer targetDate={config.date} />
-
-          <div className="pt-6 relative">
-            {/* <FloatingHearts /> */}
-            {/* 
-            <motion.div
-              animate={{
-                scale: [1, 1.1, 1],
-                rotate: [0, 5, -5, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <Heart
-                className="w-10 sm:w-12 h-10 sm:h-12 text-theme-romantic mx-auto"
-                fill="currentColor"
-              />
-            </motion.div>
-            */}
-          </div>
+          {/* Spacer to push content down - adjust h-[value] as needed */}
+          <div className="h-48 sm:h-32" aria-hidden="true" />
         </motion.div>
+        <div className="mt-auto w-full max-w-4xl px-4 relative z-10 mb-8 sm:mb-16">
+          <CountdownTimer targetDate={config.date} />
+        </div>
       </section>
     </>
   );

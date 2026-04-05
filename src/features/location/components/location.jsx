@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { MapPin } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { getAssetPath } from "@/utils/asset-path";
@@ -70,21 +69,15 @@ export default function Location() {
               </div>
 
               {/* Address Card */}
-              <div className="w-full flex items-start gap-6 p-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-theme-support-1/20 shadow-xl">
-                <div className="w-12 h-12 rounded-2xl bg-theme-alt flex items-center justify-center flex-shrink-0 text-theme-main-2 shadow-sm">
-                  <MapPin className="w-6 h-6" />
-                </div>
+              <div className="w-full p-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-theme-support-1/20 shadow-xl text-center">
                 <div>
                   <h3 className="text-2xl font-serif text-theme-accent mb-6">
                     {t("wedding.location")}
                   </h3>
                   <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-theme-main-2 mt-2 flex-shrink-0" />
-                      <p className="text-theme-accent/80 flex-1">
-                        {t("wedding.address")}
-                      </p>
-                    </div>
+                    <p className="text-theme-accent/80">
+                      {t("wedding.address")}
+                    </p>
                   </div>
                 </div>
               </div>
