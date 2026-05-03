@@ -133,11 +133,11 @@ export default function Hero({ useAltBg = false }) {
     <>
       <section
         id="home"
-        className="min-h-[120vh] flex flex-col items-center justify-start px-4 pt-10 pb-20 sm:pt-32 sm:pb-32 text-center relative overflow-hidden"
+        className="min-h-[120vh] flex flex-col items-center justify-start px-4 pt-4 pb-20 sm:pt-16 sm:pb-32 text-center relative overflow-hidden"
         style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
       >
         {/* Background Image with fixed 160vh height to preserve perspective */}
-        <div className="absolute -top-40 left-0 right-0 h-[160vh] z-0 pointer-events-none">
+        <div className="absolute -top-10 left-0 right-0 h-[160vh] z-0 pointer-events-none">
           <img
             src={getAssetPath("/images/hero-bg.jpg")}
             alt="Hero Background"
@@ -263,11 +263,11 @@ export default function Hero({ useAltBg = false }) {
           </motion.div>
 
           {/* Spacer to push content down - adjust h-[value] as needed */}
-          <div className="h-48 sm:h-32" aria-hidden="true" />
+          {/* <div className="h-48 sm:h-32" aria-hidden="true" /> */}
+          <div className="mt-auto w-full max-w-4xl px-4 relative z-10 mb-8 sm:mb-16">
+            <CountdownTimer targetDate={config.date} />
+          </div>
         </motion.div>
-        <div className="mt-auto w-full max-w-4xl px-4 relative z-10 mb-8 sm:mb-16">
-          <CountdownTimer targetDate={config.date} />
-        </div>
       </section>
     </>
   );
