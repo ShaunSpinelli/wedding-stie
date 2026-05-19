@@ -97,6 +97,32 @@ export function createMockWish(overrides = {}) {
 }
 
 /**
+ * Creates mock guest data
+ * @param {Object} overrides - Override default values
+ * @returns {Object} Guest data
+ */
+export function createMockGuest(overrides = {}) {
+  return {
+    id: "550e8400-e29b-41d4-a716-446655440000",
+    name: "John Doe",
+    email: "john@example.com",
+    language: "en",
+    attending: "MAYBE",
+    country: "USA",
+    features: ["VIP"],
+    dietary_requirements: "None",
+    has_plus_one: false,
+    plus_one_name: null,
+    plus_guests_allowed: 0,
+    plus_guests: [],
+    children_count: 0,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    ...overrides,
+  };
+}
+
+/**
  * Creates mock agenda data
  * @param {Object} overrides - Override default values
  * @returns {Object} Agenda data

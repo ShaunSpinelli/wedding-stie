@@ -56,17 +56,41 @@ app.get(
     const { uid } = c.req.valid("param");
     try {
       const pool = await getDbClient(c);
-      const result = await pool.query(
-        `SELECT
-          COUNT(*) FILTER (WHERE attendance = 'ATTENDING') as attending,
-          COUNT(*) FILTER (WHERE attendance = 'NOT_ATTENDING') as not_attending,
-          COUNT(*) FILTER (WHERE attendance = 'MAYBE') as maybe,
-          COUNT(*) as total
-       FROM wishes
-       WHERE invitation_uid = $1`,
+
+      // Calculate real headcount from guests table
+      const headCountResult = await pool.query(
+        `SELECT 
+          COUNT(*) FILTER (WHERE attending = 'ATTENDING') as primary_attending,
+          SUM(jsonb_array_length(plus_guests)) FILTER (WHERE attending = 'ATTENDING') as plus_guests_attending,
+          SUM(children_count) FILTER (WHERE attending = 'ATTENDING') as children_attending,
+          COUNT(*) as total_records
+         FROM guests 
+         WHERE invitation_uid = $1`,
         [uid],
       );
-      return c.json({ success: true, data: result.rows[0] });
+
+      const stats = headCountResult.rows[0];
+      const totalAttending =
+        (parseInt(stats.primary_attending) || 0) +
+        (parseInt(stats.plus_guests_attending) || 0) +
+        (parseInt(stats.children_attending) || 0);
+
+      // Keep compatible with frontend expectations
+      return c.json({
+        success: true,
+        data: {
+          attending: totalAttending,
+          not_attending:
+            headCountResult.rows[0].total_records -
+            headCountResult.rows[0].primary_attending, // Approximate
+          total: headCountResult.rows[0].total_records,
+          breakdown: {
+            guests: parseInt(stats.primary_attending) || 0,
+            plus_ones: parseInt(stats.plus_guests_attending) || 0,
+            children: parseInt(stats.children_attending) || 0,
+          },
+        },
+      });
     } catch (error) {
       console.error("Error fetching stats:", error);
       return c.json({ success: false, error: "Internal server error" }, 500);

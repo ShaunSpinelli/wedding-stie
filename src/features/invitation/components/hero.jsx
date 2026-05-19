@@ -7,7 +7,55 @@ import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { getAssetPath } from "@/utils/asset-path";
 
-export default function Hero({ useAltBg = false }) {
+const CountdownTimer = ({ targetDate }) => {
+  const { t } = useLanguage();
+  const calculateTimeLeft = useCallback(() => {
+    const difference = +new Date(targetDate) - +new Date();
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        [t("hero.countdown.days")]: Math.floor(
+          difference / (1000 * 60 * 60 * 24),
+        ),
+        [t("hero.countdown.hours")]: Math.floor(
+          (difference / (1000 * 60 * 60)) % 24,
+        ),
+        [t("hero.countdown.minutes")]: Math.floor(
+          (difference / 1000 / 60) % 60,
+        ),
+        [t("hero.countdown.seconds")]: Math.floor((difference / 1000) % 60),
+      };
+    }
+    return timeLeft;
+  }, [targetDate, t]);
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [calculateTimeLeft]);
+
+  return (
+    <div className="grid grid-cols-4 gap-4 w-full max-w-xs mx-auto">
+      {Object.keys(timeLeft).map((interval) => (
+        <div key={interval} className="flex flex-col items-center">
+          <span className="text-2xl font-serif text-theme-main-2 leading-none">
+            {timeLeft[interval]}
+          </span>
+          <span className="text-[9px] text-theme-main-2/50 uppercase tracking-[0.1em] mt-1">
+            {interval}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default function Hero() {
   const config = useConfig();
   const { t } = useLanguage();
   const { guest } = useInvitation();
@@ -15,260 +63,124 @@ export default function Hero({ useAltBg = false }) {
   const displayName = useMemo(() => {
     const mainName =
       guest?.name || getGuestName() || t("hero.guest_name_fallback");
-    if (guest?.has_plus_one && guest?.plus_one_name) {
-      return `${mainName} & ${guest.plus_one_name}`;
-    }
-    return mainName;
+
+    const safeParsePlusGuests = (data) => {
+      if (Array.isArray(data)) return data;
+      if (typeof data === "string") {
+        try {
+          const parsed = JSON.parse(data);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+      return [];
+    };
+
+    const plusNames = safeParsePlusGuests(
+      guest?.plus_guests || (guest?.plus_one_name ? [guest.plus_one_name] : []),
+    );
+    const allNames = [mainName, ...plusNames].filter(Boolean);
+
+    if (allNames.length <= 1) return mainName;
+    if (allNames.length === 2) return allNames.join(" & ");
+
+    return (
+      allNames.slice(0, -1).join(", ") + " & " + allNames[allNames.length - 1]
+    );
   }, [guest, t]);
 
-  const CountdownTimer = ({ targetDate }) => {
-    const calculateTimeLeft = useCallback(() => {
-      const difference = +new Date(targetDate) - +new Date();
-      let timeLeft = {};
-
-      if (difference > 0) {
-        timeLeft = {
-          [t("hero.countdown.days")]: Math.floor(
-            difference / (1000 * 60 * 60 * 24),
-          ),
-          [t("hero.countdown.hours")]: Math.floor(
-            (difference / (1000 * 60 * 60)) % 24,
-          ),
-          [t("hero.countdown.minutes")]: Math.floor(
-            (difference / 1000 / 60) % 60,
-          ),
-          [t("hero.countdown.seconds")]: Math.floor((difference / 1000) % 60),
-        };
-      }
-      return timeLeft;
-    }, [targetDate]);
-
-    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setTimeLeft(calculateTimeLeft());
-      }, 1000);
-      return () => clearInterval(timer);
-    }, [calculateTimeLeft]);
-
-    return (
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {Object.keys(timeLeft).map((interval) => (
-          <motion.div
-            key={interval}
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="flex flex-col items-center p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 shadow-lg"
-          >
-            <span className="text-xl sm:text-2xl font-bold text-theme-main-2 drop-shadow-sm">
-              {timeLeft[interval]}
-            </span>
-            <span className="text-xs text-theme-main-2/70 capitalize font-medium">
-              {interval}
-            </span>
-          </motion.div>
-        ))}
-      </div>
-    );
-  };
-
-  /*
-  const FloatingHearts = () => {
-    const [hearts] = useState(() =>
-      [...Array(8)].map((_, i) => ({
-        size: Math.floor(Math.random() * 2) + 8,
-        color:
-          i % 3 === 0
-            ? "text-theme-romantic/40"
-            : i % 3 === 1
-              ? "text-theme-main-2/40"
-              : "text-theme-main-3/20",
-        initialX: Math.random() * 100,
-        animateX: Math.random() * 100,
-      })),
-    );
-
-    return (
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {hearts.map((heart, i) => (
-          <motion.div
-            key={i}
-            initial={{
-              opacity: 0,
-              scale: 0,
-              left: `${heart.initialX}%`,
-              bottom: "-10%",
-            }}
-            animate={{
-              opacity: [0, 1, 1, 0],
-              scale: [0, 1, 1, 0.5],
-              left: `${heart.animateX}%`,
-              bottom: "110%",
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              delay: i * 0.8,
-              ease: "easeOut",
-            }}
-            className="absolute"
-          >
-            <Heart
-              className={heart.color}
-              style={{
-                width: `${heart.size * 4}px`,
-                height: `${heart.size * 4}px`,
-              }}
-              fill="currentColor"
-            />
-          </motion.div>
-        ))}
-      </div>
-    );
-  };
-  */
-
   return (
-    <>
-      <section
-        id="home"
-        className="min-h-[120vh] flex flex-col items-center justify-start px-4 pt-4 pb-20 sm:pt-16 sm:pb-32 text-center relative overflow-hidden"
-        style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
-      >
-        {/* Background Image with fixed 160vh height to preserve perspective */}
-        <div className="absolute -top-10 left-0 right-0 h-[160vh] z-0 pointer-events-none">
-          <img
-            src={getAssetPath("/images/hero-bg.jpg")}
-            alt="Hero Background"
-            className="w-full h-full object-cover opacity-30"
-            style={{
-              objectPosition: "center top",
-              maskImage:
-                "linear-gradient(to bottom, black 50%, transparent 75%)",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, black 50%, transparent 75%)",
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white pointer-events-none" />
-        </div>
+    <div className="page-wrapper flex flex-col h-[100vh] bg-white overflow-hidden">
+      {/* Top Section: Image + Overlaid Title */}
+      <section className="relative flex-grow overflow-hidden">
+        {/* Background Image */}
+        <img
+          src={getAssetPath("/images/hero-bg.jpg")}
+          className="absolute w-full h-[120%] object-cover top-0 left-0 z-0"
+          style={{
+            /* 100% = Shifts image UP to show the bottom. 
+               Adjust this value to fine-tune the shift. */
+            objectPosition: "50% 100%",
+          }}
+          alt="Wedding Hero"
+        />
+
+        {/* Title Content Overlaid on Image */}
+        <header className="relative z-10 pt-24 pb-6 px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-1 bg-white/30 backdrop-blur-md border border-white/20 p-8 rounded-2xl max-w-sm sm:max-w-2xl mx-auto shadow-lg"
+          >
+            <span className="text-[10px] uppercase tracking-[0.3em] text-theme-main-2 font-semibold">
+              {t("hero.save_the_date")}
+            </span>
+            <h1 className="text-4xl sm:text-7xl font-serif text-theme-main-2 leading-tight">
+              {t("wedding.groomName")}{" "}
+              <span className="text-2xl italic font-light serif mx-1">&</span>{" "}
+              {t("wedding.brideName")}
+            </h1>
+            <p className="text-theme-main-2/80 font-serif italic text-base">
+              {t("hero.married_announcement")}
+            </p>
+          </motion.div>
+        </header>
+
+        {/* Bottom fade for transition to details card */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent z-[5]" />
+      </section>
+
+      {/* 3. Details Card (Fixed Bottom) */}
+      <footer className="details-card relative z-20 bg-white px-8 pt-4 pb-10 text-center -mt-8 rounded-t-[2.5rem] shadow-[0_-15px_30px_-15px_rgba(0,0,0,0.05)]">
+        {/* Subtle decorative divider */}
+        <div className="w-12 h-px bg-theme-main-2/10 mx-auto mb-6" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="space-y-6 relative z-10"
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="space-y-6"
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-block mx-auto"
-          >
-            <span className="px-4 py-1 text-sm bg-theme-support-1/10 text-theme-main-2 rounded-full border border-theme-support-1/20 font-serif italic backdrop-blur-sm">
-              {t("hero.save_the_date")}
-            </span>
-          </motion.div>
-
-          <div className="space-y-4">
-            <motion.h2
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-4xl sm:text-6xl lg:text-8xl font-serif text-theme-main-2 drop-shadow-sm"
-            >
-              {t("wedding.groomName")} & {t("wedding.brideName")}
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="text-theme-main-2 font-light italic text-xl sm:text-2xl drop-shadow-sm"
-            >
-              {t("hero.married_announcement")}
-            </motion.p>
+          {/* Guest Greeting */}
+          <div className="space-y-1">
+            <p className="text-theme-main-2/50 font-serif italic text-sm">
+              {t("hero.dear")}
+            </p>
+            <h2 className="text-3xl font-serif text-theme-main-2 italic">
+              {displayName}
+            </h2>
           </div>
 
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="relative max-w-md lg:max-w-2xl mx-auto"
-          >
-            {/* Transparent background with lighter blur */}
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-md rounded-2xl" />
+          {/* Invitation Text */}
+          <div className="max-w-[280px] mx-auto">
+            <p className="text-theme-main-2/70 text-sm leading-relaxed font-light italic">
+              {t("hero.invitation_message")}
+            </p>
+          </div>
 
-            <div className="relative px-4 sm:px-8 py-8 sm:py-10 rounded-2xl border border-white/20 shadow-xl">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-px">
-                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-              </div>
-
-              <div className="space-y-0 text-center">
-                <div className="space-y-3 mb-6">
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.9 }}
-                    className="flex items-center justify-center space-x-2"
-                  >
-                    <Calendar className="w-4 h-4 text-theme-main-2" />
-                    <span className="text-theme-main-2 font-medium text-sm sm:text-base">
-                      {t("wedding.displayDate")}
-                    </span>
-                  </motion.div>
-
-                  {t("wedding.displayTime") && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 1 }}
-                      className="flex items-center justify-center space-x-2"
-                    >
-                      <Clock className="w-4 h-4 text-theme-main-2" />
-                      <span className="text-theme-main-2 font-medium text-sm sm:text-base">
-                        {t("wedding.displayTime")}
-                      </span>
-                    </motion.div>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-center mb-6">
-                  <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-theme-main-2/20 to-transparent" />
-                </div>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.1 }}
-                  className="space-y-0"
-                >
-                  <p className="text-theme-main-2 font-serif italic text-base opacity-80">
-                    {t("hero.dear")}
-                  </p>
-                  <div className="space-y-2">
-                    <p className="text-theme-main-2 font-semibold text-2xl drop-shadow-sm">
-                      {displayName}
-                    </p>
-                    <p className="text-theme-main-2 text-sm sm:text-base leading-relaxed max-w-[250px] mx-auto opacity-90">
-                      {t("hero.invitation_message")}
-                    </p>
-                  </div>
-                </motion.div>
-              </div>
-
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-px">
-                <div className="w-20 sm:w-32 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-              </div>
+          {/* Date & Time */}
+          <div className="flex flex-col items-center justify-center space-y-2 py-4 border-y border-theme-main-2/5">
+            <div className="flex items-center space-x-3 text-theme-main-2">
+              <Calendar className="w-4 h-4 opacity-40" />
+              <span className="font-serif text-lg tracking-tight">
+                {t("wedding.displayDate")}
+              </span>
             </div>
-          </motion.div>
+            {t("wedding.displayTime") && (
+              <div className="flex items-center space-x-2 text-theme-main-2/40 text-xs uppercase tracking-[0.1em]">
+                <Clock className="w-3 h-3" />
+                <span>{t("wedding.displayTime")}</span>
+              </div>
+            )}
+          </div>
 
-          {/* Spacer to push content down - adjust h-[value] as needed */}
-          {/* <div className="h-48 sm:h-32" aria-hidden="true" /> */}
-          <div className="mt-auto w-full max-w-4xl px-4 relative z-10 mb-8 sm:mb-16">
+          {/* Countdown Section */}
+          <div className="pt-2">
             <CountdownTimer targetDate={config.date} />
           </div>
         </motion.div>
-      </section>
-    </>
+      </footer>
+    </div>
   );
 }

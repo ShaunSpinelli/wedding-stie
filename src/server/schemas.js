@@ -80,25 +80,29 @@ export const uidParamSchema = z.object({
 /**
  * Guest creation and update schemas
  */
-export const createGuestSchema = z.object({
-  name: z.string().min(1, "Name is required").max(255).trim(),
-  email: z
-    .string()
-    .email("Invalid email address")
-    .optional()
-    .nullable()
-    .or(z.literal("")),
-  language: z.enum(["en", "fr"]).default("en"),
-  attending: z.enum(["ATTENDING", "NOT_ATTENDING", "MAYBE"]).default("MAYBE"),
-  country: z.string().max(100).optional().nullable().or(z.literal("")),
-  features: z.array(z.string()).default([]),
-  dietary_requirements: z.string().optional().nullable().or(z.literal("")),
-  has_plus_one: z.boolean().default(false),
-  plus_one_name: z.string().max(255).optional().nullable().or(z.literal("")),
-  children_count: z.number().int().min(0).default(0),
-});
+export const createGuestSchema = z
+  .object({
+    name: z.string().min(1, "Name is required").max(255).trim(),
+    email: z
+      .string()
+      .email("Invalid email address")
+      .optional()
+      .nullable()
+      .or(z.literal("")),
+    language: z.enum(["en", "fr"]).default("en"),
+    attending: z.enum(["ATTENDING", "NOT_ATTENDING", "MAYBE"]).default("MAYBE"),
+    country: z.string().max(100).optional().nullable().or(z.literal("")),
+    features: z.array(z.string()).default([]),
+    dietary_requirements: z.string().optional().nullable().or(z.literal("")),
+    has_plus_one: z.boolean().default(false),
+    plus_one_name: z.string().max(255).optional().nullable().or(z.literal("")),
+    plus_guests_allowed: z.number().int().min(0).max(5).default(0),
+    plus_guests: z.array(z.string().max(255)).max(5).default([]),
+    children_count: z.number().int().min(0).default(0),
+  })
+  .passthrough();
 
-export const updateGuestSchema = createGuestSchema.partial();
+export const updateGuestSchema = createGuestSchema.partial().passthrough();
 
 /**
  * Guest ID parameter schema

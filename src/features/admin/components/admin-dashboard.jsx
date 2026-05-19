@@ -52,10 +52,23 @@ export default function AdminDashboard() {
     features: "",
     country: "",
     children_count: 0,
-    has_plus_one: false,
-    plus_one_name: "",
+    plus_guests_allowed: 0,
+    plus_guests: [],
   });
   const [saving, setSaving] = useState(false);
+
+  const safeParsePlusGuests = (data) => {
+    if (Array.isArray(data)) return data;
+    if (typeof data === "string") {
+      try {
+        const parsed = JSON.parse(data);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  };
 
   const loadGuests = async () => {
     try {
@@ -80,9 +93,27 @@ export default function AdminDashboard() {
   };
 
   const startEdit = (guest) => {
+    const plusGuestsAllowed =
+      guest.plus_guests_allowed !== undefined
+        ? guest.plus_guests_allowed
+        : guest.has_plus_one
+          ? 1
+          : 0;
+    const currentPlusGuests = safeParsePlusGuests(
+      guest.plus_guests || (guest.plus_one_name ? [guest.plus_one_name] : []),
+    );
+
+    // Ensure the array has the correct length by padding with empty strings
+    const paddedPlusGuests = [...currentPlusGuests];
+    while (paddedPlusGuests.length < plusGuestsAllowed) {
+      paddedPlusGuests.push("");
+    }
+
     setEditingGuest(guest);
     setEditForm({
       ...guest,
+      plus_guests_allowed: plusGuestsAllowed,
+      plus_guests: paddedPlusGuests,
       features: guest.features?.join(", ") || "",
     });
   };
@@ -98,12 +129,16 @@ export default function AdminDashboard() {
           .map((f) => f.trim())
           .filter(Boolean),
         children_count: parseInt(editForm.children_count) || 0,
+        plus_guests_allowed: parseInt(editForm.plus_guests_allowed) || 0,
+        plus_guests: (editForm.plus_guests || [])
+          .map((name) => name?.trim() || "")
+          .slice(0, parseInt(editForm.plus_guests_allowed) || 0),
       };
       const response = await updateGuest(uid, editingGuest.id, payload);
       if (response.success) {
-        // Refresh guest list
-        const refreshed = await fetchGuests(uid);
-        if (refreshed.success) setGuests(refreshed.data);
+        setGuests(
+          guests.map((g) => (g.id === editingGuest.id ? response.data : g)),
+        );
         setEditingGuest(null);
       }
     } catch {
@@ -124,12 +159,14 @@ export default function AdminDashboard() {
           .map((f) => f.trim())
           .filter(Boolean),
         children_count: parseInt(addForm.children_count) || 0,
+        plus_guests_allowed: parseInt(addForm.plus_guests_allowed) || 0,
+        plus_guests: (addForm.plus_guests || [])
+          .map((name) => name?.trim() || "")
+          .slice(0, parseInt(addForm.plus_guests_allowed) || 0),
       };
       const response = await createGuest(uid, payload);
       if (response.success) {
-        // Refresh guest list
-        const refreshed = await fetchGuests(uid);
-        if (refreshed.success) setGuests(refreshed.data);
+        setGuests([response.data, ...guests]);
         setIsAddingGuest(false);
         setAddForm({
           name: "",
@@ -139,8 +176,8 @@ export default function AdminDashboard() {
           features: "",
           country: "",
           children_count: 0,
-          has_plus_one: false,
-          plus_one_name: "",
+          plus_guests_allowed: 0,
+          plus_guests: [],
         });
       }
     } catch {
@@ -261,7 +298,8 @@ export default function AdminDashboard() {
                   (sum, g) =>
                     sum +
                     1 +
-                    (g.has_plus_one ? 1 : 0) +
+                    (safeParsePlusGuests(g.plus_guests).length ||
+                      (g.has_plus_one ? 1 : 0)) +
                     (g.children_count || 0),
                   0,
                 ),
@@ -340,13 +378,26 @@ export default function AdminDashboard() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      {guest.has_plus_one ? (
+                      {guest.plus_guests_allowed > 0 ||
+                      (guest.plus_guests_allowed === 0
+                        ? false
+                        : guest.has_plus_one) ? (
                         <div className="flex flex-col">
                           <span className="font-bold text-theme-main-2">
-                            Yes
+                            {guest.plus_guests_allowed !== undefined
+                              ? guest.plus_guests_allowed
+                              : guest.has_plus_one
+                                ? 1
+                                : 0}{" "}
+                            Allowed
                           </span>
                           <span className="text-[10px] opacity-60">
-                            {guest.plus_one_name}
+                            {(() => {
+                              const pg = safeParsePlusGuests(guest.plus_guests);
+                              return pg.length > 0
+                                ? pg.join(", ")
+                                : guest.plus_one_name || "None added yet";
+                            })()}
                           </span>
                         </div>
                       ) : (
@@ -570,34 +621,57 @@ export default function AdminDashboard() {
                   />
                 </div>
 
-                <div className="flex items-center gap-4 p-4 bg-theme-support-3/20 rounded-2xl">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                <div className="flex flex-col gap-4 p-4 bg-theme-support-3/20 rounded-2xl">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Plus Guests Allowed (Max 5)
+                    </label>
                     <input
-                      type="checkbox"
-                      checked={addForm.has_plus_one}
-                      onChange={(e) =>
+                      type="number"
+                      min="0"
+                      max="5"
+                      value={addForm.plus_guests_allowed}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value) || 0;
+                        const newPlusGuests = [...addForm.plus_guests];
+                        while (newPlusGuests.length < val)
+                          newPlusGuests.push("");
                         setAddForm({
                           ...addForm,
-                          has_plus_one: e.target.checked,
-                        })
-                      }
-                      className="w-4 h-4 accent-theme-main-2"
+                          plus_guests_allowed: val,
+                          plus_guests: newPlusGuests.slice(0, val),
+                        });
+                      }}
+                      className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
                     />
-                    <span className="text-sm font-bold">Has Plus One?</span>
-                  </label>
-                  {addForm.has_plus_one && (
-                    <input
-                      type="text"
-                      value={addForm.plus_one_name}
-                      onChange={(e) =>
-                        setAddForm({
-                          ...addForm,
-                          plus_one_name: e.target.value,
-                        })
-                      }
-                      className="flex-1 px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
-                      placeholder="Plus One Name"
-                    />
+                  </div>
+
+                  {addForm.plus_guests_allowed > 0 && (
+                    <div className="space-y-3 pt-2 border-t border-theme-support-1/10">
+                      <p className="text-[10px] font-black uppercase opacity-40">
+                        Plus Guest Names
+                      </p>
+                      {Array.from({ length: addForm.plus_guests_allowed }).map(
+                        (_, i) => (
+                          <div key={i} className="space-y-1">
+                            <input
+                              type="text"
+                              value={addForm.plus_guests[i] || ""}
+                              onChange={(e) => {
+                                const newNames = [...addForm.plus_guests];
+                                newNames[i] = e.target.value;
+                                setAddForm({
+                                  ...addForm,
+                                  plus_guests: newNames,
+                                });
+                              }}
+                              className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                              placeholder={`Plus Guest ${i + 1} Name`}
+                            />
+                          </div>
+                        ),
+                      )}
+                    </div>
                   )}
                 </div>
 
@@ -769,34 +843,61 @@ export default function AdminDashboard() {
                   />
                 </div>
 
-                <div className="flex items-center gap-4 p-4 bg-theme-support-3/20 rounded-2xl">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                <div className="flex flex-col gap-4 p-4 bg-theme-support-3/20 rounded-2xl">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Plus Guests Allowed (Max 5)
+                    </label>
                     <input
-                      type="checkbox"
-                      checked={editForm.has_plus_one}
-                      onChange={(e) =>
+                      type="number"
+                      min="0"
+                      max="5"
+                      value={editForm.plus_guests_allowed}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value) || 0;
+                        const newPlusGuests = [...(editForm.plus_guests || [])];
+                        while (newPlusGuests.length < val)
+                          newPlusGuests.push("");
                         setEditForm({
                           ...editForm,
-                          has_plus_one: e.target.checked,
-                        })
-                      }
-                      className="w-4 h-4 accent-theme-main-2"
+                          plus_guests_allowed: val,
+                          plus_guests: newPlusGuests.slice(0, val),
+                        });
+                      }}
+                      className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
                     />
-                    <span className="text-sm font-bold">Has Plus One?</span>
-                  </label>
-                  {editForm.has_plus_one && (
-                    <input
-                      type="text"
-                      value={editForm.plus_one_name}
-                      onChange={(e) =>
-                        setEditForm({
-                          ...editForm,
-                          plus_one_name: e.target.value,
-                        })
-                      }
-                      className="flex-1 px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
-                      placeholder="Plus One Name"
-                    />
+                  </div>
+
+                  {editForm.plus_guests_allowed > 0 && (
+                    <div className="space-y-3 pt-2 border-t border-theme-support-1/10">
+                      <p className="text-[10px] font-black uppercase opacity-40">
+                        Plus Guest Names
+                      </p>
+                      {Array.from({ length: editForm.plus_guests_allowed }).map(
+                        (_, i) => (
+                          <div key={i} className="space-y-1">
+                            <input
+                              type="text"
+                              value={editForm.plus_guests?.[i] || ""}
+                              onChange={(e) => {
+                                const newNames = [
+                                  ...(editForm.plus_guests || []),
+                                ];
+                                // Fill gaps if any
+                                while (newNames.length <= i) newNames.push("");
+                                newNames[i] = e.target.value;
+                                setEditForm({
+                                  ...editForm,
+                                  plus_guests: newNames,
+                                });
+                              }}
+                              className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                              placeholder={`Plus Guest ${i + 1} Name`}
+                            />
+                          </div>
+                        ),
+                      )}
+                    </div>
                   )}
                 </div>
 

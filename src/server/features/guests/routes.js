@@ -17,6 +17,31 @@ import { adminAuth, isAdmin } from "../../lib/auth.js";
 const guestsRoutes = new Hono();
 
 /**
+ * Helper to map DB guest row to frontend object
+ */
+const mapGuestResponse = (guest) => ({
+  id: guest.id,
+  name: guest.name,
+  email: guest.email,
+  language: guest.language,
+  attending: guest.attending,
+  country: guest.country,
+  features: guest.features || [],
+  dietary_requirements: guest.dietary_requirements,
+  has_plus_one: guest.has_plus_one || false,
+  plus_one_name: guest.plus_one_name,
+  plus_guests_allowed: guest.plus_guests_allowed ?? 0,
+  plus_guests: Array.isArray(guest.plus_guests)
+    ? guest.plus_guests
+    : typeof guest.plus_guests === "string"
+      ? JSON.parse(guest.plus_guests)
+      : [],
+  children_count: guest.children_count ?? 0,
+  createdAt: guest.created_at,
+  updatedAt: guest.updated_at,
+});
+
+/**
  * GET /api/:uid/guests/search
  * Find a guest by name or email
  */
@@ -52,25 +77,7 @@ guestsRoutes.get("/search", zValidator("param", uidParamSchema), async (c) => {
       return c.json({ success: false, error: "Guest not found" }, 404);
     }
 
-    // Convert snake_case from DB to camelCase for frontend
-    const guest = result.rows[0];
-    const data = {
-      id: guest.id,
-      name: guest.name,
-      email: guest.email,
-      language: guest.language,
-      attending: guest.attending,
-      country: guest.country,
-      features: guest.features,
-      dietary_requirements: guest.dietary_requirements,
-      has_plus_one: guest.has_plus_one,
-      plus_one_name: guest.plus_one_name,
-      children_count: guest.children_count,
-      createdAt: guest.created_at,
-      updatedAt: guest.updated_at,
-    };
-
-    return c.json({ success: true, data });
+    return c.json({ success: true, data: mapGuestResponse(result.rows[0]) });
   } catch (error) {
     console.error("Error searching guest:", error);
     return c.json({ success: false, error: "Internal server error" }, 500);
@@ -95,23 +102,7 @@ guestsRoutes.get(
         [uid],
       );
 
-      const data = result.rows.map((guest) => ({
-        id: guest.id,
-        name: guest.name,
-        email: guest.email,
-        language: guest.language,
-        attending: guest.attending,
-        country: guest.country,
-        features: guest.features,
-        dietary_requirements: guest.dietary_requirements,
-        has_plus_one: guest.has_plus_one,
-        plus_one_name: guest.plus_one_name,
-        children_count: guest.children_count,
-        createdAt: guest.created_at,
-        updatedAt: guest.updated_at,
-      }));
-
-      return c.json({ success: true, data });
+      return c.json({ success: true, data: result.rows.map(mapGuestResponse) });
     } catch (error) {
       console.error("Error fetching guests:", error);
       return c.json({ success: false, error: "Internal server error" }, 500);
@@ -121,7 +112,7 @@ guestsRoutes.get(
 
 /**
  * POST /api/:uid/guests
- * Add a new guest (Public registration)
+ * Add a new guest (Public registration or Admin)
  */
 guestsRoutes.post(
   "/",
@@ -130,12 +121,21 @@ guestsRoutes.post(
   async (c) => {
     const { uid } = c.req.valid("param");
     const guestData = c.req.valid("json");
+    const isRequestAdmin = isAdmin(c);
 
     try {
       const pool = await getDbClient(c);
+
+      // If not admin, restricted fields are forced to defaults
+      const plus_guests_allowed = isRequestAdmin
+        ? guestData.plus_guests_allowed || 0
+        : 0;
+      const country = isRequestAdmin ? guestData.country || null : null;
+      const features = isRequestAdmin ? guestData.features || [] : [];
+
       const result = await pool.query(
-        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, children_count)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, plus_guests_allowed, plus_guests, children_count)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
          RETURNING *`,
         [
           uid,
@@ -143,35 +143,19 @@ guestsRoutes.post(
           guestData.email || null,
           guestData.language || "en",
           guestData.attending,
-          guestData.country || null,
-          guestData.features || [],
+          country,
+          features,
           guestData.dietary_requirements || null,
           guestData.has_plus_one || false,
           guestData.plus_one_name || null,
+          plus_guests_allowed,
+          JSON.stringify(guestData.plus_guests || []),
           guestData.children_count || 0,
         ],
       );
 
       const guest = result.rows[0];
-      return c.json(
-        {
-          success: true,
-          data: {
-            id: guest.id,
-            name: guest.name,
-            email: guest.email,
-            language: guest.language,
-            attending: guest.attending,
-            country: guest.country,
-            features: guest.features,
-            dietary_requirements: guest.dietary_requirements,
-            has_plus_one: guest.has_plus_one,
-            plus_one_name: guest.plus_one_name,
-            children_count: guest.children_count,
-          },
-        },
-        201,
-      );
+      return c.json({ success: true, data: mapGuestResponse(guest) }, 201);
     } catch (error) {
       console.error("Error creating guest:", error);
       return c.json({ success: false, error: "Internal server error" }, 500);
@@ -197,23 +181,7 @@ guestsRoutes.get("/:id", zValidator("param", guestIdParamSchema), async (c) => {
       return c.json({ success: false, error: "Guest not found" }, 404);
     }
 
-    const guest = result.rows[0];
-    return c.json({
-      success: true,
-      data: {
-        id: guest.id,
-        name: guest.name,
-        email: guest.email,
-        language: guest.language,
-        attending: guest.attending,
-        country: guest.country,
-        features: guest.features,
-        dietary_requirements: guest.dietary_requirements,
-        has_plus_one: guest.has_plus_one,
-        plus_one_name: guest.plus_one_name,
-        children_count: guest.children_count,
-      },
-    });
+    return c.json({ success: true, data: mapGuestResponse(result.rows[0]) });
   } catch (error) {
     console.error("Error fetching guest:", error);
     return c.json({ success: false, error: "Internal server error" }, 500);
@@ -243,6 +211,8 @@ guestsRoutes.patch(
       dietary_requirements: "dietary_requirements",
       has_plus_one: "has_plus_one",
       plus_one_name: "plus_one_name",
+      plus_guests_allowed: "plus_guests_allowed",
+      plus_guests: "plus_guests",
       children_count: "children_count",
     };
 
@@ -256,10 +226,11 @@ guestsRoutes.patch(
       }
     });
 
-    // Authorization check: Non-admins cannot update country or features
+    // Authorization check: Silently strip admin-only fields if not an admin
     if (!isAdmin(c)) {
       delete updates.country;
       delete updates.features;
+      delete updates.plus_guests_allowed;
     }
 
     const keys = Object.keys(updates);
@@ -274,7 +245,10 @@ guestsRoutes.patch(
       const pool = await getDbClient(c);
 
       const setClause = keys.map((key, i) => `${key} = $${i + 3}`).join(", ");
-      const values = keys.map((key) => updates[key]);
+      const values = keys.map((key) => {
+        if (key === "plus_guests") return JSON.stringify(updates[key] || []);
+        return updates[key];
+      });
 
       const query = `UPDATE guests
          SET ${setClause}, updated_at = CURRENT_TIMESTAMP
@@ -287,23 +261,7 @@ guestsRoutes.patch(
         return c.json({ success: false, error: "Guest not found" }, 404);
       }
 
-      const guest = result.rows[0];
-      return c.json({
-        success: true,
-        data: {
-          id: guest.id,
-          name: guest.name,
-          email: guest.email,
-          language: guest.language,
-          attending: guest.attending,
-          country: guest.country,
-          features: guest.features,
-          dietary_requirements: guest.dietary_requirements,
-          has_plus_one: guest.has_plus_one,
-          plus_one_name: guest.plus_one_name,
-          children_count: guest.children_count,
-        },
-      });
+      return c.json({ success: true, data: mapGuestResponse(result.rows[0]) });
     } catch (error) {
       console.error("Update error:", error);
       return c.json({ success: false, error: "Internal server error" }, 500);

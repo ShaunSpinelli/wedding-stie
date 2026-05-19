@@ -46,11 +46,24 @@ export default function GuestRSVP({ useAltBg = false }) {
     email: "",
     attending: "MAYBE",
     dietary_requirements: "",
-    has_plus_one: false,
-    plus_one_name: "",
+    plus_guests_allowed: 0,
+    plus_guests: [],
     children_count: 0,
   });
   const [msg, setMsg] = useState({ type: "", text: "" });
+
+  const safeParsePlusGuests = (data) => {
+    if (Array.isArray(data)) return data;
+    if (typeof data === "string") {
+      try {
+        const parsed = JSON.parse(data);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  };
 
   // Sync with global guest state
   useEffect(() => {
@@ -61,8 +74,16 @@ export default function GuestRSVP({ useAltBg = false }) {
         email: globalGuest.email || "",
         attending: globalGuest.attending || "MAYBE",
         dietary_requirements: globalGuest.dietary_requirements || "",
-        has_plus_one: globalGuest.has_plus_one || false,
-        plus_one_name: globalGuest.plus_one_name || "",
+        plus_guests_allowed:
+          globalGuest.plus_guests_allowed !== undefined
+            ? globalGuest.plus_guests_allowed
+            : globalGuest.has_plus_one
+              ? 1
+              : 0,
+        plus_guests: safeParsePlusGuests(
+          globalGuest.plus_guests ||
+            (globalGuest.plus_one_name ? [globalGuest.plus_one_name] : []),
+        ),
         children_count: globalGuest.children_count || 0,
       });
       setIsEditMode(false);
@@ -87,13 +108,20 @@ export default function GuestRSVP({ useAltBg = false }) {
     setMsg({ type: "", text: "" });
 
     try {
+      const payload = {
+        ...formData,
+        plus_guests: (formData.plus_guests || [])
+          .map((name) => name?.trim() || "")
+          .slice(0, formData.plus_guests_allowed || 0),
+      };
+
       let response;
       if (guest && guest.id) {
         // Update existing guest
-        response = await updateGuest(uid, guest.id, formData);
+        response = await updateGuest(uid, guest.id, payload);
       } else {
         // Create new guest
-        response = await createGuest(uid, formData);
+        response = await createGuest(uid, payload);
         if (response.success) {
           storeGuestName(formData.name);
         }
@@ -179,10 +207,23 @@ export default function GuestRSVP({ useAltBg = false }) {
                 >
                   <div className="flex justify-between items-start">
                     <div className="space-y-1">
+                      <h3 className="text-xl font-serif text-theme-main-2 font-bold">
+                        {[
+                          guest.name,
+                          ...safeParsePlusGuests(
+                            guest.plus_guests ||
+                              (guest.plus_one_name
+                                ? [guest.plus_one_name]
+                                : []),
+                          ),
+                        ]
+                          .filter(Boolean)
+                          .join(" & ")}
+                      </h3>
                       <p className="text-theme-main-3 font-medium flex items-center gap-2 italic">
                         <Sparkles className="w-4 h-4" />
                         {t(
-                          `wishes.attendance.${guest.attending.toLowerCase()}${guest.has_plus_one ? "_we" : ""}`,
+                          `wishes.attendance.${guest.attending.toLowerCase()}${guest.plus_guests_allowed > 0 || (guest.plus_guests_allowed === undefined && guest.has_plus_one) ? "_we" : ""}`,
                         )}
                       </p>
                     </div>
@@ -217,21 +258,45 @@ export default function GuestRSVP({ useAltBg = false }) {
                       </div>
                     </div>
 
-                    {guest.has_plus_one && (
-                      <div className="flex items-center gap-4 text-theme-main-3">
-                        <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                          <Users className="w-5 h-5 text-theme-main-2" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                            {t("rsvp.form.guest_two")}
-                          </p>
-                          <p className="font-medium">
-                            {guest.plus_one_name || "Yes"}
-                          </p>
-                        </div>
-                      </div>
-                    )}
+                    {guest.plus_guests_allowed > 0
+                      ? Array.from({ length: guest.plus_guests_allowed }).map(
+                          (_, i) => (
+                            <div
+                              key={i}
+                              className="flex items-center gap-4 text-theme-main-3"
+                            >
+                              <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
+                                <Users className="w-5 h-5 text-theme-main-2" />
+                              </div>
+                              <div>
+                                <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
+                                  {t("rsvp.form.guest_two")}{" "}
+                                  {guest.plus_guests_allowed > 1 ? i + 1 : ""}
+                                </p>
+                                <p className="font-medium">
+                                  {safeParsePlusGuests(guest.plus_guests)[i] ||
+                                    "—"}
+                                </p>
+                              </div>
+                            </div>
+                          ),
+                        )
+                      : guest.plus_guests_allowed === undefined &&
+                        guest.has_plus_one && (
+                          <div className="flex items-center gap-4 text-theme-main-3">
+                            <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
+                              <Users className="w-5 h-5 text-theme-main-2" />
+                            </div>
+                            <div>
+                              <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
+                                {t("rsvp.form.guest_two")}
+                              </p>
+                              <p className="font-medium">
+                                {guest.plus_one_name || "Yes"}
+                              </p>
+                            </div>
+                          </div>
+                        )}
 
                     {hasFeature("children") && (
                       <div className="flex items-center gap-4 text-theme-main-3">
@@ -302,28 +367,58 @@ export default function GuestRSVP({ useAltBg = false }) {
                         />
                       </div>
 
-                      {globalGuest?.has_plus_one && (
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                            <Users className="w-4 h-4" />
-                            {t("rsvp.form.guest_two")}
-                          </label>
-                          <input
-                            type="text"
-                            value={formData.plus_one_name}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                plus_one_name: e.target.value,
-                              })
-                            }
-                            className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                            placeholder={t(
-                              "rsvp.form.placeholder_plus_one_name",
-                            )}
-                          />
-                        </div>
-                      )}
+                      {formData.plus_guests_allowed > 0 &&
+                        Array.from({
+                          length: formData.plus_guests_allowed,
+                        }).map((_, i) => (
+                          <div key={i} className="space-y-2">
+                            <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
+                              <Users className="w-4 h-4" />
+                              {t("rsvp.form.guest_two")}{" "}
+                              {formData.plus_guests_allowed > 1 ? i + 1 : ""}
+                            </label>
+                            <input
+                              type="text"
+                              value={formData.plus_guests[i] || ""}
+                              onChange={(e) => {
+                                const newPlusGuests = [...formData.plus_guests];
+                                newPlusGuests[i] = e.target.value;
+                                setFormData({
+                                  ...formData,
+                                  plus_guests: newPlusGuests,
+                                });
+                              }}
+                              className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
+                              placeholder={t(
+                                "rsvp.form.placeholder_plus_one_name",
+                              )}
+                            />
+                          </div>
+                        ))}
+
+                      {!formData.plus_guests_allowed &&
+                        globalGuest?.has_plus_one && (
+                          <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
+                              <Users className="w-4 h-4" />
+                              {t("rsvp.form.guest_two")}
+                            </label>
+                            <input
+                              type="text"
+                              value={formData.plus_one_name}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  plus_one_name: e.target.value,
+                                })
+                              }
+                              className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
+                              placeholder={t(
+                                "rsvp.form.placeholder_plus_one_name",
+                              )}
+                            />
+                          </div>
+                        )}
                     </div>
 
                     <div className="space-y-4">
@@ -380,7 +475,7 @@ export default function GuestRSVP({ useAltBg = false }) {
                           className={`px-4 py-3 rounded-xl text-xs font-bold border transition-all ${formData.attending === status ? "bg-theme-main-2 border-theme-main-2 text-white shadow-md" : "bg-white border-theme-support-1/20 text-theme-main-3/60 hover:border-theme-main-2/30"}`}
                         >
                           {t(
-                            `wishes.attendance.${status.toLowerCase()}${globalGuest?.has_plus_one ? "_we" : ""}`,
+                            `wishes.attendance.${status.toLowerCase()}${formData.plus_guests_allowed > 0 || globalGuest?.has_plus_one ? "_we" : ""}`,
                           )}
                         </button>
                       ))}

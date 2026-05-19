@@ -9,6 +9,7 @@ import {
   wishesQuerySchema,
   uidParamSchema,
   wishIdParamSchema,
+  createGuestSchema,
 } from "./schemas.js";
 
 describe("schemas", () => {
@@ -274,6 +275,48 @@ describe("schemas", () => {
       const result = wishIdParamSchema.safeParse({
         uid: "wedding",
         id: "12.5",
+      });
+
+      expect(result.success).toBe(false);
+    });
+  });
+
+  describe("createGuestSchema", () => {
+    it("should validate a valid guest with plus N", () => {
+      const result = createGuestSchema.safeParse({
+        name: "John Doe",
+        plus_guests_allowed: 3,
+        plus_guests: ["Jane Doe", "Jimmy Doe"],
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.data.plus_guests_allowed).toBe(3);
+      expect(result.data.plus_guests).toEqual(["Jane Doe", "Jimmy Doe"]);
+    });
+
+    it("should default plus_guests_allowed to 0", () => {
+      const result = createGuestSchema.safeParse({
+        name: "John Doe",
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.data.plus_guests_allowed).toBe(0);
+      expect(result.data.plus_guests).toEqual([]);
+    });
+
+    it("should reject plus_guests_allowed exceeding 5", () => {
+      const result = createGuestSchema.safeParse({
+        name: "John Doe",
+        plus_guests_allowed: 6,
+      });
+
+      expect(result.success).toBe(false);
+    });
+
+    it("should reject plus_guests array exceeding 5 items", () => {
+      const result = createGuestSchema.safeParse({
+        name: "John Doe",
+        plus_guests: ["1", "2", "3", "4", "5", "6"],
       });
 
       expect(result.success).toBe(false);

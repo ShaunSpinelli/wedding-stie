@@ -20,7 +20,15 @@ export const adminAuth = async (c, next) => {
  * Helper to check if the request is from an admin
  */
 export const isAdmin = (c) => {
-  const adminSecret = c.env?.ADMIN_SECRET || process.env.ADMIN_SECRET;
-  const authHeader = c.req.header("Authorization");
+  const adminSecret = (
+    c.env?.ADMIN_SECRET ||
+    process.env.ADMIN_SECRET ||
+    ""
+  ).trim();
+  const authHeader = (c.req.header("Authorization") || "").trim();
+
+  // Security: If adminSecret is not set, no one is an admin
+  if (!adminSecret) return false;
+
   return authHeader === adminSecret;
 };
