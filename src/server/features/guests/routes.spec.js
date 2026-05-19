@@ -67,10 +67,10 @@ describe("guests routes", () => {
       const insertCall = mockPool.query.mock.calls.find((c) =>
         c[0].includes("INSERT INTO guests"),
       );
-      expect(insertCall[1]).toContain(2); // plus_guests_allowed
-      expect(insertCall[1]).toContain(
-        JSON.stringify(["Jane Doe", "Jimmy Doe"]),
-      ); // stringified for pg
+      // plus_guests_allowed is the 11th parameter ($11), which is index 10
+      expect(insertCall[1][10]).toBe(2);
+      // plus_guests is the 12th parameter ($12), which is index 11
+      expect(insertCall[1][11]).toBe(JSON.stringify(["Jane Doe", "Jimmy Doe"]));
     });
 
     it("should reject more than 5 plus guests (validation)", async () => {
