@@ -48,7 +48,10 @@ describe("guests routes", () => {
 
       const res = await app.request("/test-wedding/guests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
         body: JSON.stringify({
           name: "John Doe",
           plus_guests_allowed: 2,
