@@ -11,6 +11,7 @@ import {
   Users,
   Baby,
   AlertCircle,
+  HelpCircle,
   X,
 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
@@ -46,6 +47,7 @@ export default function GuestRSVP({ useAltBg = false }) {
     email: "",
     attending: "MAYBE",
     dietary_requirements: "",
+    additional_info: "",
     plus_guests_allowed: 0,
     plus_guests: [],
     children_count: 0,
@@ -74,6 +76,7 @@ export default function GuestRSVP({ useAltBg = false }) {
         email: globalGuest.email || "",
         attending: globalGuest.attending || "MAYBE",
         dietary_requirements: globalGuest.dietary_requirements || "",
+        additional_info: globalGuest.additional_info || "",
         plus_guests_allowed:
           globalGuest.plus_guests_allowed !== undefined
             ? globalGuest.plus_guests_allowed
@@ -497,6 +500,24 @@ export default function GuestRSVP({ useAltBg = false }) {
                       }
                       className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2 h-24 resize-none"
                       placeholder="Allergies, vegetarian, etc."
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
+                      <HelpCircle className="w-4 h-4" />
+                      {t("rsvp.form.label_additional_info")}
+                    </label>
+                    <textarea
+                      value={formData.additional_info}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          additional_info: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2 h-24 resize-none"
+                      placeholder={t("rsvp.form.placeholder_additional_info")}
                     />
                   </div>
 

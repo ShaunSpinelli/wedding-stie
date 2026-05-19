@@ -28,6 +28,7 @@ const mapGuestResponse = (guest) => ({
   country: guest.country,
   features: guest.features || [],
   dietary_requirements: guest.dietary_requirements,
+  additional_info: guest.additional_info,
   has_plus_one: guest.has_plus_one || false,
   plus_one_name: guest.plus_one_name,
   plus_guests_allowed: guest.plus_guests_allowed ?? 0,
@@ -134,8 +135,8 @@ guestsRoutes.post(
       const features = isRequestAdmin ? guestData.features || [] : [];
 
       const result = await pool.query(
-        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, plus_guests_allowed, plus_guests, children_count)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, plus_guests_allowed, plus_guests, children_count, additional_info)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
          RETURNING *`,
         [
           uid,
@@ -151,6 +152,7 @@ guestsRoutes.post(
           plus_guests_allowed,
           JSON.stringify(guestData.plus_guests || []),
           guestData.children_count || 0,
+          guestData.additional_info || null,
         ],
       );
 
@@ -214,6 +216,7 @@ guestsRoutes.patch(
       plus_guests_allowed: "plus_guests_allowed",
       plus_guests: "plus_guests",
       children_count: "children_count",
+      additional_info: "additional_info",
     };
 
     let updates = {};

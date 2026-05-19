@@ -51,9 +51,11 @@ export default function AdminDashboard() {
     attending: "MAYBE",
     features: "",
     country: "",
+    dietary_requirements: "",
     children_count: 0,
     plus_guests_allowed: 0,
     plus_guests: [],
+    additional_info: "",
   });
   const [saving, setSaving] = useState(false);
 
@@ -115,6 +117,7 @@ export default function AdminDashboard() {
       plus_guests_allowed: plusGuestsAllowed,
       plus_guests: paddedPlusGuests,
       features: guest.features?.join(", ") || "",
+      additional_info: guest.additional_info || "",
     });
   };
 
@@ -133,6 +136,7 @@ export default function AdminDashboard() {
         plus_guests: (editForm.plus_guests || [])
           .map((name) => name?.trim() || "")
           .slice(0, parseInt(editForm.plus_guests_allowed) || 0),
+        additional_info: editForm.additional_info,
       };
       const response = await updateGuest(uid, editingGuest.id, payload);
       if (response.success) {
@@ -158,11 +162,13 @@ export default function AdminDashboard() {
           .split(",")
           .map((f) => f.trim())
           .filter(Boolean),
+        dietary_requirements: addForm.dietary_requirements,
         children_count: parseInt(addForm.children_count) || 0,
         plus_guests_allowed: parseInt(addForm.plus_guests_allowed) || 0,
         plus_guests: (addForm.plus_guests || [])
           .map((name) => name?.trim() || "")
           .slice(0, parseInt(addForm.plus_guests_allowed) || 0),
+        additional_info: addForm.additional_info,
       };
       const response = await createGuest(uid, payload);
       if (response.success) {
@@ -175,9 +181,11 @@ export default function AdminDashboard() {
           attending: "MAYBE",
           features: "",
           country: "",
+          dietary_requirements: "",
           children_count: 0,
           plus_guests_allowed: 0,
           plus_guests: [],
+          additional_info: "",
         });
       }
     } catch {
@@ -331,6 +339,7 @@ export default function AdminDashboard() {
                   <th className="px-6 py-5">Guest Info</th>
                   <th className="px-6 py-5">RSVP Status</th>
                   <th className="px-6 py-5">Dietary</th>
+                  <th className="px-6 py-5">Notes</th>
                   <th className="px-6 py-5">Plus One</th>
                   <th className="px-6 py-5">Kids</th>
                   <th className="px-6 py-5">Lang</th>
@@ -367,14 +376,26 @@ export default function AdminDashboard() {
                     </td>
                     <td className="px-6 py-4">
                       {guest.dietary_requirements ? (
-                        <div className="flex items-center gap-2 opacity-70">
-                          <Utensils className="w-3.5 h-3.5" />
-                          <span className="line-clamp-1 max-w-[150px]">
+                        <div className="flex items-center gap-2 text-xs text-theme-main-3">
+                          <Utensils className="w-3 h-3 opacity-40" />
+                          <span className="truncate max-w-[150px]">
                             {guest.dietary_requirements}
                           </span>
                         </div>
                       ) : (
-                        <span className="opacity-20">—</span>
+                        <span className="opacity-10">—</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      {guest.additional_info ? (
+                        <div className="flex items-center gap-2 text-xs text-theme-main-3 italic">
+                          <HelpCircle className="w-3 h-3 opacity-40" />
+                          <span className="truncate max-w-[150px]">
+                            {guest.additional_info}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="opacity-10">—</span>
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -621,6 +642,40 @@ export default function AdminDashboard() {
                   />
                 </div>
 
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase opacity-40">
+                    Dietary Requirements
+                  </label>
+                  <textarea
+                    value={addForm.dietary_requirements}
+                    onChange={(e) =>
+                      setAddForm({
+                        ...addForm,
+                        dietary_requirements: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm h-20 resize-none"
+                    placeholder="Allergies, vegetarian, etc..."
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase opacity-40">
+                    Additional Info / Message
+                  </label>
+                  <textarea
+                    value={addForm.additional_info}
+                    onChange={(e) =>
+                      setAddForm({
+                        ...addForm,
+                        additional_info: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm h-20 resize-none"
+                    placeholder="Any other notes..."
+                  />
+                </div>
+
                 <div className="flex flex-col gap-4 p-4 bg-theme-support-3/20 rounded-2xl">
                   <div className="space-y-1">
                     <label className="text-[10px] font-black uppercase opacity-40">
@@ -825,6 +880,23 @@ export default function AdminDashboard() {
                       })
                     }
                     className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all h-20 resize-none"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase opacity-40">
+                    Additional Info / Message
+                  </label>
+                  <textarea
+                    value={editForm.additional_info}
+                    onChange={(e) =>
+                      setEditForm({
+                        ...editForm,
+                        additional_info: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all h-20 resize-none"
+                    placeholder="Any other notes..."
                   />
                 </div>
 

@@ -1,4 +1,3 @@
-import { Calendar, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useConfig } from "@/features/invitation/hooks/use-config";
@@ -43,10 +42,10 @@ const CountdownTimer = ({ targetDate }) => {
     <div className="grid grid-cols-4 gap-4 w-full max-w-xs mx-auto">
       {Object.keys(timeLeft).map((interval) => (
         <div key={interval} className="flex flex-col items-center">
-          <span className="text-2xl font-serif text-theme-main-2 leading-none">
+          <span className="text-2xl font-serif text-black leading-none">
             {timeLeft[interval]}
           </span>
-          <span className="text-[9px] text-theme-main-2/50 uppercase tracking-[0.1em] mt-1">
+          <span className="text-[9px] text-black/40 uppercase tracking-[0.1em] mt-1">
             {interval}
           </span>
         </div>
@@ -91,92 +90,83 @@ export default function Hero() {
   }, [guest, t]);
 
   return (
-    <div className="page-wrapper flex flex-col h-[100vh] bg-white overflow-hidden">
-      {/* Top Section: Image + Overlaid Title */}
-      <section className="relative flex-grow overflow-hidden">
-        {/* Background Image */}
-        <img
-          src={getAssetPath("/images/hero-bg.jpg")}
-          className="absolute w-full h-[120%] object-cover top-0 left-0 z-0"
-          style={{
-            /* 100% = Shifts image UP to show the bottom. 
-               Adjust this value to fine-tune the shift. */
-            objectPosition: "50% 100%",
-          }}
-          alt="Wedding Hero"
-        />
+    <div className="page-wrapper min-h-screen bg-white">
+      {/* Main Hero Section: Shaun [Image] Manon */}
+      <section className="flex flex-col items-center justify-center pt-24 pb-12 px-6 bg-white">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5 }}
+          className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 xl:gap-20 w-full max-w-7xl"
+        >
+          {/* Groom's Name */}
+          <div className="flex-1 flex justify-center lg:justify-end min-w-0">
+            <h1 className="text-[72px] font-serif text-black uppercase tracking-[0.05em] leading-[0.9] text-center lg:text-right">
+              {t("wedding.groomName")}
+            </h1>
+          </div>
 
-        {/* Title Content Overlaid on Image */}
-        <header className="relative z-10 pt-24 pb-6 px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-1 bg-white/30 backdrop-blur-md border border-white/20 p-8 rounded-2xl max-w-sm sm:max-w-2xl mx-auto shadow-lg"
-          >
-            <span className="text-[10px] uppercase tracking-[0.3em] text-theme-main-2 font-semibold">
-              {t("hero.save_the_date")}
-            </span>
-            <h1 className="text-4xl sm:text-7xl font-serif text-theme-main-2 leading-tight">
-              {t("wedding.groomName")}{" "}
-              <span className="text-2xl italic font-light serif mx-1">&</span>{" "}
+          {/* Central Image with simple black border */}
+          <div className="flex-shrink-0 border border-black p-1 bg-white shadow-sm mx-auto w-56 h-72 sm:w-64 sm:h-80 lg:w-72 lg:h-[24rem] xl:w-80 xl:h-[28rem]">
+            <img
+              src={getAssetPath("/images/hero-bg.jpg")}
+              className="w-full h-full object-cover"
+              alt="Wedding Couple"
+            />
+          </div>
+
+          {/* Bride's Name */}
+          <div className="flex-1 flex justify-center lg:justify-start min-w-0">
+            <h1 className="text-[72px] font-serif text-black uppercase tracking-[0.05em] leading-[0.9] text-center lg:text-left">
               {t("wedding.brideName")}
             </h1>
-            <p className="text-theme-main-2/80 font-serif italic text-base">
-              {t("hero.married_announcement")}
-            </p>
-          </motion.div>
-        </header>
+          </div>
+        </motion.div>
 
-        {/* Bottom fade for transition to details card */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent z-[5]" />
+        {/* Date & Location Line (Matches Screenshot) */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 1 }}
+          className="mt-16 text-center"
+        >
+          <p className="text-xs sm:text-sm md:text-base text-black uppercase tracking-[0.2em] font-light">
+            {t("wedding.displayDate")}{" "}
+            <span className="mx-4 opacity-20">|</span> {t("wedding.location")}
+          </p>
+        </motion.div>
       </section>
 
-      {/* 3. Details Card (Fixed Bottom) */}
-      <footer className="details-card relative z-20 bg-white px-8 pt-4 pb-10 text-center -mt-8 rounded-t-[2.5rem] shadow-[0_-15px_30px_-15px_rgba(0,0,0,0.05)]">
-        {/* Subtle decorative divider */}
-        <div className="w-12 h-px bg-theme-main-2/10 mx-auto mb-6" />
-
+      {/* Details Section (Greeting & Countdown) */}
+      <footer className="bg-white px-8 pt-12 pb-24 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="space-y-6"
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="space-y-12"
         >
+          {/* Subtle decorative divider */}
+          <div className="w-16 h-px bg-black/10 mx-auto" />
+
           {/* Guest Greeting */}
-          <div className="space-y-1">
-            <p className="text-theme-main-2/50 font-serif italic text-sm">
+          <div className="space-y-2">
+            <p className="text-black/40 font-serif italic text-sm">
               {t("hero.dear")}
             </p>
-            <h2 className="text-3xl font-serif text-theme-main-2 italic">
+            <h2 className="text-4xl font-serif text-black italic">
               {displayName}
             </h2>
           </div>
 
           {/* Invitation Text */}
-          <div className="max-w-[280px] mx-auto">
-            <p className="text-theme-main-2/70 text-sm leading-relaxed font-light italic">
+          <div className="max-w-[400px] mx-auto">
+            <p className="text-black/60 text-base leading-relaxed font-light italic">
               {t("hero.invitation_message")}
             </p>
           </div>
 
-          {/* Date & Time */}
-          <div className="flex flex-col items-center justify-center space-y-2 py-4 border-y border-theme-main-2/5">
-            <div className="flex items-center space-x-3 text-theme-main-2">
-              <Calendar className="w-4 h-4 opacity-40" />
-              <span className="font-serif text-lg tracking-tight">
-                {t("wedding.displayDate")}
-              </span>
-            </div>
-            {t("wedding.displayTime") && (
-              <div className="flex items-center space-x-2 text-theme-main-2/40 text-xs uppercase tracking-[0.1em]">
-                <Clock className="w-3 h-3" />
-                <span>{t("wedding.displayTime")}</span>
-              </div>
-            )}
-          </div>
-
           {/* Countdown Section */}
-          <div className="pt-2">
+          <div className="pt-8 border-t border-black/5 max-w-md mx-auto">
             <CountdownTimer targetDate={config.date} />
           </div>
         </motion.div>
