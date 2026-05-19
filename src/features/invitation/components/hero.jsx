@@ -130,10 +130,12 @@ export default function Hero() {
           transition={{ delay: 0.5, duration: 1 }}
           className="mt-16 text-center"
         >
-          <p className="text-xs sm:text-sm md:text-base text-black uppercase tracking-[0.2em] font-light">
-            {t("wedding.displayDate")}{" "}
-            <span className="mx-4 opacity-20">|</span> {t("wedding.location")}
-          </p>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-0 text-xs sm:text-sm md:text-base text-black uppercase tracking-[0.2em] font-light">
+            <span>{t("wedding.displayDate")}</span>
+            <span className="hidden md:inline mx-4 opacity-20">|</span>
+            <div className="w-8 h-px bg-black/20 md:hidden my-2" />
+            <span>{t("wedding.location")}</span>
+          </div>
         </motion.div>
       </section>
 
