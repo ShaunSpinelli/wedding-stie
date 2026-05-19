@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Hero from "@/features/invitation/components/hero";
-import { Location } from "@/features/location";
+import { LocationBanner } from "@/features/location";
 import TravelInfo from "@/features/location/components/travel-info";
 import { GuestRSVP } from "@/features/guests";
 import ComingSoon from "@/features/invitation/components/coming-soon";
@@ -31,7 +31,7 @@ export default function MainContent() {
   return (
     <>
       <Hero useAltBg={false} />
-      <Location />
+      <LocationBanner />
       <TravelInfo />
       <GuestRSVP useAltBg={true} />
       <ComingSoon />

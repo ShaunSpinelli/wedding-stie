@@ -209,7 +209,9 @@
     "location": {
       "title": "Event Location",
       "subtitle": "Location",
-      "view_map": "View Map"
+      "view_map": "View Map",
+      "banner_text": "Celebrate with us in the beautiful south of France",
+      "venue_address_label": "Venue Address"
     },
     "travel": {
       "title": "Getting Here",
@@ -606,8 +608,11 @@
     "location": {
       "title": "Lieu de l'événement",
       "subtitle": "Localisation",
-      "view_map": "Voir la carte"
+      "view_map": "View Map",
+      "banner_text": "Célébrez avec nous dans le magnifique sud de la France",
+      "venue_address_label": "Adresse du lieu"
     },
+
     "travel": {
       "title": "Comment s'y rendre",
       "subtitle": "Options de voyage",
