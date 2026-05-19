@@ -11,32 +11,34 @@ export default function LocationBanner() {
   // -----------------------------------------------------
 
   return (
-    <section className="bg-white">
+    <section className="bg-white pt-20">
       {/* Full-width Image Section */}
       <div
-        className="relative w-full overflow-hidden md:h-[80vh]"
+        className="relative w-full md:h-[80vh]"
         style={{ height: window.innerWidth < 768 ? mobileHeight : undefined }}
       >
-        <img
-          src={getAssetPath("/images/venue-drone.webp")}
-          alt="Wedding Venue Drone View"
-          className="w-full h-full object-cover"
-        />
-        {/* Text Overlay */}
-        <div className="absolute inset-0 flex items-start justify-center pt-8 md:pt-20 bg-black/20">
+        <div className="w-full h-full overflow-hidden">
+          <img
+            src={getAssetPath("/images/venue-drone.webp")}
+            alt="Wedding Venue Drone View"
+            className="w-full h-full object-cover grayscale"
+          />
+        </div>
+
+        {/* Text Overlay - Elevated and Slanted */}
+        <div className="absolute -top-12 md:-top-16 inset-x-0 flex justify-center z-20 pointer-events-none">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, rotate: 0 }}
+            whileInView={{ opacity: 1, y: 0, rotate: -3 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="text-white text-2xl md:text-5xl lg:text-6xl font-serif text-center px-8 max-w-4xl leading-tight"
+            className="text-[#bc2c1a] text-3xl md:text-5xl lg:text-6xl font-handwritten text-center px-8 max-w-4xl leading-tight drop-shadow-sm"
           >
             {t("location.banner_text") ||
               "Celebrate with us in the beautiful south of France"}
           </motion.h2>
         </div>
       </div>
-
       {/* Address Text Section */}
       <div className="py-12 px-6 text-center bg-white">
         <motion.div

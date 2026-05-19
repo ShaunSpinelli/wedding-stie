@@ -217,6 +217,7 @@
       "venue_address_label": "Venue Address"
     },
     "travel": {
+      "guide_title": "How to get there",
       "title": "Getting Here",
       "subtitle": "Travel Options",
       "steps": {
@@ -620,6 +621,7 @@
     },
 
     "travel": {
+      "guide_title": "Comment s'y rendre",
       "title": "Comment s'y rendre",
       "subtitle": "Options de voyage",
       "steps": {
