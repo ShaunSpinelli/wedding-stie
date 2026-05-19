@@ -25,6 +25,8 @@ export class WeddingStack extends cdk.Stack {
       environment: {
         DATABASE_URL: process.env.DATABASE_URL || "",
         ADMIN_SECRET: process.env.ADMIN_SECRET || "",
+        SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID || "",
+        SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET || "",
         PORT: "3001",
       },
       bundling: {
