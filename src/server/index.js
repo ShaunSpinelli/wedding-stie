@@ -30,7 +30,6 @@ app.use(
       "http://localhost:5173",
       "http://127.0.0.1:5173",
       "https://shaunspinelli.github.io",
-      "https://shaunspinelli.github.io/wedding-stie",
     ],
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
