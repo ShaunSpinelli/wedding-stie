@@ -100,6 +100,7 @@ export const createGuestSchema = z
     plus_guests: z.array(z.string().max(255)).max(5).default([]),
     children_count: z.number().int().min(0).default(0),
     additional_info: z.string().optional().nullable().or(z.literal("")),
+    spotify_song_id: z.string().optional().nullable().or(z.literal("")),
   })
   .passthrough();
 

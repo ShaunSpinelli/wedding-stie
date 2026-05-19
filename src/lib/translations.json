@@ -5,7 +5,8 @@
     "error_check_url": "Please check your URL or contact the organizer.",
     "common": {
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "invitation_handwritten": "You are invited to our wedding"
     },
     "landing": {
       "open_invitation": "Open Invitation",
@@ -19,7 +20,7 @@
       "brideName": "Manon",
       "parentGroom": "Mr. Groom & Mrs. Groom",
       "parentBride": "Mr. Bride & Mrs. Bride",
-      "location": "Alès, France",
+      "location": "Saint-Hilaire-de-Brethmas, France",
       "address": "Chem. du Mas de la Rouquette, 30560 Saint-Hilaire-de-Brethmas, France",
       "displayDate": "Weekend of 21, 22, 23 May 2027",
       "displayTime": "",
@@ -121,7 +122,7 @@
       "not_found": "We couldn't find you on the guest list, but you can register here!",
       "form": {
         "guest_one": "Guest One",
-        "guest_two": "Guest Two",
+        "guest_plus": "Guest",
         "label_name": "Full Name",
         "placeholder_name": "Enter full name...",
         "label_email": "Email Address",
@@ -130,7 +131,7 @@
         "label_dietary": "Dietary Requirements",
         "placeholder_dietary": "Allergies, vegetarian, etc...",
         "label_plus_one": "Will there be a second guest?",
-        "label_plus_one_name": "Guest Two - Full Name",
+        "label_plus_one_name": "Guest 2 - Full Name",
         "placeholder_plus_one_name": "Their full name...",
         "label_children": "Number of Children",
         "label_additional_info": "Anything else you want to let us know?",
@@ -172,7 +173,9 @@
     "playlist": {
       "title": "The Vibe",
       "subtitle": "Wedding Playlist",
-      "description": "Get in the mood for our celebration with some of our favorite tunes."
+      "description": "Get in the mood for our celebration with some of our favorite tunes.",
+      "request_title": "Add to the Playlist",
+      "request_description": "Search for a song you'd love to hear at the wedding."
     },
     "hero": {
       "save_the_date": "Save the Date",
@@ -404,7 +407,8 @@
     "error_check_url": "Veuillez vérifier votre URL ou contacter l'organisateur.",
     "common": {
       "yes": "Oui",
-      "no": "Non"
+      "no": "Non",
+      "invitation_handwritten": "Vous êtes invités à notre mariage"
     },
     "landing": {
       "open_invitation": "Ouvrir l'invitation",
@@ -418,7 +422,7 @@
       "brideName": "Manon",
       "parentGroom": "M. Groom & Mme Groom",
       "parentBride": "M. Bride & Mme Bride",
-      "location": "Alès, France",
+      "location": "Saint-Hilaire-de-Brethmas, France",
       "address": "Chem. du Mas de la Rouquette, 30560 Saint-Hilaire-de-Brethmas, France",
       "displayDate": "Week-end du 21, 22, 23 Mai 2027",
       "displayTime": "",
@@ -520,7 +524,7 @@
       "not_found": "Nous ne vous avons pas trouvé sur la liste des invités, mais vous pouvez vous inscrire ici !",
       "form": {
         "guest_one": "Invité 1",
-        "guest_two": "Invité 2",
+        "guest_plus": "Invité",
         "label_name": "Nom Complet",
         "placeholder_name": "Entrez votre nom complet...",
         "label_email": "Adresse E-mail",
@@ -571,7 +575,9 @@
     "playlist": {
       "title": "L'Ambiance",
       "subtitle": "Playlist du Mariage",
-      "description": "Plongez dans l'ambiance de notre célébration avec nos morceaux préférés."
+      "description": "Plongez dans l'ambiance de notre célébration avec nos morceaux préférés.",
+      "request_title": "Contribuez à la Playlist",
+      "request_description": "Cherchez une chanson que vous aimeriez entendre au mariage."
     },
     "hero": {
       "save_the_date": "Réservez la date",

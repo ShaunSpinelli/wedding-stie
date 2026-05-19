@@ -29,6 +29,7 @@ const mapGuestResponse = (guest) => ({
   features: guest.features || [],
   dietary_requirements: guest.dietary_requirements,
   additional_info: guest.additional_info,
+  spotify_song_id: guest.spotify_song_id,
   has_plus_one: guest.has_plus_one || false,
   plus_one_name: guest.plus_one_name,
   plus_guests_allowed: guest.plus_guests_allowed ?? 0,
@@ -135,8 +136,8 @@ guestsRoutes.post(
       const features = isRequestAdmin ? guestData.features || [] : [];
 
       const result = await pool.query(
-        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, plus_guests_allowed, plus_guests, children_count, additional_info)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, plus_guests_allowed, plus_guests, children_count, additional_info, spotify_song_id)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
          RETURNING *`,
         [
           uid,
@@ -153,6 +154,7 @@ guestsRoutes.post(
           JSON.stringify(guestData.plus_guests || []),
           guestData.children_count || 0,
           guestData.additional_info || null,
+          guestData.spotify_song_id || null,
         ],
       );
 
@@ -217,6 +219,7 @@ guestsRoutes.patch(
       plus_guests: "plus_guests",
       children_count: "children_count",
       additional_info: "additional_info",
+      spotify_song_id: "spotify_song_id",
     };
 
     let updates = {};

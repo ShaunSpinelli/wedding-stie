@@ -248,3 +248,40 @@ export async function deleteGuest(uid, id) {
   }
   return response.json();
 }
+
+/**
+ * SPOTIFY API
+ */
+
+/**
+ * Search tracks on Spotify
+ * @param {string} query - Search term
+ * @returns {Promise<object>}
+ */
+export async function searchSpotifyTracks(query) {
+  const url = new URL(`${API_URL}/api/spotify/search`);
+  url.searchParams.set("q", query);
+
+  const response = await fetch(url, { headers: getHeaders() });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to search Spotify");
+  }
+  return response.json();
+}
+
+/**
+ * Get track details from Spotify
+ * @param {string} id - Spotify track ID
+ * @returns {Promise<object>}
+ */
+export async function fetchSpotifyTrack(id) {
+  const response = await fetch(`${API_URL}/api/spotify/tracks/${id}`, {
+    headers: getHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to fetch Spotify track");
+  }
+  return response.json();
+}

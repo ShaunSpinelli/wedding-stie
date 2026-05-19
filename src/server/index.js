@@ -13,6 +13,7 @@ import { adminAuth } from "./lib/auth.js";
 import { invitationRoutes } from "./features/invitation/index.js";
 import { wishesRoutes } from "./features/wishes/index.js";
 import { guestsRoutes } from "./features/guests/index.js";
+import spotifyRoutes from "./features/spotify/routes.js";
 import { uidParamSchema } from "./schemas.js";
 import { getDbClient } from "./lib/db-client.js";
 
@@ -100,6 +101,7 @@ app.get(
 
 // Mount features
 app.route("/api/invitation", invitationRoutes);
+app.route("/api/spotify", spotifyRoutes);
 app.route("/api/:uid/wishes", wishesRoutes);
 app.route("/api/:uid/guests", guestsRoutes);
 

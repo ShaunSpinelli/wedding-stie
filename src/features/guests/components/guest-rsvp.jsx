@@ -1,23 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  User,
-  Mail,
-  CheckCircle,
-  Loader2,
-  Edit2,
-  Sparkles,
-  Utensils,
-  Users,
-  Baby,
-  AlertCircle,
-  HelpCircle,
-  X,
-} from "lucide-react";
+import { X } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { storeGuestName } from "@/lib/invitation-storage";
-import { createGuest, updateGuest } from "@/services/api";
+import { createGuest, updateGuest, searchGuest } from "@/services/api";
 
 const FEEDBACK_GIFS = {
   happy:
@@ -27,7 +14,7 @@ const FEEDBACK_GIFS = {
     "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGM4cHhuamVuOTd6ZmRleHQ4a3JpandjMGllaHk0eDVocTBranozaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ji6zzUZwNIuLS/giphy.gif",
 };
 
-export default function GuestRSVP({ useAltBg = false }) {
+export default function GuestRSVP() {
   const {
     uid,
     guest: globalGuest,
@@ -37,10 +24,13 @@ export default function GuestRSVP({ useAltBg = false }) {
   const { t } = useLanguage();
 
   const [saving, setSaving] = useState(false);
-  const [isEditing, setIsEditMode] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [guest, setLocalGuest] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
+  const [searchName, setSearchName] = useState("");
+  const [searchError, setSearchError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -51,522 +41,514 @@ export default function GuestRSVP({ useAltBg = false }) {
     plus_guests_allowed: 0,
     plus_guests: [],
     children_count: 0,
+    spotify_song_id: null,
   });
-  const [msg, setMsg] = useState({ type: "", text: "" });
 
-  const safeParsePlusGuests = (data) => {
-    if (Array.isArray(data)) return data;
-    if (typeof data === "string") {
-      try {
-        const parsed = JSON.parse(data);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
-    }
-    return [];
-  };
-
-  // Sync with global guest state
+  // Load existing guest session
   useEffect(() => {
     if (globalGuest) {
       setLocalGuest(globalGuest);
+      setIsEditing(false); // Default to read-only if guest exists
       setFormData({
         name: globalGuest.name || "",
         email: globalGuest.email || "",
         attending: globalGuest.attending || "MAYBE",
         dietary_requirements: globalGuest.dietary_requirements || "",
         additional_info: globalGuest.additional_info || "",
-        plus_guests_allowed:
-          globalGuest.plus_guests_allowed !== undefined
-            ? globalGuest.plus_guests_allowed
-            : globalGuest.has_plus_one
-              ? 1
-              : 0,
-        plus_guests: safeParsePlusGuests(
-          globalGuest.plus_guests ||
-            (globalGuest.plus_one_name ? [globalGuest.plus_one_name] : []),
-        ),
-        children_count: globalGuest.children_count || 0,
+        plus_guests_allowed: globalGuest.plus_guests_allowed ?? 0,
+        plus_guests: globalGuest.plus_guests || [],
+        children_count: globalGuest.children_count ?? 0,
+        spotify_song_id: globalGuest.spotify_song_id || null,
       });
-      setIsEditMode(false);
-    } else {
-      setIsEditMode(true);
     }
   }, [globalGuest]);
 
-  const handleAttendanceClick = (status) => {
-    setFormData({ ...formData, attending: status });
-
-    if (status === "ATTENDING") setModalType("happy");
-    else if (status === "NOT_ATTENDING") setModalType("sad");
-    else setModalType("confused");
-
-    setShowModal(true);
+  const handleSearch = async () => {
+    if (!searchName.trim()) return;
+    setLoading(true);
+    setSearchError("");
+    try {
+      const response = await searchGuest(uid, { name: searchName });
+      if (response.success) {
+        setGlobalGuest(response.data);
+        storeGuestName(response.data.name);
+      } else {
+        setSearchError(t("rsvp.not_found"));
+      }
+    } catch {
+      setSearchError(t("rsvp.not_found"));
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setSaving(true);
-    setMsg({ type: "", text: "" });
-
     try {
-      const payload = {
-        ...formData,
-        plus_guests: (formData.plus_guests || [])
-          .map((name) => name?.trim() || "")
-          .slice(0, formData.plus_guests_allowed || 0),
-      };
-
+      const payload = { ...formData };
       let response;
-      if (guest && guest.id) {
-        // Update existing guest
+      if (guest?.id) {
         response = await updateGuest(uid, guest.id, payload);
       } else {
-        // Create new guest
         response = await createGuest(uid, payload);
-        if (response.success) {
-          storeGuestName(formData.name);
-        }
       }
 
       if (response.success) {
         setGlobalGuest(response.data);
-        setIsEditMode(false);
-        setMsg({
-          type: "success",
-          text:
-            t("rsvp.form.success_msg") ||
-            "Thank you! Your RSVP has been saved.",
-        });
-      } else {
-        setMsg({
-          type: "error",
-          text: response.error || "Failed to save RSVP",
-        });
+        setIsEditing(false);
+        // Show visual feedback
+        if (payload.attending === "ATTENDING") setModalType("happy");
+        else if (payload.attending === "NOT_ATTENDING") setModalType("sad");
+        else setModalType("confused");
+        setShowModal(true);
       }
     } catch (err) {
       console.error("RSVP error:", err);
-      setMsg({
-        type: "error",
-        text: "An error occurred while saving your RSVP.",
-      });
     } finally {
       setSaving(false);
     }
   };
 
+  const handleAttendanceClick = (status) => {
+    setFormData({ ...formData, attending: status });
+  };
+
   return (
-    <section
-      id="rsvp"
-      className="py-10 relative overflow-hidden"
-      style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
-    >
+    <section id="rsvp" className="py-24 relative overflow-hidden bg-white">
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center space-y-4 mb-12"
+          transition={{ duration: 0.8 }}
+          className="text-center space-y-6 mb-16"
         >
           <motion.h2
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-4xl md:text-5xl font-serif text-theme-main-2"
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="font-handwritten text-6xl md:text-8xl text-[#bc2c1a] leading-none"
           >
             {t("rsvp.title")}
           </motion.h2>
-          {guest && (
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="text-theme-main-3 font-medium italic"
-            >
-              {t("rsvp.your_details")}
-            </motion.p>
-          )}
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="max-w-2xl mx-auto"
-        >
-          <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl border border-theme-support-1/20 shadow-xl min-h-[400px] flex flex-col">
-            <AnimatePresence mode="wait">
-              {!isEditing && guest ? (
-                <motion.div
-                  key="profile"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="space-y-8 flex-1 flex flex-col"
-                >
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-1">
-                      <h3 className="text-xl font-serif text-theme-main-2 font-bold">
-                        {[
-                          guest.name,
-                          ...safeParsePlusGuests(
-                            guest.plus_guests ||
-                              (guest.plus_one_name
-                                ? [guest.plus_one_name]
-                                : []),
-                          ),
-                        ]
-                          .filter(Boolean)
-                          .join(" & ")}
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="bg-white rounded-[2.5rem] border border-black/5 shadow-2xl shadow-black/5 overflow-hidden"
+          >
+            <div className="h-2 bg-theme-main-2/10 w-full" />
+
+            <div className="p-8 md:p-12">
+              <AnimatePresence mode="wait">
+                {!guest ? (
+                  <motion.div
+                    key="search"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="space-y-8"
+                  >
+                    <div className="text-center space-y-2">
+                      <h3 className="text-2xl font-serif text-black uppercase tracking-[0.2em]">
+                        {t("rsvp.subtitle")}
                       </h3>
-                      <p className="text-theme-main-3 font-medium flex items-center gap-2 italic">
-                        <Sparkles className="w-4 h-4" />
-                        {t(
-                          `wishes.attendance.${guest.attending.toLowerCase()}${guest.plus_guests_allowed > 0 || (guest.plus_guests_allowed === undefined && guest.has_plus_one) ? "_we" : ""}`,
-                        )}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-theme-support-1/10 pt-8 flex-1">
-                    <div className="flex items-center gap-4 text-theme-main-3">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-theme-main-2" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                          {t("rsvp.form.guest_one")}
-                        </p>
-                        <p className="font-medium truncate max-w-[180px]">
-                          {guest.name}
-                        </p>
-                      </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-theme-main-3">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                        <Mail className="w-5 h-5 text-theme-main-2" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                          {t("rsvp.form.label_email")}
-                        </p>
-                        <p className="font-medium truncate max-w-[180px]">
-                          {guest.email || "—"}
-                        </p>
-                      </div>
-                    </div>
-
-                    {guest.plus_guests_allowed > 0
-                      ? Array.from({ length: guest.plus_guests_allowed }).map(
-                          (_, i) => (
-                            <div
-                              key={i}
-                              className="flex items-center gap-4 text-theme-main-3"
-                            >
-                              <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                                <Users className="w-5 h-5 text-theme-main-2" />
-                              </div>
-                              <div>
-                                <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                                  {t("rsvp.form.guest_two")}{" "}
-                                  {guest.plus_guests_allowed > 1 ? i + 1 : ""}
-                                </p>
-                                <p className="font-medium">
-                                  {safeParsePlusGuests(guest.plus_guests)[i] ||
-                                    "—"}
-                                </p>
-                              </div>
-                            </div>
-                          ),
-                        )
-                      : guest.plus_guests_allowed === undefined &&
-                        guest.has_plus_one && (
-                          <div className="flex items-center gap-4 text-theme-main-3">
-                            <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                              <Users className="w-5 h-5 text-theme-main-2" />
-                            </div>
-                            <div>
-                              <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                                {t("rsvp.form.guest_two")}
-                              </p>
-                              <p className="font-medium">
-                                {guest.plus_one_name || "Yes"}
-                              </p>
-                            </div>
-                          </div>
-                        )}
-
-                    {hasFeature("children") && (
-                      <div className="flex items-center gap-4 text-theme-main-3">
-                        <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                          <Baby className="w-5 h-5 text-theme-main-2" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                            {t("rsvp.form.label_children")}
-                          </p>
-                          <p className="font-medium">
-                            {guest.children_count || 0}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-4 text-theme-main-3">
-                      <div className="w-10 h-10 rounded-xl bg-theme-support-3/5 flex items-center justify-center flex-shrink-0">
-                        <Utensils className="w-5 h-5 text-theme-main-2" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold opacity-50">
-                          Dietary
-                        </p>
-                        <p className="font-medium truncate max-w-[180px]">
-                          {guest.dietary_requirements || "None"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-8 border-t border-theme-support-1/10">
-                    <button
-                      onClick={() => setIsEditMode(true)}
-                      className="w-full py-4 bg-theme-alt text-theme-main-2 rounded-xl font-bold shadow-sm hover:bg-theme-main-2 hover:text-white transition-all flex items-center justify-center gap-2"
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSearch();
+                      }}
+                      className="max-w-md mx-auto space-y-6"
                     >
-                      <Edit2 className="w-4 h-4" />
-                      {t("rsvp.form.btn_update_info")}
-                    </button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.form
-                  key={guest ? guest.id : "new"}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  onSubmit={handleSubmit}
-                  className="space-y-6 flex-1"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
                       <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                          <User className="w-4 h-4" />
-                          {t("rsvp.form.guest_one")}
+                        <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                          {t("rsvp.form.label_name")}
                         </label>
                         <input
                           type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
-                          }
-                          className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
+                          value={searchName}
+                          onChange={(e) => setSearchName(e.target.value)}
+                          className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black text-lg font-serif"
                           placeholder={t("rsvp.form.placeholder_name")}
+                          required
                         />
                       </div>
 
-                      {formData.plus_guests_allowed > 0 &&
-                        Array.from({
-                          length: formData.plus_guests_allowed,
-                        }).map((_, i) => (
-                          <div key={i} className="space-y-2">
-                            <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                              <Users className="w-4 h-4" />
-                              {t("rsvp.form.guest_two")}{" "}
-                              {formData.plus_guests_allowed > 1 ? i + 1 : ""}
-                            </label>
-                            <input
-                              type="text"
-                              value={formData.plus_guests[i] || ""}
-                              onChange={(e) => {
-                                const newPlusGuests = [...formData.plus_guests];
-                                newPlusGuests[i] = e.target.value;
-                                setFormData({
-                                  ...formData,
-                                  plus_guests: newPlusGuests,
-                                });
-                              }}
-                              className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                              placeholder={t(
-                                "rsvp.form.placeholder_plus_one_name",
-                              )}
-                            />
-                          </div>
-                        ))}
+                      {searchError && (
+                        <motion.p
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="text-theme-main-2 text-sm italic text-center"
+                        >
+                          {searchError}
+                        </motion.p>
+                      )}
 
-                      {!formData.plus_guests_allowed &&
-                        globalGuest?.has_plus_one && (
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full py-5 rounded-2xl bg-black text-white uppercase tracking-[0.3em] text-xs font-bold hover:bg-theme-main-2 transition-all shadow-xl disabled:opacity-50"
+                      >
+                        {loading
+                          ? t("rsvp.form.btn_saving")
+                          : t("rsvp.form.btn_update_info")}
+                      </button>
+                    </form>
+                  </motion.div>
+                ) : !isEditing ? (
+                  <motion.div
+                    key="summary"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-12"
+                  >
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-black/5">
+                      <div className="text-center md:text-left">
+                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30">
+                          {t("rsvp.your_details")}
+                        </p>
+                        <h3 className="text-3xl font-serif italic text-black">
+                          {guest.name}
+                        </h3>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setLocalGuest(null);
+                          setGlobalGuest(null);
+                        }}
+                        className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 hover:text-[#bc2c1a] transition-colors border-b border-transparent hover:border-[#bc2c1a]"
+                      >
+                        Not you?
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                      <div className="space-y-8">
+                        <div>
+                          <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
+                            Attendance
+                          </p>
+                          <p className="text-xl font-serif text-black">
+                            {t(
+                              `wishes.attendance.${formData.attending.toLowerCase()}${
+                                formData.plus_guests_allowed > 0 ||
+                                globalGuest?.has_plus_one
+                                  ? "_we"
+                                  : ""
+                              }`,
+                            )}
+                          </p>
+                        </div>
+
+                        {formData.email && (
+                          <div>
+                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
+                              Email
+                            </p>
+                            <p className="text-lg font-serif text-black/80">
+                              {formData.email}
+                            </p>
+                          </div>
+                        )}
+
+                        {(formData.plus_one_name ||
+                          formData.plus_guests.length > 0) && (
+                          <div>
+                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
+                              Plus Guests
+                            </p>
+                            <div className="space-y-1">
+                              {formData.plus_one_name && (
+                                <p className="text-lg font-serif text-black/80">
+                                  {formData.plus_one_name}
+                                </p>
+                              )}
+                              {formData.plus_guests.map((name, i) => (
+                                <p
+                                  key={i}
+                                  className="text-lg font-serif text-black/80"
+                                >
+                                  {name}
+                                </p>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="space-y-8">
+                        {formData.dietary_requirements && (
+                          <div>
+                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
+                              Dietary
+                            </p>
+                            <p className="text-lg font-serif text-black/80 italic">
+                              {formData.dietary_requirements}
+                            </p>
+                          </div>
+                        )}
+
+                        {formData.additional_info && (
+                          <div>
+                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
+                              Note
+                            </p>
+                            <p className="text-lg font-serif text-black/80 italic leading-relaxed">
+                              &ldquo;{formData.additional_info}&rdquo;
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-black/5">
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className="w-full py-5 rounded-2xl bg-black text-white uppercase tracking-[0.3em] text-xs font-bold hover:bg-theme-main-2 transition-all shadow-xl"
+                      >
+                        Update Details
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-10"
+                  >
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-black/5">
+                      <div className="text-center md:text-left">
+                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30">
+                          {t("rsvp.your_details")}
+                        </p>
+                        <h3 className="text-3xl font-serif italic text-black">
+                          {guest.name}
+                        </h3>
+                      </div>
+                      <button
+                        onClick={() => setIsEditing(false)}
+                        className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 hover:text-black transition-colors"
+                      >
+                        Cancel Edit
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                      <div className="space-y-6">
+                        <div className="space-y-4">
                           <div className="space-y-2">
-                            <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                              <Users className="w-4 h-4" />
-                              {t("rsvp.form.guest_two")}
+                            <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                              {t("rsvp.form.guest_one")}
                             </label>
                             <input
                               type="text"
-                              value={formData.plus_one_name}
+                              value={formData.name}
                               onChange={(e) =>
                                 setFormData({
                                   ...formData,
-                                  plus_one_name: e.target.value,
+                                  name: e.target.value,
                                 })
                               }
-                              className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
+                              className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black font-serif"
+                            />
+                          </div>
+
+                          {formData.plus_guests_allowed > 0 &&
+                            Array.from({
+                              length: formData.plus_guests_allowed,
+                            }).map((_, i) => (
+                              <div key={i} className="space-y-2">
+                                <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                                  {t("rsvp.form.guest_plus")} {i + 2}
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.plus_guests[i] || ""}
+                                  onChange={(e) => {
+                                    const newPlusGuests = [
+                                      ...formData.plus_guests,
+                                    ];
+                                    newPlusGuests[i] = e.target.value;
+                                    setFormData({
+                                      ...formData,
+                                      plus_guests: newPlusGuests,
+                                    });
+                                  }}
+                                  className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black font-serif"
+                                  placeholder={t(
+                                    "rsvp.form.placeholder_plus_one_name",
+                                  )}
+                                />
+                              </div>
+                            ))}
+
+                          {!formData.plus_guests_allowed &&
+                            globalGuest?.has_plus_one && (
+                              <div className="space-y-2">
+                                <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                                  {t("rsvp.form.guest_plus")} 2
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.plus_one_name}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      plus_one_name: e.target.value,
+                                    })
+                                  }
+                                  className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black font-serif"
+                                  placeholder={t(
+                                    "rsvp.form.placeholder_plus_one_name",
+                                  )}
+                                />
+                              </div>
+                            )}
+                        </div>
+
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                              {t("rsvp.form.label_email")}
+                            </label>
+                            <input
+                              type="email"
+                              value={formData.email}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  email: e.target.value,
+                                })
+                              }
+                              className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black font-serif"
+                              placeholder={t("rsvp.form.placeholder_email")}
+                            />
+                          </div>
+
+                          {hasFeature("children") && (
+                            <div className="space-y-2">
+                              <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                                {t("rsvp.form.label_children")}
+                              </label>
+                              <input
+                                type="number"
+                                min="0"
+                                value={formData.children_count}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    children_count:
+                                      parseInt(e.target.value) || 0,
+                                  })
+                                }
+                                className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black font-serif"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-8">
+                        <div className="space-y-4">
+                          <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                            {t("rsvp.form.label_attendance")}
+                          </label>
+                          <div className="grid grid-cols-1 gap-3">
+                            {["ATTENDING", "MAYBE", "NOT_ATTENDING"].map(
+                              (status) => (
+                                <button
+                                  key={status}
+                                  type="button"
+                                  onClick={() => handleAttendanceClick(status)}
+                                  className={`px-6 py-4 rounded-2xl text-xs font-bold border uppercase tracking-widest transition-all ${
+                                    formData.attending === status
+                                      ? "bg-black border-black text-white shadow-lg scale-[1.02]"
+                                      : "bg-white border-black/5 text-black/40 hover:border-black/20"
+                                  }`}
+                                >
+                                  {t(
+                                    `wishes.attendance.${status.toLowerCase()}${
+                                      formData.plus_guests_allowed > 0 ||
+                                      globalGuest?.has_plus_one
+                                        ? "_we"
+                                        : ""
+                                    }`,
+                                  )}
+                                </button>
+                              ),
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                              Dietary Requirements
+                            </label>
+                            <textarea
+                              value={formData.dietary_requirements}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  dietary_requirements: e.target.value,
+                                })
+                              }
+                              className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black font-serif h-24 resize-none"
+                              placeholder={t("rsvp.form.placeholder_dietary")}
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
+                              {t("rsvp.form.label_additional_info")}
+                            </label>
+                            <textarea
+                              value={formData.additional_info}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  additional_info: e.target.value,
+                                })
+                              }
+                              className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black font-serif h-24 resize-none"
                               placeholder={t(
-                                "rsvp.form.placeholder_plus_one_name",
+                                "rsvp.form.placeholder_additional_info",
                               )}
                             />
                           </div>
-                        )}
-                    </div>
-
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                          <Mail className="w-4 h-4" />
-                          {t("rsvp.form.label_email")}
-                        </label>
-                        <input
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) =>
-                            setFormData({ ...formData, email: e.target.value })
-                          }
-                          className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                          placeholder={t("rsvp.form.placeholder_email")}
-                        />
-                      </div>
-
-                      {hasFeature("children") && (
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                            <Baby className="w-4 h-4" />
-                            {t("rsvp.form.label_children")}
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            value={formData.children_count}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                children_count: parseInt(e.target.value) || 0,
-                              })
-                            }
-                            className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2"
-                          />
                         </div>
-                      )}
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                      <CheckCircle className="w-4 h-4" />
-                      {t("rsvp.form.label_attendance")}
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {["ATTENDING", "MAYBE", "NOT_ATTENDING"].map((status) => (
-                        <button
-                          key={status}
-                          type="button"
-                          onClick={() => handleAttendanceClick(status)}
-                          className={`px-4 py-3 rounded-xl text-xs font-bold border transition-all ${formData.attending === status ? "bg-theme-main-2 border-theme-main-2 text-white shadow-md" : "bg-white border-theme-support-1/20 text-theme-main-3/60 hover:border-theme-main-2/30"}`}
-                        >
-                          {t(
-                            `wishes.attendance.${status.toLowerCase()}${formData.plus_guests_allowed > 0 || globalGuest?.has_plus_one ? "_we" : ""}`,
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                      <Utensils className="w-4 h-4" />
-                      Dietary Requirements
-                    </label>
-                    <textarea
-                      value={formData.dietary_requirements}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          dietary_requirements: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2 h-24 resize-none"
-                      placeholder="Allergies, vegetarian, etc."
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-theme-main-3 text-sm font-medium">
-                      <HelpCircle className="w-4 h-4" />
-                      {t("rsvp.form.label_additional_info")}
-                    </label>
-                    <textarea
-                      value={formData.additional_info}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          additional_info: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 rounded-xl border border-theme-support-1/20 focus:border-theme-main-2 transition-all outline-none text-theme-main-2 h-24 resize-none"
-                      placeholder={t("rsvp.form.placeholder_additional_info")}
-                    />
-                  </div>
-
-                  {msg.text && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      className={`p-4 rounded-xl flex items-center gap-3 text-sm ${msg.type === "success" ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-theme-support-3/10 text-theme-main-3 border border-theme-support-1/10"}`}
-                    >
-                      {msg.type === "success" ? (
-                        <CheckCircle className="w-5 h-5" />
-                      ) : (
-                        <AlertCircle className="w-5 h-5" />
-                      )}
-                      {msg.text}
-                    </motion.div>
-                  )}
-
-                  <div className="pt-4 flex gap-3">
-                    {guest && (
+                    <div className="pt-8">
                       <button
-                        type="button"
-                        onClick={() => setIsEditMode(false)}
-                        className="flex-1 px-6 py-4 rounded-xl font-bold border border-theme-support-1/20 text-theme-main-3 hover:bg-theme-support-3/5 transition-all"
+                        onClick={handleSubmit}
+                        disabled={saving}
+                        className="w-full py-6 rounded-2xl bg-black text-white uppercase tracking-[0.4em] text-sm font-bold hover:bg-theme-main-2 transition-all shadow-2xl disabled:opacity-50"
                       >
-                        Cancel
+                        {saving
+                          ? t("rsvp.form.btn_saving")
+                          : t("rsvp.form.btn_save")}
                       </button>
-                    )}
-                    <button
-                      type="submit"
-                      disabled={saving}
-                      className="flex-[2] bg-theme-main-2 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-theme-main-2/90 transition-all flex justify-center items-center gap-2"
-                    >
-                      {saving ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <Sparkles className="w-5 h-5" />
-                      )}
-                      {t("rsvp.form.btn_save")}
-                    </button>
-                  </div>
-                </motion.form>
-              )}
-            </AnimatePresence>
-          </div>
-        </motion.div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      {/* Visual Feedback Modal */}
       <AnimatePresence>
         {showModal && (
           <motion.div
@@ -599,12 +581,12 @@ export default function GuestRSVP({ useAltBg = false }) {
               </div>
 
               <div className="p-6 text-center">
-                <p className="text-theme-main-3 text-sm mb-6">
+                <p className="text-black text-sm mb-6">
                   {t(`rsvp.form.feedback.${modalType}`)}
                 </p>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="w-full py-3 bg-theme-main-2 text-white rounded-xl font-bold shadow-md hover:bg-theme-main-2/90 transition-all"
+                  className="w-full py-3 bg-black text-white rounded-xl font-bold shadow-md hover:bg-theme-main-2 transition-all"
                 >
                   {t("rsvp.form.feedback.btn_continue")}
                 </button>

@@ -1,7 +1,14 @@
 // src/components/bottom-bar/BottomBar.jsx
 import React, { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Home, HeartHandshake, MapPin, Plane, HelpCircle } from "lucide-react";
+import {
+  Home,
+  HeartHandshake,
+  MapPin,
+  Plane,
+  HelpCircle,
+  Music,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-context";
 
@@ -9,6 +16,7 @@ const menuItems = [
   { icon: Home, labelKey: "nav.home", href: "#home", id: "home" },
   { icon: MapPin, labelKey: "nav.location", href: "#location", id: "location" },
   { icon: Plane, labelKey: "nav.travel", href: "#travel", id: "travel" },
+  { icon: Music, labelKey: "nav.playlist", href: "#playlist", id: "playlist" },
   { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
   { icon: HelpCircle, labelKey: "nav.faq", href: "#faq", id: "faq" },
 ];
@@ -107,8 +115,8 @@ const BottomBar = () => {
                 key={item.labelKey}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center py-2 px-2 rounded-xl transition-all duration-300 ease-in-out",
-                  "hover:bg-theme-main-1/30 cursor-pointer min-w-[60px]",
+                  "flex flex-col items-center justify-center py-2 px-1 sm:px-2 rounded-xl transition-all duration-300 ease-in-out",
+                  "hover:bg-theme-main-1/30 cursor-pointer min-w-[50px] sm:min-w-[60px]",
                   active === item.id
                     ? "text-theme-main-2 bg-theme-main-1/50"
                     : "text-gray-500",
@@ -134,7 +142,7 @@ const BottomBar = () => {
                 </motion.div>
                 <motion.span
                   className={cn(
-                    "text-[10px] sm:text-xs font-medium transition-all duration-300 line-clamp-1",
+                    "text-[9px] sm:text-xs font-medium transition-all duration-300 line-clamp-1 hidden min-[380px]:block",
                     active === item.id
                       ? "text-theme-main-2 font-semibold"
                       : "text-gray-500",

@@ -9,6 +9,7 @@ import Funny from "@/features/funny/components/funny";
 import FunnyCaptcha from "@/features/funny/components/funny-captcha";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { FAQSection } from "@/features/faq";
+import { Playlist } from "@/features/playlist";
 
 // Main Invitation Content
 export default function MainContent() {
@@ -46,6 +47,8 @@ export default function MainContent() {
         isOpen={isCaptchaOpen}
         onClose={() => setIsCaptchaOpen(false)}
       />
+
+      <Playlist useAltBg={false} />
 
       <FAQSection useAltBg={true} />
     </>

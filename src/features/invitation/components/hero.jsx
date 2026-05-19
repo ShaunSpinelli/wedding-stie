@@ -107,7 +107,7 @@ export default function Hero() {
           </div>
 
           {/* Central Image with simple black border */}
-          <div className="flex-shrink-0 border border-black p-1 bg-white shadow-sm mx-auto w-56 h-72 sm:w-64 sm:h-80 lg:w-72 lg:h-[24rem] xl:w-80 xl:h-[28rem]">
+          <div className="flex-shrink-0 border border-black p-1 bg-white shadow-sm mx-auto w-64 h-64 sm:w-80 sm:h-80 lg:w-72 lg:h-72 xl:w-80 xl:h-80 2xl:w-[28rem] 2xl:h-[28rem]">
             <img
               src={getAssetPath("/images/hero-bg.jpg")}
               className="w-full h-full object-cover"
@@ -137,6 +137,28 @@ export default function Hero() {
             <span>{t("wedding.location")}</span>
           </div>
         </motion.div>
+
+        {/* Countdown Section (Moved to Hero) */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 1 }}
+          className="mt-12"
+        >
+          <CountdownTimer targetDate={config.date} />
+        </motion.div>
+
+        {/* Handwritten Invitation Message */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.8, duration: 1.5 }}
+          className="mt-12 text-center px-6"
+        >
+          <p className="font-handwritten text-3xl md:text-4xl lg:text-5xl text-[#bc2c1a] leading-none">
+            {t("common.invitation_handwritten")}
+          </p>
+        </motion.div>
       </section>
 
       {/* Details Section (Greeting & Countdown) */}
@@ -165,11 +187,6 @@ export default function Hero() {
             <p className="text-black/60 text-base leading-relaxed font-light italic">
               {t("hero.invitation_message")}
             </p>
-          </div>
-
-          {/* Countdown Section */}
-          <div className="pt-8 border-t border-black/5 max-w-md mx-auto">
-            <CountdownTimer targetDate={config.date} />
           </div>
         </motion.div>
       </footer>

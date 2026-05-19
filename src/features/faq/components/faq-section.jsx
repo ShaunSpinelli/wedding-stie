@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HelpCircle, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import translations from "@/lib/translations.json";
@@ -81,38 +81,21 @@ export default function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-10 px-4 bg-white">
+    <section id="faq" className="py-24 px-4 bg-white overflow-hidden">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center justify-center p-3 bg-theme-main-1/20 rounded-full mb-6 text-theme-main-2"
-          >
-            <HelpCircle size={32} />
-          </motion.div>
+        <div className="text-center mb-20">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-serif text-theme-main-2 mb-6"
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="font-handwritten text-6xl md:text-8xl text-[#bc2c1a] leading-none"
           >
             {t("faq.title")}
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-500 text-lg max-w-xl mx-auto italic"
-          >
-            {t("faq.subtitle")}
-          </motion.p>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-4">
           {faqItems.map((item, index) => (
             <FAQItem
               key={index}
