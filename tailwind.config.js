@@ -18,7 +18,7 @@ export default {
       },
       fontFamily: {
         serif: ["Playfair Display", "serif"],
-        handwritten: ["Nothing You Could Do", "cursive"],
+        handwritten: ["Biro Script", "cursive"],
       },
       colors: {
         background: "hsl(var(--background))",

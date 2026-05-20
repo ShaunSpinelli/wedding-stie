@@ -1,3 +1,14 @@
+/* Custom Handwritten Font */
+@font-face {
+  font-family: "Biro Script";
+  src:
+    url("./assets/fonts/Biro_Script_reduced.otf") format("opentype"),
+    url("./assets/fonts/Biro_Script_reduced.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Import Theme Files must be at the very top */
 @import "./styles/themes/buttercream.css";
 @import "./styles/themes/ember-ash.css";
