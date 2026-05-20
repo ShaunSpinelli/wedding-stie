@@ -11,7 +11,7 @@ export default function LocationBanner() {
   // -----------------------------------------------------
 
   return (
-    <section className="bg-white pt-10 md:pt-20">
+    <section id="location" className="bg-white pt-10 md:pt-20">
       {/* Full-width Image Section */}
       <div
         className="relative w-full md:h-[80vh]"

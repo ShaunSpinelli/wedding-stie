@@ -16,8 +16,8 @@ const menuItems = [
   { icon: Home, labelKey: "nav.home", href: "#home", id: "home" },
   { icon: MapPin, labelKey: "nav.location", href: "#location", id: "location" },
   { icon: Plane, labelKey: "nav.travel", href: "#travel", id: "travel" },
-  { icon: Music, labelKey: "nav.playlist", href: "#playlist", id: "playlist" },
   { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
+  { icon: Music, labelKey: "nav.playlist", href: "#playlist", id: "playlist" },
   { icon: HelpCircle, labelKey: "nav.faq", href: "#faq", id: "faq" },
 ];
 
