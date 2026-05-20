@@ -30,7 +30,7 @@ export default function TravelGuide() {
             <img
               src={getAssetPath("/images/travel-map.png")}
               alt="How to get there map"
-              className="w-full h-auto"
+              className="w-full h-auto grayscale"
               style={{
                 maskImage:
                   "radial-gradient(circle, black 60%, transparent 95%)",
