@@ -218,6 +218,11 @@
     },
     "travel": {
       "guide_title": "How to get there ?",
+      "quick_guide_label": "The Easiest Way",
+      "step_plane": "Fly to Paris (CDG or ORY)",
+      "step_train": "Take the TGV train to Nîmes via",
+      "step_accommodation": "Let us know your arrival time and we can help you organize the final part to the accommodation",
+      "other_routes_note": "For other routes, please check the FAQ or reach out to us directly.",
       "title": "Getting Here",
       "subtitle": "Travel Options",
       "steps": {
@@ -622,6 +627,11 @@
 
     "travel": {
       "guide_title": "Comment s'y rendre ?",
+      "quick_guide_label": "Le moyen le plus simple",
+      "step_plane": "Vol vers Paris (CDG ou ORY)",
+      "step_train": "Prendre le TGV vers Nîmes via",
+      "step_accommodation": "Faites-nous part de votre heure d'arrivée et nous pourrons vous aider à organiser la dernière partie du trajet jusqu'à l'hébergement",
+      "other_routes_note": "Pour d'autres itinéraires, veuillez consulter la FAQ ou nous contacter directement.",
       "title": "Comment s'y rendre",
       "subtitle": "Options de voyage",
       "steps": {

@@ -5,6 +5,7 @@ import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { storeGuestName } from "@/lib/invitation-storage";
 import { createGuest, updateGuest, searchGuest } from "@/services/api";
+import { getAssetPath } from "@/utils/asset-path";
 
 const FEEDBACK_GIFS = {
   happy:
@@ -144,11 +145,27 @@ export default function GuestRSVP() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="bg-white rounded-[2.5rem] border border-black/5 shadow-2xl shadow-black/5 overflow-hidden"
+            className="relative rounded-[2.5rem] shadow-2xl shadow-black/5 overflow-hidden"
           >
-            <div className="h-2 bg-theme-main-2/10 w-full" />
+            {/* Custom Background Image Layer */}
+            <div className="absolute inset-0 z-0 bg-white" />
+            {!isEditing && (
+              <div
+                className="absolute inset-0 z-0 pointer-events-none"
+                style={{
+                  backgroundImage: `url(${getAssetPath("/textures/rsvp-bg.png")})`,
+                  backgroundSize: "100% 100%",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
+            )}
+            {/* Subtle inner depth */}
+            <div className="absolute inset-0 z-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.02)] pointer-events-none" />
 
-            <div className="p-8 md:p-12">
+            <div className="relative z-10 h-2 bg-theme-main-2/10 w-full" />
+
+            <div className="relative z-10 p-12 md:p-24">
               <AnimatePresence mode="wait">
                 {!guest ? (
                   <motion.div
