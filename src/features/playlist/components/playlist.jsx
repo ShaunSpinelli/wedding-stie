@@ -166,7 +166,7 @@ export default function Playlist({ useAltBg = false }) {
             )}
           </motion.div>
 
-          {/* Existing Playlist Embed */}
+          {/* Existing Playlist Embed - Commented out as requested
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-sm font-bold text-theme-main-3/40 uppercase tracking-[0.3em]">
@@ -192,6 +192,7 @@ export default function Playlist({ useAltBg = false }) {
               ></iframe>
             </motion.div>
           </div>
+          */}
         </div>
       </div>
     </section>
