@@ -119,7 +119,10 @@ export default function GuestRSVP() {
   };
 
   return (
-    <section id="rsvp" className="py-24 relative overflow-hidden bg-white">
+    <section
+      id="rsvp"
+      className="py-12 md:py-24 relative overflow-hidden bg-white"
+    >
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -6,7 +6,7 @@ export default function ComingSoon() {
   const { t } = useLanguage();
 
   return (
-    <section id="info" className="py-10 bg-theme-support-3/5">
+    <section id="info" className="py-5 md:py-10 bg-theme-support-3/5">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

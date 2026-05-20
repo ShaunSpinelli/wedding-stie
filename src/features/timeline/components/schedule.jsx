@@ -7,9 +7,9 @@ export default function Schedule({ useAltBg = false }) {
   const scheduleData = t("wedding.schedule") || [];
 
   return (
-    <section 
-      id="schedule" 
-      className="relative overflow-hidden py-16"
+    <section
+      id="schedule"
+      className="relative overflow-hidden py-8 md:py-16"
       style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
     >
       <div className="container mx-auto px-4 relative z-10">
@@ -56,7 +56,9 @@ export default function Schedule({ useAltBg = false }) {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     className="inline-block px-8 py-2 text-xl md:text-2xl font-serif text-theme-main-2 italic border-2 border-theme-support-1/30 rounded-full shadow-sm relative z-10"
-                    style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
+                    style={{
+                      backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF",
+                    }}
                   >
                     {dayPlan.day}
                   </motion.h3>
@@ -121,9 +123,13 @@ export default function Schedule({ useAltBg = false }) {
 
                             {/* Center Column (Dot) */}
                             <div className="relative flex justify-center items-center">
-                              <div 
-                                className="w-4 h-4 rounded-full border-2 border-theme-main-2 shadow-sm z-10" 
-                                style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
+                              <div
+                                className="w-4 h-4 rounded-full border-2 border-theme-main-2 shadow-sm z-10"
+                                style={{
+                                  backgroundColor: useAltBg
+                                    ? "#F4F1EC"
+                                    : "#FFFFFF",
+                                }}
                               />
                             </div>
 
@@ -151,9 +157,9 @@ export default function Schedule({ useAltBg = false }) {
                           <div className="md:hidden flex flex-col pl-20 relative mb-12 last:mb-0">
                             <div
                               className="absolute left-10 top-[32px] w-4 h-4 rounded-full bg-theme-main-2 z-10 border-2 shadow-md"
-                              style={{ 
+                              style={{
                                 transform: "translate(-50%, -50%)",
-                                borderColor: useAltBg ? "#F4F1EC" : "#FFFFFF" 
+                                borderColor: useAltBg ? "#F4F1EC" : "#FFFFFF",
                               }}
                             />
 

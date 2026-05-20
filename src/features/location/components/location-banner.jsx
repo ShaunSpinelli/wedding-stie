@@ -11,7 +11,7 @@ export default function LocationBanner() {
   // -----------------------------------------------------
 
   return (
-    <section className="bg-white pt-20">
+    <section className="bg-white pt-10 md:pt-20">
       {/* Full-width Image Section */}
       <div
         className="relative w-full md:h-[80vh]"
@@ -40,7 +40,7 @@ export default function LocationBanner() {
         </div>
       </div>
       {/* Address Text Section */}
-      <div className="py-12 px-6 text-center bg-white">
+      <div className="py-6 md:py-12 px-6 text-center bg-white">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

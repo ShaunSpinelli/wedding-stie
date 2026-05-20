@@ -92,7 +92,7 @@ export default function Hero() {
   return (
     <div className="page-wrapper min-h-screen bg-white">
       {/* Main Hero Section: Shaun [Image] Manon */}
-      <section className="flex flex-col items-center justify-center pt-24 pb-12 px-6 bg-white">
+      <section className="flex flex-col items-center justify-center pt-12 pb-6 md:pt-24 md:pb-12 px-6 bg-white">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

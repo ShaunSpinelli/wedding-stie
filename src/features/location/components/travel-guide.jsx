@@ -6,7 +6,10 @@ export default function TravelGuide() {
   const { t } = useLanguage();
 
   return (
-    <section id="travel" className="py-24 px-4 bg-white overflow-hidden">
+    <section
+      id="travel"
+      className="py-12 md:py-24 px-4 bg-white overflow-hidden"
+    >
       <div className="max-w-4xl mx-auto text-center space-y-12">
         <motion.h2
           initial={{ opacity: 0, scale: 0.9 }}

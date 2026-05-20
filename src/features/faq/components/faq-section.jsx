@@ -81,7 +81,7 @@ export default function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-24 px-4 bg-white overflow-hidden">
+    <section id="faq" className="py-12 md:py-24 px-4 bg-white overflow-hidden">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-20">
           <motion.h2

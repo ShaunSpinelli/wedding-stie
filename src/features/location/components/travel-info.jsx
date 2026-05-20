@@ -67,7 +67,7 @@ export default function TravelInfo() {
   );
 
   return (
-    <section id="travel" className="py-10 bg-white">
+    <section id="travel" className="py-5 md:py-10 bg-white">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

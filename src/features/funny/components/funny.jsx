@@ -6,7 +6,7 @@ export default function Funny() {
   const eyebrowPath2 = "M60 70 Q80 90 100 70 T140 70";
 
   return (
-    <section className="py-10 bg-theme-support-3/5 overflow-hidden">
+    <section className="py-5 md:py-10 bg-theme-support-3/5 overflow-hidden">
       <div className="container mx-auto px-4 text-center space-y-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
