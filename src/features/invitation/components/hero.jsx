@@ -60,8 +60,13 @@ export default function Hero() {
   const { guest } = useInvitation();
 
   const displayName = useMemo(() => {
+    const storedName = getGuestName();
+    const isEmail = storedName?.includes("@");
+
     const mainName =
-      guest?.name || getGuestName() || t("hero.guest_name_fallback");
+      guest?.name ||
+      (!isEmail ? storedName : null) ||
+      t("hero.guest_name_fallback");
 
     const safeParsePlusGuests = (data) => {
       if (Array.isArray(data)) return data;
@@ -112,7 +117,7 @@ export default function Hero() {
           {/* Central Image with simple black border */}
           <div className="flex-shrink-0 border border-black p-1 bg-white shadow-sm mx-auto w-64 h-64 sm:w-80 sm:h-80 lg:w-72 lg:h-72 xl:w-80 xl:h-80 2xl:w-[28rem] 2xl:h-[28rem]">
             <img
-              src={getAssetPath("/images/hero-bg.jpg")}
+              src={getAssetPath("/images/hero.gif")}
               className="w-full h-full object-cover"
               alt="Wedding Couple"
             />
