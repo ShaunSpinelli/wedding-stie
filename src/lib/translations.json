@@ -182,9 +182,9 @@
       }
     },
     "playlist": {
-      "title": "help get the party started",
+      "title": "help us get the party started",
       "subtitle": "",
-      "description": "Get in the mood for our celebration with some of our favorite tunes.",
+      "description": "",
       "request_title": "Add to the Playlist",
       "request_description": "Search for a song you'd love to hear at the wedding."
     },
@@ -226,7 +226,7 @@
       "subtitle": "Location",
       "view_map": "View Map",
       "banner_text": "Celebrate with us in the beautiful south of France",
-      "venue_address_label": "Venue Address"
+      "venue_address_label": "Address"
     },
     "travel": {
       "guide_title": "How to get there ?",
@@ -602,9 +602,9 @@
       }
     },
     "playlist": {
-      "title": "L'Ambiance",
-      "subtitle": "Playlist du Mariage",
-      "description": "Plongez dans l'ambiance de notre célébration avec nos morceaux préférés.",
+      "title": "aidez-nous à lancer la fête",
+      "subtitle": "",
+      "description": "",
       "request_title": "Contribuez à la Playlist",
       "request_description": "Cherchez une chanson que vous aimeriez entendre au mariage."
     },
@@ -646,7 +646,7 @@
       "subtitle": "Localisation",
       "view_map": "View Map",
       "banner_text": "Célébrez avec nous dans le magnifique sud de la France",
-      "venue_address_label": "Adresse du lieu"
+      "venue_address_label": "Adresse"
     },
 
     "travel": {

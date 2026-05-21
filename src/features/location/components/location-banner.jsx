@@ -2,8 +2,12 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { getAssetPath } from "@/utils/asset-path";
 
+import { MapPin } from "lucide-react";
+
 export default function LocationBanner() {
   const { t } = useLanguage();
+
+  const googleMapsUrl = "https://maps.app.goo.gl/UPDuxwLdwjGVyE2Q9";
 
   // --- CONFIGURATION: Adjust mobile image height here ---
   // Increase this value to make the image taller on mobile (e.g., "50vh", "400px")
@@ -57,6 +61,22 @@ export default function LocationBanner() {
           <p className="text-black/60 text-sm md:text-base font-serif italic">
             {t("wedding.address")}
           </p>
+
+          <motion.a
+            href={googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="inline-flex items-center gap-2 text-[#bc2c1a] hover:text-[#bc2c1a]/80 transition-colors mt-6 group"
+          >
+            <MapPin className="w-4 h-4 transition-transform group-hover:scale-110" />
+            <span className="text-sm uppercase tracking-[0.2em] font-medium border-b border-[#bc2c1a]/20 group-hover:border-[#bc2c1a]/50 pb-0.5">
+              {t("location.view_map")}
+            </span>
+          </motion.a>
         </motion.div>
       </div>
     </section>

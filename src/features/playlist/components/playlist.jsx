@@ -80,9 +80,6 @@ export default function Playlist({ useAltBg = false }) {
           <motion.h2 className="text-5xl md:text-7xl font-handwritten text-theme-main-2">
             {t("playlist.title")}
           </motion.h2>
-          <p className="text-theme-main-3/70 max-w-md mx-auto italic">
-            {t("playlist.description")}
-          </p>
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-12">
