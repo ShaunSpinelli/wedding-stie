@@ -77,11 +77,8 @@ export default function Playlist({ useAltBg = false }) {
           viewport={{ once: true }}
           className="text-center space-y-4 mb-12"
         >
-          <motion.span className="inline-block text-theme-main-2 font-medium uppercase tracking-widest text-sm">
+          <motion.h2 className="text-5xl md:text-7xl font-handwritten text-theme-main-2">
             {t("playlist.title")}
-          </motion.span>
-          <motion.h2 className="text-4xl md:text-5xl font-serif text-theme-main-2">
-            {t("playlist.subtitle")}
           </motion.h2>
           <p className="text-theme-main-3/70 max-w-md mx-auto italic">
             {t("playlist.description")}
