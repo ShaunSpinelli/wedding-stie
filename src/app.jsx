@@ -89,11 +89,11 @@ function App() {
     <HelmetProvider>
       <EntryEmailModal />
 
-      {/* Admin Toggle Button */}
+      {/* Admin Toggle Button (Hidden but Functional) */}
       {!isAdminPath && (
         <Link
           to="/admin"
-          className="fixed top-4 right-4 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-full w-10 h-10 border border-theme-support-1/30 shadow-lg text-theme-accent hover:bg-theme-main-1/50 transition-all"
+          className="fixed top-0 right-0 z-[100] w-16 h-16 opacity-0"
         >
           <Settings className="w-5 h-5" />
         </Link>
