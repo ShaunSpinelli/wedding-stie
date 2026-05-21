@@ -20,7 +20,7 @@
     "landing": {
       "open_invitation": "Open Invitation",
       "wedding_of": "The Wedding of",
-      "click_to_open": "Click to Open"
+      "tap_to_open": "Tap to Open"
     },
     "wedding": {
       "title": "The Wedding of Shaun & Manon",
@@ -440,7 +440,7 @@
     "landing": {
       "open_invitation": "Ouvrir l'invitation",
       "wedding_of": "Le mariage de",
-      "click_to_open": "Cliquer pour ouvrir"
+      "tap_to_open": "Appuyez pour ouvrir"
     },
     "wedding": {
       "title": "Le Mariage de Shaun & Manon",

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { getAssetPath } from "@/utils/asset-path";
+import { useLanguage } from "@/lib/language-context";
 
 const LandingPage = ({ onOpenInvitation }) => {
+  const { t } = useLanguage();
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
 
   const handleEnvelopeClick = () => {
@@ -82,6 +84,18 @@ const LandingPage = ({ onOpenInvitation }) => {
               </motion.div>
             </div>
           </div>
+
+          {/* Tap to Open Hint */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="mt-8 text-center"
+          >
+            <p className="font-handwritten text-2xl md:text-3xl text-black/40">
+              {t("landing.tap_to_open")}
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </motion.div>
