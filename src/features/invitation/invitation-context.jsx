@@ -22,6 +22,37 @@ export function InvitationProvider({ children }) {
   const [guest, setGuest] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+
+  // Helper to search and set guest
+  const lookupGuest = useCallback(
+    async (identifier) => {
+      if (!identifier) return false;
+      try {
+        const isEmail = identifier.includes("@");
+        const searchParams = isEmail
+          ? { email: identifier }
+          : { name: identifier };
+
+        const response = await searchGuest(invitationUid, searchParams);
+        if (response.success) {
+          setGuest(response.data);
+          storeGuestName(identifier);
+          // Auto-set language if guest has a preference
+          if (response.data.language) {
+            toggleLanguage(response.data.language);
+          }
+          setShowEmailModal(false);
+          return true;
+        }
+        return false;
+      } catch (err) {
+        console.error("[InvitationProvider] Guest search failed:", err);
+        return false;
+      }
+    },
+    [invitationUid, toggleLanguage],
+  );
 
   // Safety fallback: if everything hangs, stop loading after 5 seconds
   useEffect(() => {
@@ -128,28 +159,23 @@ export function InvitationProvider({ children }) {
       console.log("[InvitationProvider] Final name to search:", nameToSearch);
 
       if (nameToSearch) {
-        console.log("[InvitationProvider] Searching for guest:", nameToSearch);
-        try {
-          const response = await searchGuest(invitationUid, {
-            name: nameToSearch,
-          });
-          console.log("[InvitationProvider] Search response:", response);
-          if (response.success) {
-            setGuest(response.data);
-            // Auto-set language if guest has a preference
-            if (response.data.language) {
-              toggleLanguage(response.data.language);
-            }
-          }
-        } catch (err) {
-          console.error("[InvitationProvider] Guest search failed:", err);
+        const success = await lookupGuest(nameToSearch);
+        if (!success) {
+          setShowEmailModal(true);
+        }
+      } else {
+        // No guest param and no storage -> show entry modal
+        // Skip for admin path
+        const isAdminPath = window.location.pathname.includes("/admin");
+        if (!isAdminPath) {
+          setShowEmailModal(true);
         }
       }
       setIsLoading(false);
     };
 
     identifyGuest();
-  }, [invitationUid, toggleLanguage]);
+  }, [invitationUid, lookupGuest]);
 
   // Helper to check if guest has a specific feature tag
   const hasFeature = useCallback(
@@ -162,6 +188,13 @@ export function InvitationProvider({ children }) {
     [guest],
   );
 
+  const logoutGuest = useCallback(() => {
+    setGuest(null);
+    storeGuestName("");
+    localStorage.removeItem("sakeenah_guest_name");
+    setShowEmailModal(true);
+  }, []);
+
   const value = useMemo(
     () => ({
       uid: invitationUid,
@@ -171,8 +204,22 @@ export function InvitationProvider({ children }) {
       hasFeature,
       isLoading,
       error,
+      showEmailModal,
+      setShowEmailModal,
+      lookupGuest,
+      logoutGuest,
     }),
-    [config, guest, isLoading, error, hasFeature],
+    [
+      config,
+      guest,
+      isLoading,
+      error,
+      hasFeature,
+      showEmailModal,
+      setShowEmailModal,
+      lookupGuest,
+      logoutGuest,
+    ],
   );
 
   return (

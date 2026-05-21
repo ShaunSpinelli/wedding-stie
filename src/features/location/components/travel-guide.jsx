@@ -16,7 +16,7 @@ export default function TravelGuide() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          className="font-handwritten text-3xl sm:text-5xl md:text-8xl text-[#bc2c1a] leading-tight px-4"
+          className="font-handwritten text-3xl md:text-5xl lg:text-6xl text-[#bc2c1a] leading-tight px-4"
         >
           {t("travel.guide_title")}
         </motion.h2>

@@ -3,6 +3,15 @@
     "loading": "Loading invitation...",
     "error_not_found": "Invitation Not Found",
     "error_check_url": "Please check your URL or contact the organizer.",
+    "entry_modal": {
+      "title": "Welcome",
+      "subtitle": "Please enter the email address where you received your invitation so we can personalize your experience.",
+      "label": "Email Address",
+      "placeholder": "your@email.com",
+      "btn_continue": "Continue to Invitation",
+      "error_not_found": "We couldn't find that email in our guest list. Please check and try again.",
+      "loading": "Verifying..."
+    },
     "common": {
       "yes": "Yes",
       "no": "No",
@@ -123,6 +132,8 @@
       "form": {
         "guest_one": "Guest One",
         "guest_plus": "Guest",
+        "label_search": "Email Address",
+        "placeholder_search": "The email you received the invitation on...",
         "label_name": "Full Name",
         "placeholder_name": "Enter full name...",
         "label_email": "Email Address",
@@ -411,6 +422,15 @@
     "loading": "Chargement de l'invitation...",
     "error_not_found": "Invitation non trouvée",
     "error_check_url": "Veuillez vérifier votre URL ou contacter l'organisateur.",
+    "entry_modal": {
+      "title": "Bienvenue",
+      "subtitle": "Veuillez entrer l'adresse e-mail sur laquelle vous avez reçu votre invitation afin que nous puissions personnaliser votre expérience.",
+      "label": "Adresse E-mail",
+      "placeholder": "votre@email.com",
+      "btn_continue": "Continuer vers l'invitation",
+      "error_not_found": "Nous n'avons pas trouvé cet e-mail dans notre liste d'invités. Veuillez vérifier et réessayer.",
+      "loading": "Vérification..."
+    },
     "common": {
       "yes": "Oui",
       "no": "Non",
@@ -531,6 +551,8 @@
       "form": {
         "guest_one": "Invité 1",
         "guest_plus": "Invité",
+        "label_search": "Adresse E-mail",
+        "placeholder_search": "L'e-mail sur lequel vous avez reçu l'invitation...",
         "label_name": "Nom Complet",
         "placeholder_name": "Entrez votre nom complet...",
         "label_email": "Adresse E-mail",

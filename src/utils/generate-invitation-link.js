@@ -3,18 +3,15 @@ import { safeBase64 } from "@/lib/base64";
 /**
  * Generate a personalized invitation link for a guest
  * @param {string} uid - The invitation UID (e.g., 'rifqi-dina-2025')
- * @param {string} guestName - The guest's name (e.g., 'John Doe')
+ * @param {string} guestEmail - The guest's email address
  * @param {string} baseUrl - Optional base URL (defaults to current origin)
  * @returns {string} - The personalized invitation URL
  *
  * @example
- * generateInvitationLink('rifqi-dina-2025', 'John Doe')
- * // Returns: http://localhost:5173/rifqi-dina-2025?guest=Sm9obiBEb2U=
- *
- * generateInvitationLink('rifqi-dina-2025', 'Ahmad Abdullah', 'https://wedding.example.com')
- * // Returns: https://wedding.example.com/rifqi-dina-2025?guest=QWhtYWQgQWJkdWxsYWg=
+ * generateInvitationLink('rifqi-dina-2025', 'john@example.com')
+ * // Returns: http://localhost:5173/rifqi-dina-2025?guest=am9obkBleGFtcGxlLmNvbQ==
  */
-export function generateInvitationLink(uid, guestName, baseUrl) {
+export function generateInvitationLink(uid, guestEmail, baseUrl) {
   const origin = typeof window !== "undefined" ? window.location.origin : "";
   const base =
     baseUrl ||
@@ -25,53 +22,38 @@ export function generateInvitationLink(uid, guestName, baseUrl) {
   const cleanUid = uid.startsWith("/") ? uid.slice(1) : uid;
 
   const url = baseUrl ? base : `${origin}${cleanBase}`;
-  const encodedName = safeBase64.encode(guestName);
+  const encodedEmail = safeBase64.encode(guestEmail);
 
-  return `${url}${cleanUid}?guest=${encodedName}`;
+  return `${url}${cleanUid}?guest=${encodedEmail}`;
 }
 
 /**
  * Generate multiple invitation links for a list of guests
  * @param {string} uid - The invitation UID
- * @param {string[]} guestNames - Array of guest names
+ * @param {string[]} guestEmails - Array of guest emails
  * @param {string} baseUrl - Optional base URL
- * @returns {Array<{name: string, link: string}>} - Array of objects with name and link
- *
- * @example
- * const guests = ['John Doe', 'Jane Smith', 'Ahmad Abdullah'];
- * generateBulkInvitationLinks('rifqi-dina-2025', guests);
- * // Returns:
- * // [
- * //   { name: 'John Doe', link: 'http://localhost:5173/?uid=rifqi-dina-2025&guest=...' },
- * //   { name: 'Jane Smith', link: 'http://localhost:5173/?uid=rifqi-dina-2025&guest=...' },
- * //   { name: 'Ahmad Abdullah', link: 'http://localhost:5173/?uid=rifqi-dina-2025&guest=...' }
- * // ]
+ * @returns {Array<{email: string, link: string}>} - Array of objects with email and link
  */
-export function generateBulkInvitationLinks(uid, guestNames, baseUrl) {
-  return guestNames.map((name) => ({
-    name,
-    link: generateInvitationLink(uid, name, baseUrl),
+export function generateBulkInvitationLinks(uid, guestEmails, baseUrl) {
+  return guestEmails.map((email) => ({
+    email,
+    link: generateInvitationLink(uid, email, baseUrl),
   }));
 }
 
 /**
  * Console utility to quickly generate invitation links
  * Usage: Run this in browser console or node script
- *
- * @example
- * // In browser console:
- * import { printInvitationLinks } from './utils/generateInvitationLink'
- * printInvitationLinks('rifqi-dina-2025', ['John Doe', 'Jane Smith'])
  */
 export function printInvitationLinks(
   uid,
-  guestNames,
+  guestEmails,
   baseUrl = "http://localhost:5173",
 ) {
-  const links = generateBulkInvitationLinks(uid, guestNames, baseUrl);
+  const links = generateBulkInvitationLinks(uid, guestEmails, baseUrl);
   console.log("\n=== Personalized Invitation Links ===\n");
-  links.forEach(({ name, link }) => {
-    console.log(`${name}:\n${link}\n`);
+  links.forEach(({ email, link }) => {
+    console.log(`${email}:\n${link}\n`);
   });
   return links;
 }

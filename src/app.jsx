@@ -39,6 +39,7 @@ const AdminLogin = lazy(
 import Layout from "@/components/layout/layout";
 import MainContent from "@/features/invitation/components/main-content";
 import LandingPage from "@/features/invitation/components/landing-page";
+import EntryEmailModal from "@/features/invitation/components/entry-email-modal";
 
 /**
  * App component serves as the root of the application.
@@ -88,6 +89,7 @@ function App() {
   return (
     <HelmetProvider>
       <LanguageToggle />
+      <EntryEmailModal />
 
       {/* Admin Toggle Button */}
       {!isAdminPath && (

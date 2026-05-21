@@ -209,7 +209,13 @@ export default function AdminDashboard() {
   };
 
   const handleCopyLink = (guest) => {
-    const link = generateInvitationLink(uid, guest.name);
+    if (!guest.email) {
+      alert(
+        "This guest doesn't have an email address associated with their record.",
+      );
+      return;
+    }
+    const link = generateInvitationLink(uid, guest.email);
     navigator.clipboard.writeText(link);
     setCopiedId(guest.id);
     setTimeout(() => setCopiedId(null), 2000);

@@ -59,6 +59,16 @@ export default function Hero() {
   const { t } = useLanguage();
   const { guest } = useInvitation();
 
+  const [currentImageIndex, setCurrentImageIndex] = useState(1);
+  const totalImages = 8;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev % totalImages) + 1);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   const displayName = useMemo(() => {
     const storedName = getGuestName();
     const isEmail = storedName?.includes("@");
@@ -117,7 +127,9 @@ export default function Hero() {
           {/* Central Image with simple black border */}
           <div className="flex-shrink-0 border border-black p-1 bg-white shadow-sm mx-auto w-64 h-64 sm:w-80 sm:h-80 lg:w-72 lg:h-72 xl:w-80 xl:h-80 2xl:w-[28rem] 2xl:h-[28rem]">
             <img
-              src={getAssetPath("/images/hero.gif")}
+              src={getAssetPath(
+                `/images/hero-sequence/hero-${currentImageIndex}.png`,
+              )}
               className="w-full h-full object-cover"
               alt="Wedding Couple"
             />

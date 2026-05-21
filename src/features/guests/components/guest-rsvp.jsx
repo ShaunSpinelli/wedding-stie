@@ -21,6 +21,7 @@ export default function GuestRSVP() {
     guest: globalGuest,
     setGuest: setGlobalGuest,
     hasFeature,
+    logoutGuest,
   } = useInvitation();
   const { t } = useLanguage();
 
@@ -73,7 +74,7 @@ export default function GuestRSVP() {
     setLoading(true);
     setSearchError("");
     try {
-      const response = await searchGuest(uid, { name: searchName });
+      const response = await searchGuest(uid, { email: searchName.trim() });
       if (response.success) {
         setGlobalGuest(response.data);
         storeGuestName(response.data.name);
@@ -193,14 +194,14 @@ export default function GuestRSVP() {
                     >
                       <div className="space-y-2">
                         <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
-                          {t("rsvp.form.label_name")}
+                          {t("rsvp.form.label_search")}
                         </label>
                         <input
-                          type="text"
+                          type="email"
                           value={searchName}
                           onChange={(e) => setSearchName(e.target.value)}
                           className="w-full px-6 py-4 rounded-2xl border border-black/5 bg-gray-50/30 focus:bg-white focus:border-theme-main-2 transition-all outline-none text-black text-lg font-serif"
-                          placeholder={t("rsvp.form.placeholder_name")}
+                          placeholder={t("rsvp.form.placeholder_search")}
                           required
                         />
                       </div>
@@ -244,10 +245,7 @@ export default function GuestRSVP() {
                         </h3>
                       </div>
                       <button
-                        onClick={() => {
-                          setLocalGuest(null);
-                          setGlobalGuest(null);
-                        }}
+                        onClick={logoutGuest}
                         className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 hover:text-[#bc2c1a] transition-colors border-b border-transparent hover:border-[#bc2c1a]"
                       >
                         Not you?

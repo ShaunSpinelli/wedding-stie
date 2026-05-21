@@ -59,8 +59,14 @@ export default function Wishes({ useAltBg = false }) {
   useEffect(() => {
     const storedGuestName = getGuestName();
     if (storedGuestName) {
-      setGuestName(storedGuestName);
-      setIsNameFromInvitation(true);
+      // If it's an email, don't use it as the display name for the wish
+      if (storedGuestName.includes("@")) {
+        setGuestName("");
+        setIsNameFromInvitation(false);
+      } else {
+        setGuestName(storedGuestName);
+        setIsNameFromInvitation(true);
+      }
     }
   }, []);
 
