@@ -622,6 +622,7 @@ export default function AdminDashboard() {
                       type="number"
                       min="0"
                       value={addForm.children_count}
+                      onWheel={(e) => e.target.blur()}
                       onChange={(e) =>
                         setAddForm({
                           ...addForm,
@@ -692,6 +693,7 @@ export default function AdminDashboard() {
                       min="0"
                       max="5"
                       value={addForm.plus_guests_allowed}
+                      onWheel={(e) => e.target.blur()}
                       onChange={(e) => {
                         const val = parseInt(e.target.value) || 0;
                         const newPlusGuests = [...addForm.plus_guests];
@@ -846,6 +848,7 @@ export default function AdminDashboard() {
                     <input
                       type="number"
                       value={editForm.children_count}
+                      onWheel={(e) => e.target.blur()}
                       onChange={(e) =>
                         setEditForm({
                           ...editForm,
@@ -931,6 +934,7 @@ export default function AdminDashboard() {
                       min="0"
                       max="5"
                       value={editForm.plus_guests_allowed}
+                      onWheel={(e) => e.target.blur()}
                       onChange={(e) => {
                         const val = parseInt(e.target.value) || 0;
                         const newPlusGuests = [...(editForm.plus_guests || [])];

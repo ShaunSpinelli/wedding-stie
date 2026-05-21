@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
@@ -8,8 +8,7 @@ import { createGuest, updateGuest, searchGuest } from "@/services/api";
 import { getAssetPath } from "@/utils/asset-path";
 
 const FEEDBACK_GIFS = {
-  happy:
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG95YTRlM3RqeXFvZW14MHljb3cwNnpwNnMxdmdjc25lcWw0dGdjZCZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/OfkGZ5H2H3f8Y/giphy.gif",
+  happy: getAssetPath("/images/rsvp-happy.gif"),
   sad: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3FuaDhzYWV0eG9vcXp1NHl0NmI1OXducTl0ZWJobm81MWNtNWt0biZlcD12MV9naWZzX3NlYXJjaCZjdD1n/H6cmWzp6LGFvqjidB7/giphy.gif",
   confused:
     "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGM4cHhuamVuOTd6ZmRleHQ4a3JpandjMGllaHk0eDVocTBranozaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ji6zzUZwNIuLS/giphy.gif",
@@ -24,6 +23,7 @@ export default function GuestRSVP() {
     logoutGuest,
   } = useInvitation();
   const { t } = useLanguage();
+  const rsvpRef = useRef(null);
 
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -102,11 +102,17 @@ export default function GuestRSVP() {
       if (response.success) {
         setGlobalGuest(response.data);
         setIsEditing(false);
-        // Show visual feedback
-        if (payload.attending === "ATTENDING") setModalType("happy");
-        else if (payload.attending === "NOT_ATTENDING") setModalType("sad");
-        else setModalType("confused");
-        setShowModal(true);
+
+        // Scroll back to top of RSVP section
+        rsvpRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // Show visual feedback ONLY if attendance changed
+        if (payload.attending !== globalGuest?.attending) {
+          if (payload.attending === "ATTENDING") setModalType("happy");
+          else if (payload.attending === "NOT_ATTENDING") setModalType("sad");
+          else setModalType("confused");
+          setShowModal(true);
+        }
       }
     } catch (err) {
       console.error("RSVP error:", err);
@@ -122,6 +128,7 @@ export default function GuestRSVP() {
   return (
     <section
       id="rsvp"
+      ref={rsvpRef}
       className="py-12 md:py-24 relative overflow-hidden bg-white"
     >
       <div className="container mx-auto px-4 relative z-10">
@@ -248,7 +255,7 @@ export default function GuestRSVP() {
                         onClick={logoutGuest}
                         className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 hover:text-[#bc2c1a] transition-colors border-b border-transparent hover:border-[#bc2c1a]"
                       >
-                        Not you?
+                        {t("rsvp.not_you")}
                       </button>
                     </div>
 
@@ -256,7 +263,7 @@ export default function GuestRSVP() {
                       <div className="space-y-8">
                         <div>
                           <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
-                            Attendance
+                            {t("rsvp.form.label_attendance_summary")}
                           </p>
                           <p className="text-xl font-serif text-black">
                             {t(
@@ -273,7 +280,7 @@ export default function GuestRSVP() {
                         {formData.email && (
                           <div>
                             <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
-                              Email
+                              {t("rsvp.form.label_email_summary")}
                             </p>
                             <p className="text-lg font-serif text-black/80">
                               {formData.email}
@@ -285,7 +292,7 @@ export default function GuestRSVP() {
                           formData.plus_guests.length > 0) && (
                           <div>
                             <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
-                              Plus Guests
+                              {t("rsvp.form.label_plus_guests")}
                             </p>
                             <div className="space-y-1">
                               {formData.plus_one_name && (
@@ -310,7 +317,7 @@ export default function GuestRSVP() {
                         {formData.dietary_requirements && (
                           <div>
                             <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
-                              Dietary
+                              {t("rsvp.form.label_dietary_summary")}
                             </p>
                             <p className="text-lg font-serif text-black/80 italic">
                               {formData.dietary_requirements}
@@ -321,7 +328,7 @@ export default function GuestRSVP() {
                         {formData.additional_info && (
                           <div>
                             <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-30 mb-2">
-                              Note
+                              {t("rsvp.form.label_note_summary")}
                             </p>
                             <p className="text-lg font-serif text-black/80 italic leading-relaxed">
                               &ldquo;{formData.additional_info}&rdquo;
@@ -336,7 +343,7 @@ export default function GuestRSVP() {
                         onClick={() => setIsEditing(true)}
                         className="w-full py-5 rounded-2xl bg-black text-white uppercase tracking-[0.3em] text-xs font-bold hover:bg-theme-main-2 transition-all shadow-xl"
                       >
-                        Update Details
+                        {t("rsvp.form.btn_update_details")}
                       </button>
                     </div>
                   </motion.div>
@@ -361,7 +368,7 @@ export default function GuestRSVP() {
                         onClick={() => setIsEditing(false)}
                         className="text-[10px] uppercase tracking-[0.2em] font-bold text-black/40 hover:text-black transition-colors"
                       >
-                        Cancel Edit
+                        {t("rsvp.form.btn_cancel_edit")}
                       </button>
                     </div>
 
@@ -515,7 +522,7 @@ export default function GuestRSVP() {
                         <div className="space-y-4">
                           <div className="space-y-2">
                             <label className="block text-black uppercase tracking-[0.1em] text-[10px] font-bold opacity-40 ml-1">
-                              Dietary Requirements
+                              {t("rsvp.form.label_dietary")}
                             </label>
                             <textarea
                               value={formData.dietary_requirements}
