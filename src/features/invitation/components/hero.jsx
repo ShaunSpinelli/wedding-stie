@@ -182,33 +182,47 @@ export default function Hero() {
       </section>
 
       {/* Details Section (Greeting & Countdown) */}
-      <footer className="bg-white px-8 pt-12 pb-24 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="space-y-12"
-        >
-          {/* Subtle decorative divider */}
-          <div className="w-16 h-px bg-black/10 mx-auto" />
+      <footer
+        className="w-full aspect-[3/2] grid grid-cols-2 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+        style={{
+          backgroundImage: `url(${getAssetPath("/images/invitation-bg.png")})`,
+        }}
+      >
+        {/* Overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-white/20" />
 
-          {/* Guest Greeting */}
-          <div className="space-y-2">
-            <p className="text-black/40 font-serif italic text-sm">
-              {t("hero.dear")}
-            </p>
-            <h2 className="text-4xl font-serif text-black italic">
-              {displayName}
-            </h2>
-          </div>
+        {/* Column 1: Text Content */}
+        <div className="relative z-10 flex items-center pl-16 sm:pl-24 md:pl-32 lg:pl-48 pr-6 md:pr-12">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="space-y-4 md:space-y-10"
+          >
+            {/* Subtle decorative divider */}
+            <div className="w-12 md:w-16 h-px bg-black/10" />
 
-          {/* Invitation Text */}
-          <div className="max-w-[400px] mx-auto">
-            <p className="text-black/60 text-base leading-relaxed font-light italic">
-              {t("hero.invitation_message")}
-            </p>
-          </div>
-        </motion.div>
+            {/* Guest Greeting */}
+            <div className="space-y-1 md:space-y-3">
+              <p className="text-black font-handwritten text-lg md:text-2xl lg:text-3xl">
+                {t("hero.dear")}
+              </p>
+              <h2 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-handwritten text-black leading-none">
+                {displayName}
+              </h2>
+            </div>
+
+            {/* Invitation Text */}
+            <div className="max-w-[240px] sm:max-w-[300px] md:max-w-[450px]">
+              <p className="font-handwritten text-lg sm:text-xl md:text-3xl lg:text-4xl text-black leading-snug">
+                {t("hero.invitation_message")}
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Column 2: Empty/Placeholder */}
+        <div className="relative z-10" />
       </footer>
     </div>
   );
