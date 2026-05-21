@@ -65,7 +65,7 @@ export default function Playlist({ useAltBg = false }) {
   return (
     <section
       id="playlist"
-      className="py-8 md:py-24 overflow-hidden"
+      className="py-8 md:py-24 relative z-20"
       style={{ backgroundColor: useAltBg ? "#F4F1EC" : "#FFFFFF" }}
     >
       <div className="container mx-auto px-4 relative z-10">
