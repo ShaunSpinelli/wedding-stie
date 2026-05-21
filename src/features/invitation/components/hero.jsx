@@ -167,18 +167,6 @@ export default function Hero() {
         >
           <CountdownTimer targetDate={config.date} />
         </motion.div>
-
-        {/* Handwritten Invitation Message */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, duration: 1.5 }}
-          className="mt-12 text-center px-6"
-        >
-          <p className="font-handwritten text-3xl md:text-4xl lg:text-5xl text-[#bc2c1a] leading-none">
-            {t("common.invitation_handwritten")}
-          </p>
-        </motion.div>
       </section>
 
       {/* Details Section (Greeting & Countdown) */}
