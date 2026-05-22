@@ -190,7 +190,7 @@
       }
     },
     "playlist": {
-      "title": "help us get the party started",
+      "title": "Help us get the party started",
       "subtitle": "",
       "description": "",
       "request_title": "Add to the Playlist",
@@ -608,7 +608,7 @@
       }
     },
     "playlist": {
-      "title": "aidez-nous à lancer la fête",
+      "title": "Faites vibrer la piste de danse",
       "subtitle": "",
       "description": "",
       "request_title": "Contribuez à la Playlist",
@@ -634,7 +634,7 @@
       "subtitle": "Le Voyage de l'Amour"
     },
     "schedule": {
-      "title": "Itéraire",
+      "title": "Itinéraire",
       "subtitle": "Week-end de Mariage",
       "days": {
         "Friday": "Vendredi",
