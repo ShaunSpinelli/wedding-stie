@@ -19,6 +19,7 @@ import {
   Globe,
   Link as LinkIcon,
   Check,
+  Download,
 } from "lucide-react";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import {
@@ -221,6 +222,45 @@ export default function AdminDashboard() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const handleExportCSV = () => {
+    if (!guests || guests.length === 0) {
+      alert("No guest data to export");
+      return;
+    }
+
+    // Format for email script: email,language,name,plus_ones
+    const header = ["email", "language", "name", "plus_ones"];
+    const rows = guests.map((guest) => {
+      const plusOnes = safeParsePlusGuests(guest.plus_guests)
+        .map((name) => name?.trim())
+        .filter(Boolean)
+        .join(" ");
+
+      return [
+        guest.email || "",
+        (guest.language || "en").toUpperCase(),
+        guest.name || "",
+        plusOnes || guest.plus_one_name?.trim() || "",
+      ].map((val) => `"${val.replace(/"/g, '""')}"`); // Escape quotes
+    });
+
+    const csvContent = [header.join(","), ...rows.map((r) => r.join(","))].join(
+      "\n",
+    );
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `guests_export_${new Date().toISOString().split("T")[0]}.csv`,
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const getStatusIcon = (status) => {
     switch (status) {
       case "ATTENDING":
@@ -262,6 +302,14 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportCSV}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition-all shadow-sm text-sm font-bold"
+              title="Export for Email Script"
+            >
+              <Download className="w-4 h-4" />
+              Export CSV
+            </button>
             <button
               onClick={() => setIsAddingGuest(true)}
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-theme-accent text-white hover:bg-theme-accent/90 transition-all shadow-sm text-sm font-bold"
