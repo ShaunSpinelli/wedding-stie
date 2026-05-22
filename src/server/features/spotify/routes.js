@@ -29,7 +29,7 @@ async function getSpotifyToken() {
     throw new Error("Spotify credentials missing in environment variables");
   }
 
-  const auth = btoa(`${clientId}:${clientSecret}`);
+  const auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     headers: {
