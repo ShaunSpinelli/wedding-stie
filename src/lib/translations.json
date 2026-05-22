@@ -202,7 +202,7 @@
       "dear": "Dear",
       "guest_title": "Our Honored Guest",
       "guest_name_fallback": "Guest Name",
-      "invitation_message": "You are invited to our wedding",
+      "invitation_message": "We’re getting married!!\n\nHope you can make it!\n\nLove, Shaun & Manon\n\nxoxo",
       "celebration_message": "We would love to celebrate this special day with you.",
       "countdown": {
         "days": "days",
@@ -630,7 +630,7 @@
       "dear": "Cher/Chère",
       "guest_title": "Notre invité(e) d'honneur",
       "guest_name_fallback": "Nom de l'invité",
-      "invitation_message": "Vous êtes invités à notre mariage",
+      "invitation_message": "On se marie !!\n\nOn espère que vous pourrez venir !\n\nAve tout notre amour, Shaun & Manon\n\nbisous",
       "celebration_message": "Nous serions ravis de célébrer cette journée spéciale avec vous.",
       "countdown": {
         "days": "jours",

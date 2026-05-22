@@ -201,8 +201,8 @@ export default function Hero() {
             </div>
 
             {/* Invitation Text */}
-            <div className="max-w-[240px] sm:max-w-[300px] md:max-w-[450px]">
-              <p className="font-handwritten text-lg sm:text-xl md:text-3xl lg:text-4xl text-black leading-snug">
+            <div className="max-w-[280px] sm:max-w-[350px] md:max-w-[500px]">
+              <p className="font-handwritten text-lg sm:text-xl md:text-2xl lg:text-3xl text-black leading-tight whitespace-pre-line">
                 {t("hero.invitation_message")}
               </p>
             </div>
