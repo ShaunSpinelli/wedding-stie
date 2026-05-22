@@ -22,7 +22,7 @@ export default function GuestRSVP() {
     hasFeature,
     logoutGuest,
   } = useInvitation();
-  const { t } = useLanguage();
+  const { t, language: currentLanguage } = useLanguage();
   const rsvpRef = useRef(null);
 
   const [saving, setSaving] = useState(false);
@@ -91,7 +91,10 @@ export default function GuestRSVP() {
   const handleSubmit = async () => {
     setSaving(true);
     try {
-      const payload = { ...formData };
+      const payload = {
+        ...formData,
+        language: currentLanguage,
+      };
       let response;
       if (guest?.id) {
         response = await updateGuest(uid, guest.id, payload);

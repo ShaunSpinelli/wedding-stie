@@ -7,7 +7,7 @@ import { Music, ExternalLink, X } from "lucide-react";
 import SongSearch from "./song-search";
 
 export default function Playlist({ useAltBg = false }) {
-  const { t } = useLanguage();
+  const { t, language: currentLanguage } = useLanguage();
   const { uid, guest, setGuest } = useInvitation();
   const [selectedTrack, setSelectedTrack] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
@@ -37,6 +37,7 @@ export default function Playlist({ useAltBg = false }) {
     try {
       const response = await updateGuest(uid, guest.id, {
         spotify_song_id: track.id,
+        language: currentLanguage,
       });
       if (response.success) {
         setGuest(response.data);
@@ -52,6 +53,7 @@ export default function Playlist({ useAltBg = false }) {
     try {
       const response = await updateGuest(uid, guest.id, {
         spotify_song_id: null,
+        language: currentLanguage,
       });
       if (response.success) {
         setGuest(response.data);

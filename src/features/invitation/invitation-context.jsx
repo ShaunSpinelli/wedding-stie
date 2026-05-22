@@ -38,8 +38,9 @@ export function InvitationProvider({ children }) {
         if (response.success) {
           setGuest(response.data);
           storeGuestName(identifier);
-          // Auto-set language if guest has a preference
-          if (response.data.language) {
+          // Auto-set language only if user hasn't manually changed it in this session
+          const sessionLang = localStorage.getItem("wedding_lang");
+          if (response.data.language && !sessionLang) {
             toggleLanguage(response.data.language);
           }
           setShowEmailModal(false);
