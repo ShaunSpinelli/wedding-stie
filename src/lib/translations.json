@@ -377,42 +377,42 @@
         {
           "question": "When is the wedding?",
           "answer": "Our wedding will take place during the weekend of Saturday, May 22nd, 2027.",
-          "tags": ["date"]
+          "tags": []
         },
         {
           "question": "Where is the wedding?",
           "answer": "The wedding will take place in Saint-Hilaire-de-Brethmas, at Le Comptoir Saint Hilaire, in the south of France.\n\nAll the celebrations will take place at the venue, so once you arrive, you’ll be able to fully relax and enjoy the entire weekend with us.\n\nOur civil ceremony will take place just outside the venue, still nearby. Some details are currently being finalized, and we’ll share more information closer to the date.",
-          "tags": ["venue"]
+          "tags": []
         },
         {
           "question": "What time should I arrive?",
           "answer": "The festivities will begin on Friday evening and continue until Sunday, with the main celebration taking place on Saturday afternoon and evening.\n\nA detailed schedule will be shared closer to the wedding weekend.",
-          "tags": ["arrival"]
+          "tags": []
         },
         {
           "question": "Is accommodation available?",
           "answer": "Once we have a better idea of the number of guests attending, we’ll be able to share more information regarding accommodation options and contact everyone individually.\n\nFor now, we kindly ask that you do not book accommodation on your own before speaking with us first, as we are currently organizing different housing options in order to make the weekend as easy and enjoyable as possible for everyone.\n\nMore details will be shared very soon.",
-          "tags": ["accommodation"]
+          "tags": []
         },
         {
           "question": "How do I RSVP?",
           "answer": "You can RSVP directly through our wedding website.\n\nIt really helps us with the organization, so we would truly appreciate hearing from you as soon as possible. We kindly ask for a first round of responses by September 22nd.",
-          "tags": ["rsvp"]
+          "tags": []
         },
         {
           "question": "Can I bring a plus one?",
           "answer": "Your invitation will specify whether a plus one has been included.\n\nWe would love to celebrate with everyone, but as space is limited, we hope you understand. If you would like to discuss your situation with us, please feel free to contact us directly.",
-          "tags": ["plusone"]
+          "tags": []
         },
         {
           "question": "Is the wedding indoors or outdoors?",
           "answer": "Parts of the wedding weekend will take place outdoors, so we recommend bringing comfortable shoes and a light layer for the evening, just in case.\n\nThe venue also has a pool, so feel free to bring your swimsuit if you’d like to enjoy a swim during the weekend.",
-          "tags": ["attire"]
+          "tags": []
         },
         {
           "question": "What about the music?",
           "answer": "We created a collaborative Spotify playlist where everyone can add their favorite songs.\n\nAs this will be a multicultural wedding, don’t hesitate to represent your country, share songs you love, and help inspire our DJ for the weekend.",
-          "tags": ["music"]
+          "tags": []
         }
       ]
     }

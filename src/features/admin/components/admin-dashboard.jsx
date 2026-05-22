@@ -567,7 +567,7 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-theme-support-1/20 overflow-hidden"
+              className="relative bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-theme-support-1/20 overflow-hidden"
             >
               <div className="p-6 border-b border-theme-support-1/10 flex justify-between items-center bg-theme-main-1/30">
                 <h2 className="text-xl font-serif font-bold">
@@ -581,8 +581,11 @@ export default function AdminDashboard() {
                 </button>
               </div>
 
-              <form onSubmit={handleAddGuest} className="p-8 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form
+                onSubmit={handleAddGuest}
+                className="p-8 space-y-6 max-h-[80vh] overflow-y-auto"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="space-y-1">
                     <label className="text-[10px] font-black uppercase opacity-40">
                       Guest Name
@@ -594,8 +597,8 @@ export default function AdminDashboard() {
                       onChange={(e) =>
                         setAddForm({ ...addForm, name: e.target.value })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
-                      placeholder="Full name of guest"
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                      placeholder="Full name"
                     />
                   </div>
 
@@ -609,8 +612,8 @@ export default function AdminDashboard() {
                       onChange={(e) =>
                         setAddForm({ ...addForm, email: e.target.value })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
-                      placeholder="guest@example.com (optional)"
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                      placeholder="guest@example.com"
                     />
                   </div>
 
@@ -623,7 +626,7 @@ export default function AdminDashboard() {
                       onChange={(e) =>
                         setAddForm({ ...addForm, language: e.target.value })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
                     >
                       <option value="en">English (EN)</option>
                       <option value="fr">French (FR)</option>
@@ -639,7 +642,7 @@ export default function AdminDashboard() {
                       onChange={(e) =>
                         setAddForm({ ...addForm, attending: e.target.value })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
                     >
                       <option value="MAYBE">Maybe</option>
                       <option value="ATTENDING">Attending</option>
@@ -657,8 +660,8 @@ export default function AdminDashboard() {
                       onChange={(e) =>
                         setAddForm({ ...addForm, country: e.target.value })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
-                      placeholder="e.g. France, USA"
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                      placeholder="e.g. France"
                     />
                   </div>
 
@@ -677,7 +680,7 @@ export default function AdminDashboard() {
                           children_count: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
                     />
                   </div>
                 </div>
@@ -692,47 +695,13 @@ export default function AdminDashboard() {
                     onChange={(e) =>
                       setAddForm({ ...addForm, features: e.target.value })
                     }
-                    className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
                     placeholder="VIP, FAMILY, VEGETARIAN"
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase opacity-40">
-                    Dietary Requirements
-                  </label>
-                  <textarea
-                    value={addForm.dietary_requirements}
-                    onChange={(e) =>
-                      setAddForm({
-                        ...addForm,
-                        dietary_requirements: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm h-20 resize-none"
-                    placeholder="Allergies, vegetarian, etc..."
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase opacity-40">
-                    Additional Info / Message
-                  </label>
-                  <textarea
-                    value={addForm.additional_info}
-                    onChange={(e) =>
-                      setAddForm({
-                        ...addForm,
-                        additional_info: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm h-20 resize-none"
-                    placeholder="Any other notes..."
-                  />
-                </div>
-
                 <div className="flex flex-col gap-4 p-4 bg-theme-support-3/20 rounded-2xl">
-                  <div className="space-y-1">
+                  <div className="flex items-center justify-between">
                     <label className="text-[10px] font-black uppercase opacity-40">
                       Plus Guests Allowed (Max 5)
                     </label>
@@ -753,15 +722,12 @@ export default function AdminDashboard() {
                           plus_guests: newPlusGuests.slice(0, val),
                         });
                       }}
-                      className="w-full px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                      className="w-20 px-4 py-2 rounded-xl bg-white border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm text-center"
                     />
                   </div>
 
                   {addForm.plus_guests_allowed > 0 && (
-                    <div className="space-y-3 pt-2 border-t border-theme-support-1/10">
-                      <p className="text-[10px] font-black uppercase opacity-40">
-                        Plus Guest Names
-                      </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-theme-support-1/10">
                       {Array.from({ length: addForm.plus_guests_allowed }).map(
                         (_, i) => (
                           <div key={i} className="space-y-1">
@@ -789,7 +755,7 @@ export default function AdminDashboard() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="w-full bg-theme-accent text-white py-4 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-theme-accent/90 transition-all"
+                  className="w-full bg-theme-accent text-white py-4 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 hover:bg-theme-accent/90 transition-all sticky bottom-0"
                 >
                   {saving ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
