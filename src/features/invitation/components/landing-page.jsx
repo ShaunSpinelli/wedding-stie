@@ -47,7 +47,7 @@ const LandingPage = ({ onOpenInvitation }) => {
           {/* Envelope Image Container */}
           <div className="relative">
             <img
-              src={getAssetPath("/images/green_envelope.png")}
+              src={getAssetPath("/images/green_envelope.webp")}
               alt="Envelope"
               className="w-[600px] sm:w-[700px] md:w-[800px] h-auto drop-shadow-2xl max-w-[150vw]"
             />
@@ -77,7 +77,7 @@ const LandingPage = ({ onOpenInvitation }) => {
                 className="w-32 h-32 sm:w-48 md:w-56 flex items-center justify-center"
               >
                 <img
-                  src={getAssetPath("/images/ms-seal.png")}
+                  src={getAssetPath("/images/ms-seal.webp")}
                   alt="Seal"
                   className="w-full h-full object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)]"
                 />

@@ -128,7 +128,7 @@ export default function Hero() {
           <div className="flex-shrink-0 border border-black p-1 bg-white shadow-sm mx-auto w-64 h-64 sm:w-80 sm:h-80 lg:w-72 lg:h-72 xl:w-80 xl:h-80 2xl:w-[28rem] 2xl:h-[28rem]">
             <img
               src={getAssetPath(
-                `/images/hero-sequence/hero-${currentImageIndex}.png`,
+                `/images/hero-sequence/hero-${currentImageIndex}.webp`,
               )}
               className="w-full h-full object-cover"
               alt="Wedding Couple"
@@ -173,7 +173,7 @@ export default function Hero() {
       <footer
         className="w-full aspect-[3/2] grid grid-cols-[7fr_3fr] bg-cover bg-center bg-no-repeat relative overflow-hidden"
         style={{
-          backgroundImage: `url(${getAssetPath("/images/invitation-bg.png")})`,
+          backgroundImage: `url(${getAssetPath("/images/invitation-bg.webp")})`,
         }}
       >
         {/* Overlay to ensure text readability */}

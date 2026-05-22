@@ -164,7 +164,7 @@ export default function GuestRSVP() {
               <div
                 className="absolute inset-0 z-0 pointer-events-none"
                 style={{
-                  backgroundImage: `url(${getAssetPath("/textures/rsvp-bg.png")})`,
+                  backgroundImage: `url(${getAssetPath("/textures/rsvp-bg.webp")})`,
                   backgroundSize: "100% 100%",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",

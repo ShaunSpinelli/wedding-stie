@@ -31,7 +31,7 @@ export default function TravelGuide() {
         >
           <div className="relative">
             <img
-              src={getAssetPath("/images/travel-map.png")}
+              src={getAssetPath("/images/travel-map.webp")}
               alt="How to get there"
               className="w-full h-auto"
             />

@@ -23,7 +23,7 @@ export default function LocationBanner() {
       >
         <div className="w-full h-full overflow-hidden">
           <img
-            src={getAssetPath("/images/location-venue.png")}
+            src={getAssetPath("/images/location-venue.webp")}
             alt="Wedding Venue"
             className="w-full h-full object-cover"
           />

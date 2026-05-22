@@ -47,7 +47,7 @@ export default function Location() {
               {/* Venue Image */}
               <div className="w-full max-w-xs rounded-2xl overflow-hidden">
                 <img
-                  src={getAssetPath("/comptoir-saint-hilaire.png")}
+                  src={getAssetPath("/comptoir-saint-hilaire.webp")}
                   alt="Comptoir Saint-Hilaire Venue"
                   className="w-full h-auto"
                 />
