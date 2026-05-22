@@ -90,7 +90,7 @@ const LandingPage = ({ onOpenInvitation }) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 1 }}
-            className="-mt-12 sm:-mt-16 md:-mt-20 text-center relative z-20"
+            className="-mt-24 sm:-mt-36 md:-mt-48 text-center relative z-20"
           >
             <p className="font-handwritten text-3xl md:text-4xl text-black/60 drop-shadow-sm">
               {t("landing.tap_to_open")}
