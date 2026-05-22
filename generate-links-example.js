@@ -18,7 +18,7 @@ function generateInvitationLink(
   baseUrl = "http://localhost:5173",
 ) {
   const encodedEmail = base64Encode(guestEmail);
-  return `${baseUrl}/${uid}?guest=${encodedEmail}`;
+  return `${baseUrl}?guest=${encodedEmail}`;
 }
 
 // ===== CONFIGURATION =====
