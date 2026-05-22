@@ -192,17 +192,17 @@ export default function Hero() {
 
             {/* Guest Greeting */}
             <div className="space-y-1 md:space-y-3">
-              <p className="text-black font-handwritten text-lg md:text-2xl lg:text-3xl">
+              <p className="text-black font-handwritten text-base md:text-2xl lg:text-3xl">
                 {t("hero.dear")}
               </p>
-              <h2 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-handwritten text-black leading-none">
+              <h2 className="text-xl sm:text-3xl md:text-6xl lg:text-7xl font-handwritten text-black leading-none">
                 {displayName}
               </h2>
             </div>
 
             {/* Invitation Text */}
             <div className="max-w-[280px] sm:max-w-[350px] md:max-w-[500px]">
-              <p className="font-handwritten text-lg sm:text-xl md:text-2xl lg:text-3xl text-black leading-tight whitespace-pre-line">
+              <p className="font-handwritten text-base sm:text-xl md:text-2xl lg:text-3xl text-black leading-tight whitespace-pre-line">
                 {t("hero.invitation_message")}
               </p>
             </div>
