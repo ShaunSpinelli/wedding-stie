@@ -26,22 +26,10 @@ async function getSpotifyToken() {
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
-    console.error("Spotify env variables missing:", {
-      clientId: !!clientId,
-      clientSecret: !!clientSecret,
-    });
     throw new Error("Spotify credentials missing in environment variables");
   }
 
-  let auth;
-  try {
-    // Revert to what was working for the user
-    auth = btoa(`${clientId}:${clientSecret}`);
-  } catch {
-    // Fallback if btoa is missing
-    auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
-  }
-
+  const auth = btoa(`${clientId}:${clientSecret}`);
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     headers: {
@@ -52,11 +40,9 @@ async function getSpotifyToken() {
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Spotify Auth Error Details:", errorText);
-    throw new Error(
-      `Failed to authenticate with Spotify: ${response.status} ${response.statusText}`,
-    );
+    const error = await response.text();
+    console.error("Spotify Auth Error:", error);
+    throw new Error("Failed to authenticate with Spotify");
   }
 
   const data = await response.json();
@@ -106,11 +92,8 @@ spotifyRoutes.get("/search", async (c) => {
 
     return c.json({ success: true, data: tracks });
   } catch (error) {
-    console.error("Spotify Search error full details:", error);
-    return c.json(
-      { success: false, error: error.message, stack: error.stack },
-      500,
-    );
+    console.error("Spotify Search error:", error.message);
+    return c.json({ success: false, error: error.message }, 500);
   }
 });
 
