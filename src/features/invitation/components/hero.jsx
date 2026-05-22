@@ -100,7 +100,7 @@ export default function Hero() {
     if (allNames.length === 2) return allNames.join(" & ");
 
     return (
-      allNames.slice(0, -1).join(", ") + " & " + allNames[allNames.length - 1]
+      allNames.slice(0, -1).join(",  ") + " & " + allNames[allNames.length - 1]
     );
   }, [guest, t]);
 

@@ -22,6 +22,7 @@ export default {
           "Biro Script",
           "Thesignature",
           "Nothing You Could Do",
+          "Dancing Script",
           "cursive",
         ],
       },
