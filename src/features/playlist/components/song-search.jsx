@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { Search, Music, Loader2, Check } from "lucide-react";
 import { searchSpotifyTracks } from "@/services/api";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/lib/language-context";
 
 export default function SongSearch({ onSelect, selectedSongId }) {
+  const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +57,7 @@ export default function SongSearch({ onSelect, selectedSongId }) {
         <input
           type="text"
           className="block w-full pl-10 pr-3 py-3 border border-theme-support-1/20 rounded-2xl leading-5 bg-white placeholder-theme-main-3/30 focus:outline-none focus:ring-2 focus:ring-theme-main-2/20 focus:border-theme-main-2 transition-all text-theme-main-3"
-          placeholder="Search for a song to add..."
+          placeholder={t("playlist.search_placeholder")}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length > 2 && setIsOpen(true)}

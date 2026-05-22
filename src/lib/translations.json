@@ -194,7 +194,11 @@
       "subtitle": "",
       "description": "",
       "request_title": "Add to the Playlist",
-      "request_description": "Search for a song you'd love to hear at the wedding."
+      "request_description": "Search for a song you'd love to hear at the wedding.",
+      "btn_change_song": "Change Song",
+      "btn_cancel": "Cancel",
+      "btn_spotify": "Open in Spotify",
+      "search_placeholder": "Search for a song to add..."
     },
     "hero": {
       "save_the_date": "Save the Date",
@@ -604,7 +608,11 @@
       "subtitle": "",
       "description": "",
       "request_title": "Contribuez à la Playlist",
-      "request_description": "Cherchez une chanson que vous aimeriez entendre au mariage."
+      "request_description": "Cherchez une chanson que vous aimeriez entendre au mariage.",
+      "btn_change_song": "Changer de chanson",
+      "btn_cancel": "Annuler",
+      "btn_spotify": "Ouvrir dans Spotify",
+      "search_placeholder": "Rechercher une chanson..."
     },
     "hero": {
       "save_the_date": "Réservez la date",

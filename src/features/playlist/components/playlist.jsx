@@ -131,7 +131,7 @@ export default function Playlist({ useAltBg = false }) {
                     className="inline-flex items-center gap-2 text-xs font-bold text-[#1DB954] uppercase tracking-widest hover:underline"
                   >
                     <Music className="w-3 h-3" />
-                    Open in Spotify
+                    {t("playlist.btn_spotify")}
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
@@ -139,7 +139,7 @@ export default function Playlist({ useAltBg = false }) {
                   onClick={() => setIsSearching(true)}
                   className="px-8 py-3 bg-white border border-theme-main-2/20 text-theme-main-2 rounded-full text-sm font-bold hover:bg-theme-main-2 hover:text-white transition-all shadow-sm"
                 >
-                  Change Song
+                  {t("playlist.btn_change_song")}
                 </button>
               </div>
             ) : (
@@ -154,7 +154,7 @@ export default function Playlist({ useAltBg = false }) {
                       onClick={() => setIsSearching(false)}
                       className="text-theme-main-3/40 text-xs hover:text-theme-main-3 transition-colors uppercase tracking-widest"
                     >
-                      Cancel
+                      {t("playlist.btn_cancel")}
                     </button>
                   </div>
                 )}
