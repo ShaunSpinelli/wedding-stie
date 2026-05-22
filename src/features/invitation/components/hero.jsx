@@ -171,7 +171,7 @@ export default function Hero() {
 
       {/* Details Section (Greeting & Countdown) */}
       <footer
-        className="w-full aspect-[3/2] grid grid-cols-2 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+        className="w-full aspect-[3/2] grid grid-cols-[7fr_3fr] bg-cover bg-center bg-no-repeat relative overflow-hidden"
         style={{
           backgroundImage: `url(${getAssetPath("/images/invitation-bg.png")})`,
         }}
