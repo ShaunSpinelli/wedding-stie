@@ -195,7 +195,7 @@ export default function Hero() {
               <p className="text-black font-handwritten text-base md:text-2xl lg:text-3xl">
                 {t("hero.dear")}
               </p>
-              <h2 className="text-xl sm:text-3xl md:text-6xl lg:text-7xl font-handwritten text-black leading-none">
+              <h2 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-handwritten text-black leading-none">
                 {displayName}
               </h2>
             </div>
