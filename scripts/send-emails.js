@@ -14,8 +14,8 @@ const DEFAULT_SLEEP_MS = 2000;
 
 // Email Subjects
 const SUBJECTS = {
-  EN: "You're Invited: The Spinelli Wedding",
-  FR: "Invitation: Le Mariage Spinelli",
+  EN: "You are invited to the Spinelli wedding",
+  FR: "Vous êtes invités au mariage Spinelli",
 };
 
 // Help message
