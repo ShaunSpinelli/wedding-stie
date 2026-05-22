@@ -239,7 +239,7 @@
     "travel": {
       "guide_title": "How to get there ?",
       "quick_guide_label": "The Easiest Way",
-      "step_plane": "Fly to Paris (CDG or ORY)",
+      "step_plane": "Fly into Paris (CDG or ORY). CDG is recommended for its direct train access to Nîmes.",
       "step_train": "Take the TGV train to Nîmes via",
       "step_accommodation": "Let us know your arrival time and we can help you organize the final part to the accommodation",
       "other_routes_note": "For other routes, please check the FAQ or reach out to us directly.",
@@ -377,37 +377,42 @@
         {
           "question": "When is the wedding?",
           "answer": "Our wedding will take place during the weekend of Saturday, May 22nd, 2027.",
-          "tags": []
+          "tags": ["date"]
         },
         {
           "question": "Where is the wedding?",
-          "answer": "The wedding will take place in Saint-Hilaire-de-Brethmas, at Le Comptoir Saint Hilaire, in the south of France.\n\nAll the celebrations will happen at the venue, so once you arrive, you’ll be able to fully relax and enjoy the entire weekend with us.\n\nOur civil ceremony will take place just outside the venue, still nearby. Some details are currently being finalized, and we’ll share more information closer to the date.",
-          "tags": []
+          "answer": "The wedding will take place in Saint-Hilaire-de-Brethmas, at Le Comptoir Saint Hilaire, in the south of France.\n\nAll the celebrations will take place at the venue, so once you arrive, you’ll be able to fully relax and enjoy the entire weekend with us.\n\nOur civil ceremony will take place just outside the venue, still nearby. Some details are currently being finalized, and we’ll share more information closer to the date.",
+          "tags": ["venue"]
         },
         {
           "question": "What time should I arrive?",
           "answer": "The festivities will begin on Friday evening and continue until Sunday, with the main celebration taking place on Saturday afternoon and evening.\n\nA detailed schedule will be shared closer to the wedding weekend.",
-          "tags": []
+          "tags": ["arrival"]
         },
         {
           "question": "Is accommodation available?",
-          "answer": "Once we have a better idea of the number of guests attending, we’ll be able to share more information regarding accommodation options and contact everyone individually.",
-          "tags": []
+          "answer": "Once we have a better idea of the number of guests attending, we’ll be able to share more information regarding accommodation options and contact everyone individually.\n\nFor now, we kindly ask that you do not book accommodation on your own before speaking with us first, as we are currently organizing different housing options in order to make the weekend as easy and enjoyable as possible for everyone.\n\nMore details will be shared very soon.",
+          "tags": ["accommodation"]
         },
         {
           "question": "How do I RSVP?",
-          "answer": "You can RSVP directly through our wedding website.\n\nIt really helps us with the organization, so we’d appreciate hearing from you as soon as possible. We kindly ask for a first round of responses by September 22nd.",
-          "tags": []
+          "answer": "You can RSVP directly through our wedding website.\n\nIt really helps us with the organization, so we would truly appreciate hearing from you as soon as possible. We kindly ask for a first round of responses by September 22nd.",
+          "tags": ["rsvp"]
         },
         {
           "question": "Can I bring a plus one?",
-          "answer": "Your invitation will specify whether a plus one has been included.\n\nWe would love to celebrate with everyone, but as space is limited, we hope you understand.",
-          "tags": []
+          "answer": "Your invitation will specify whether a plus one has been included.\n\nWe would love to celebrate with everyone, but as space is limited, we hope you understand. If you would like to discuss your situation with us, please feel free to contact us directly.",
+          "tags": ["plusone"]
         },
         {
           "question": "Is the wedding indoors or outdoors?",
           "answer": "Parts of the wedding weekend will take place outdoors, so we recommend bringing comfortable shoes and a light layer for the evening, just in case.\n\nThe venue also has a pool, so feel free to bring your swimsuit if you’d like to enjoy a swim during the weekend.",
-          "tags": []
+          "tags": ["attire"]
+        },
+        {
+          "question": "What about the music?",
+          "answer": "We created a collaborative Spotify playlist where everyone can add their favorite songs.\n\nAs this will be a multicultural wedding, don’t hesitate to represent your country, share songs you love, and help inspire our DJ for the weekend.",
+          "tags": ["music"]
         }
       ]
     }
@@ -652,7 +657,7 @@
     "travel": {
       "guide_title": "Comment s'y rendre ?",
       "quick_guide_label": "Le moyen le plus simple",
-      "step_plane": "Vol vers Paris (CDG ou ORY)",
+      "step_plane": "Atterrissez à Paris (CDG ou ORY). CDG est recommandé pour son accès direct au TGV vers Nîmes.",
       "step_train": "Prendre le TGV vers Nîmes via",
       "step_accommodation": "Faites-nous part de votre heure d'arrivée et nous pourrons vous aider à organiser la dernière partie du trajet jusqu'à l'hébergement",
       "other_routes_note": "Pour d'autres itinéraires, veuillez consulter la FAQ ou nous contacter directement.",
@@ -794,32 +799,37 @@
         },
         {
           "question": "Où se déroule le mariage ?",
-          "answer": "Le mariage se déroulera à Saint-Hilaire-de-Brethmas, au Comptoir Saint Hilaire, dans le sud de la France.\n\nToutes les festivités auront lieu sur le domaine, afin que vous puissiez pleinement profiter du week-end avec nous une fois arrivés sur place.\n\nNotre cérémonie civile se déroulera à l’extérieur du domaine, à proximité. Certains détails sont encore en cours d’organisation et nous partagerons davantage d’informations prochainement.",
+          "answer": "Le mariage se déroulera à Saint-Hilaire-de-Brethmas, au Comptoir Saint Hilaire, dans le sud de la France.\n\nToutes les festivités auront lieu sur le domaine afin que vous puissiez pleinement profiter du week-end avec nous une fois arrivés sur place.\n\nNotre cérémonie civile se déroulera à l’extérieur du domaine, à proximité. Certains détails sont encore en cours d’organisation et nous partagerons davantage d’informations à l’approche du mariage.",
           "tags": []
         },
         {
           "question": "À quelle heure faut-il arriver ?",
-          "answer": "Les festivités commenceront le vendredi soir et se termineront le dimanche, avec la journée principale du mariage le samedi après-midi et soir.\n\nUn programme détaillé sera partagé à l’approche du week-end du mariage.",
+          "answer": "Les festivités commenceront le vendredi soir et se termineront le dimanche, avec la journée principale du mariage le samedi après-midi et soir.\n\nUn programme détaillé sera communiqué à l’approche du week-end du mariage.",
           "tags": []
         },
         {
           "question": "Y aura-t-il des hébergements disponibles ?",
-          "answer": "Dès que nous aurons une meilleure idée du nombre de personnes présentes, nous pourrons partager davantage d’informations concernant les hébergements et contacter chacun individuellement.",
+          "answer": "Dès que nous aurons une meilleure idée du nombre de personnes présentes, nous pourrons partager davantage d’informations concernant les possibilités d’hébergement et contacter chacun individuellement.\n\nPour le moment, nous vous demandons de ne pas réserver de logement de votre côté avant d’en avoir discuté avec nous, car nous sommes actuellement en train d’organiser différentes solutions d’hébergement afin de faciliter le séjour de tout le monde.\n\nPlus d’informations seront partagées très prochainement.",
           "tags": []
         },
         {
           "question": "Comment confirmer ma présence ?",
-          "answer": "Vous pouvez confirmer votre présence directement via notre site de mariage.\n\nCela nous aide énormément dans l’organisation, alors n’hésitez pas à nous répondre dès que possible. Nous aimerions recevoir une première vague de réponses avant le 22 septembre.",
+          "answer": "Vous pouvez confirmer votre présence directement via notre site de mariage.\n\nCela nous aide énormément dans l’organisation, alors nous apprécierions vraiment d’avoir votre réponse dès que possible. Nous aimerions recevoir une première vague de réponses avant le 22 septembre.",
           "tags": []
         },
         {
           "question": "Puis-je venir accompagné(e) ?",
-          "answer": "Votre invitation précisera si un accompagnant est inclus.\n\nNous aimerions pouvoir célébrer avec tout le monde, mais les places étant limitées, nous espérons que vous comprendrez.",
+          "answer": "Votre invitation précisera si un accompagnant est inclus.\n\nNous aimerions pouvoir célébrer avec tout le monde, mais les places étant limitées, nous espérons que vous comprendrez. Si vous souhaitez en discuter avec nous, n’hésitez pas à nous contacter directement.",
           "tags": []
         },
         {
           "question": "Le mariage aura-t-il lieu en intérieur ou en extérieur ?",
           "answer": "Une partie du week-end se déroulera en extérieur, nous vous conseillons donc de prévoir des chaussures confortables ainsi qu’une petite veste ou un pull pour le soir, au cas où.\n\nLe domaine dispose également d’une piscine, alors n’hésitez pas à apporter votre maillot de bain si vous souhaitez en profiter pendant le week-end.",
+          "tags": []
+        },
+        {
+          "question": "Et pour la musique ?",
+          "answer": "Nous avons créé une playlist Spotify collaborative sur laquelle chacun peut ajouter ses chansons préférées.\n\nComme il s’agira d’un mariage multiculturel, n’hésitez pas à représenter votre pays, partager des morceaux que vous aimez et inspirer notre DJ pour le week-end.",
           "tags": []
         }
       ]
