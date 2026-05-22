@@ -375,53 +375,38 @@
       "subtitle": "Everything you need to know",
       "items": [
         {
-          "question": "Where and when will the wedding take place?",
-          "answer": "TODO: Add answer",
+          "question": "When is the wedding?",
+          "answer": "Our wedding will take place during the weekend of Saturday, May 22nd, 2027.",
           "tags": []
         },
         {
-          "question": "What time should guests arrive?",
-          "answer": "TODO: Add answer (arrival time vs ceremony time)",
+          "question": "Where is the wedding?",
+          "answer": "The wedding will take place in Saint-Hilaire-de-Brethmas, at Le Comptoir Saint Hilaire, in the south of France.\n\nAll the celebrations will happen at the venue, so once you arrive, you’ll be able to fully relax and enjoy the entire weekend with us.\n\nOur civil ceremony will take place just outside the venue, still nearby. Some details are currently being finalized, and we’ll share more information closer to the date.",
           "tags": []
         },
         {
-          "question": "Are the wedding and reception at the same location?",
-          "answer": "TODO: Add answer",
+          "question": "What time should I arrive?",
+          "answer": "The festivities will begin on Friday evening and continue until Sunday, with the main celebration taking place on Saturday afternoon and evening.\n\nA detailed schedule will be shared closer to the wedding weekend.",
           "tags": []
         },
         {
-          "question": "Is there accommodation available for the weekend?",
-          "answer": "TODO: Add answer (on-site or Airbnb nearby)",
+          "question": "Is accommodation available?",
+          "answer": "Once we have a better idea of the number of guests attending, we’ll be able to share more information regarding accommodation options and contact everyone individually.",
           "tags": []
         },
         {
-          "question": "How do I get to the wedding venue?",
-          "answer": "TODO: Add answer (airport, train station, car recommended)",
+          "question": "How do I RSVP?",
+          "answer": "You can RSVP directly through our wedding website.\n\nIt really helps us with the organization, so we’d appreciate hearing from you as soon as possible. We kindly ask for a first round of responses by September 22nd.",
           "tags": []
         },
         {
-          "question": "Is there a dress code?",
-          "answer": "TODO: Add answer",
+          "question": "Can I bring a plus one?",
+          "answer": "Your invitation will specify whether a plus one has been included.\n\nWe would love to celebrate with everyone, but as space is limited, we hope you understand.",
           "tags": []
         },
         {
-          "question": "Will the wedding be in French, English, or bilingual?",
-          "answer": "TODO: Add answer",
-          "tags": []
-        },
-        {
-          "question": "Are children invited?",
-          "answer": "TODO: Add answer",
-          "tags": []
-        },
-        {
-          "question": "When is the RSVP deadline?",
-          "answer": "TODO: Add answer",
-          "tags": []
-        },
-        {
-          "question": "Will there be other events during the weekend?",
-          "answer": "TODO: Add answer (e.g., welcome BBQ, farewell brunch)",
+          "question": "Is the wedding indoors or outdoors?",
+          "answer": "Parts of the wedding weekend will take place outdoors, so we recommend bringing comfortable shoes and a light layer for the evening, just in case.\n\nThe venue also has a pool, so feel free to bring your swimsuit if you’d like to enjoy a swim during the weekend.",
           "tags": []
         }
       ]
@@ -630,7 +615,7 @@
       "dear": "Cher/Chère",
       "guest_title": "Notre invité(e) d'honneur",
       "guest_name_fallback": "Nom de l'invité",
-      "invitation_message": "On se marie !!\n\nOn espère que vous pourrez venir !\n\nAve tout notre amour, Shaun & Manon\n\nbisous",
+      "invitation_message": "On se marie !! On espère que vous pourrez venir !\nAve tout notre amour, Shaun & Manon\nbisous",
       "celebration_message": "Nous serions ravis de célébrer cette journée spéciale avec vous.",
       "countdown": {
         "days": "jours",
@@ -664,7 +649,6 @@
       "banner_text": "Célébrez avec nous dans le magnifique sud de la France",
       "venue_address_label": "Adresse"
     },
-
     "travel": {
       "guide_title": "Comment s'y rendre ?",
       "quick_guide_label": "Le moyen le plus simple",
@@ -804,53 +788,38 @@
       "subtitle": "Tout ce que vous devez savoir",
       "items": [
         {
-          "question": "Où et quand aura lieu le mariage ?",
-          "answer": "TODO: Ajouter la réponse",
+          "question": "Quand aura lieu le mariage ?",
+          "answer": "Notre mariage aura lieu le week-end du samedi 22 mai 2027.",
           "tags": []
         },
         {
-          "question": "À quelle heure les invités doivent-ils arriver ?",
-          "answer": "TODO: Ajouter la réponse (heure d’arrivée vs heure de cérémonie)",
+          "question": "Où se déroule le mariage ?",
+          "answer": "Le mariage se déroulera à Saint-Hilaire-de-Brethmas, au Comptoir Saint Hilaire, dans le sud de la France.\n\nToutes les festivités auront lieu sur le domaine, afin que vous puissiez pleinement profiter du week-end avec nous une fois arrivés sur place.\n\nNotre cérémonie civile se déroulera à l’extérieur du domaine, à proximité. Certains détails sont encore en cours d’organisation et nous partagerons davantage d’informations prochainement.",
           "tags": []
         },
         {
-          "question": "Le mariage et la réception sont-ils au même endroit ?",
-          "answer": "TODO: Ajouter la réponse",
+          "question": "À quelle heure faut-il arriver ?",
+          "answer": "Les festivités commenceront le vendredi soir et se termineront le dimanche, avec la journée principale du mariage le samedi après-midi et soir.\n\nUn programme détaillé sera partagé à l’approche du week-end du mariage.",
           "tags": []
         },
         {
-          "question": "Y a-t-il des logements disponibles pour le week-end ?",
-          "answer": "TODO: Ajouter la réponse (sur place ou Airbnb autour)",
+          "question": "Y aura-t-il des hébergements disponibles ?",
+          "answer": "Dès que nous aurons une meilleure idée du nombre de personnes présentes, nous pourrons partager davantage d’informations concernant les hébergements et contacter chacun individuellement.",
           "tags": []
         },
         {
-          "question": "Comment se rendre au lieu du mariage ?",
-          "answer": "TODO: Ajouter la réponse (aéroport, gare, voiture recommandée)",
+          "question": "Comment confirmer ma présence ?",
+          "answer": "Vous pouvez confirmer votre présence directement via notre site de mariage.\n\nCela nous aide énormément dans l’organisation, alors n’hésitez pas à nous répondre dès que possible. Nous aimerions recevoir une première vague de réponses avant le 22 septembre.",
           "tags": []
         },
         {
-          "question": "Y a-t-il un dress code ?",
-          "answer": "TODO: Ajouter la réponse",
+          "question": "Puis-je venir accompagné(e) ?",
+          "answer": "Votre invitation précisera si un accompagnant est inclus.\n\nNous aimerions pouvoir célébrer avec tout le monde, mais les places étant limitées, nous espérons que vous comprendrez.",
           "tags": []
         },
         {
-          "question": "Le mariage sera-t-il en français, en anglais ou bilingue ?",
-          "answer": "TODO: Ajouter la réponse",
-          "tags": []
-        },
-        {
-          "question": "Les enfants sont-ils invités ?",
-          "answer": "TODO: Ajouter la réponse",
-          "tags": []
-        },
-        {
-          "question": "Jusqu’à quand devons-nous confirmer notre présence (RSVP) ?",
-          "answer": "TODO: Ajouter la réponse",
-          "tags": []
-        },
-        {
-          "question": "Y aura-t-il des événements pendant le week-end ?",
-          "answer": "TODO: Ajouter la réponse (par exemple : welcome BBQ, brunch du lendemain)",
+          "question": "Le mariage aura-t-il lieu en intérieur ou en extérieur ?",
+          "answer": "Une partie du week-end se déroulera en extérieur, nous vous conseillons donc de prévoir des chaussures confortables ainsi qu’une petite veste ou un pull pour le soir, au cas où.\n\nLe domaine dispose également d’une piscine, alors n’hésitez pas à apporter votre maillot de bain si vous souhaitez en profiter pendant le week-end.",
           "tags": []
         }
       ]
