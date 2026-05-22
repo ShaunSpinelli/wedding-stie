@@ -60,7 +60,7 @@ export default function Hero() {
   const { guest } = useInvitation();
 
   const [currentImageIndex, setCurrentImageIndex] = useState(1);
-  const totalImages = 8;
+  const totalImages = 4;
 
   useEffect(() => {
     const interval = setInterval(() => {
