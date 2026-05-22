@@ -23,6 +23,7 @@ export default {
           "Thesignature",
           "Nothing You Could Do",
           "Dancing Script",
+          "Cedarville Cursive",
           "cursive",
         ],
       },

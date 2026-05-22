@@ -97,10 +97,24 @@ export default function Hero() {
     const allNames = [mainName, ...plusNames].filter(Boolean);
 
     if (allNames.length <= 1) return mainName;
-    if (allNames.length === 2) return allNames.join(" & ");
 
     return (
-      allNames.slice(0, -1).join(",  ") + " & " + allNames[allNames.length - 1]
+      <>
+        {allNames.map((name, index) => (
+          <span key={index}>
+            {name}
+            {index < allNames.length - 2 && (
+              <span
+                className="px-1"
+                style={{ fontFamily: "'Cedarville Cursive', cursive" }}
+              >
+                ,
+              </span>
+            )}
+            {index === allNames.length - 2 && " & "}
+          </span>
+        ))}
+      </>
     );
   }, [guest, t]);
 
@@ -191,11 +205,11 @@ export default function Hero() {
             <div className="w-12 md:w-16 h-px bg-black/10" />
 
             {/* Guest Greeting */}
-            <div className="space-y-1 md:space-y-3">
+            <div className="space-y-1 md:space-y-3 pb-2">
               <p className="text-black font-handwritten text-base md:text-2xl lg:text-3xl">
                 {t("hero.dear")}
               </p>
-              <h2 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-handwritten text-black leading-none">
+              <h2 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-handwritten text-black leading-tight">
                 {displayName}
               </h2>
             </div>
