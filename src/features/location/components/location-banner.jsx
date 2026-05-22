@@ -11,21 +11,21 @@ export default function LocationBanner() {
 
   // --- CONFIGURATION: Adjust mobile image height here ---
   // Increase this value to make the image taller on mobile (e.g., "50vh", "400px")
-  const mobileHeight = "35vh";
+  const mobileHeight = "50vh";
   // -----------------------------------------------------
 
   return (
     <section id="location" className="bg-white pt-10 md:pt-20">
       {/* Full-width Image Section */}
       <div
-        className="relative w-full md:h-[80vh]"
+        className="relative w-full md:h-[95vh]"
         style={{ height: window.innerWidth < 768 ? mobileHeight : undefined }}
       >
         <div className="w-full h-full overflow-hidden">
           <img
-            src={getAssetPath("/images/venue-drone.webp")}
-            alt="Wedding Venue Drone View"
-            className="w-full h-full object-cover grayscale"
+            src={getAssetPath("/images/location-venue.png")}
+            alt="Wedding Venue"
+            className="w-full h-full object-cover"
           />
         </div>
 
