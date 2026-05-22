@@ -23,13 +23,12 @@
       // browser's history using window.history.replaceState(...),
       // which will cause the browser to stay on the current page without refreshing
       (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
+        var urlParams = new URLSearchParams(l.search);
+        var p = urlParams.get('p');
+        var q = urlParams.get('q');
+        if (p) {
+          var decoded = p + (q ? '?' + q.replace(/~and~/g, '&') : '') + l.hash;
+          window.history.replaceState(null, null, decoded);
         }
       }(window.location))
     </script>

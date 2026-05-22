@@ -19,12 +19,10 @@ export function generateInvitationLink(uid, guestEmail, baseUrl) {
 
   // Ensure base starts and ends correctly
   const cleanBase = base.endsWith("/") ? base : `${base}/`;
-  const cleanUid = uid.startsWith("/") ? uid.slice(1) : uid;
-
   const url = baseUrl ? base : `${origin}${cleanBase}`;
   const encodedEmail = safeBase64.encode(guestEmail);
 
-  return `${url}${cleanUid}?guest=${encodedEmail}`;
+  return `${url}?guest=${encodedEmail}`;
 }
 
 /**

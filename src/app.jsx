@@ -53,8 +53,8 @@ function App() {
 
   // Check if we are on the admin path (handle both with and without basename)
   const isAdminPath =
-    location.pathname === "/admin" ||
-    location.pathname === `${import.meta.env.BASE_URL}admin` ||
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith(`${import.meta.env.BASE_URL}admin`) ||
     location.pathname === "admin";
 
   // Use config from API if available, otherwise fall back to static config
