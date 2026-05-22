@@ -8,15 +8,15 @@ export default function TravelGuide() {
   return (
     <section
       id="travel"
-      className="py-12 md:py-24 px-4 bg-white overflow-hidden"
+      className="pb-6 md:pb-12 pt-0 px-4 bg-white overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto text-center space-y-12">
+      <div className="max-w-4xl mx-auto text-center space-y-2">
         <motion.h2
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          className="font-handwritten text-3xl md:text-5xl lg:text-6xl text-[#bc2c1a] leading-tight px-4"
+          className="font-handwritten text-4xl md:text-5xl lg:text-6xl text-[#bc2c1a] leading-tight px-4 pt-8"
         >
           {t("travel.guide_title")}
         </motion.h2>
@@ -27,7 +27,7 @@ export default function TravelGuide() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 1 }}
-          className="relative max-w-2xl mx-auto"
+          className="relative max-w-lg mx-auto"
         >
           <div className="relative overflow-hidden">
             <img

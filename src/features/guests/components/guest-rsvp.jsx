@@ -129,7 +129,7 @@ export default function GuestRSVP() {
     <section
       id="rsvp"
       ref={rsvpRef}
-      className="py-12 md:py-24 relative overflow-hidden bg-white"
+      className="pt-6 md:pt-12 pb-12 md:pb-24 relative overflow-hidden bg-white"
     >
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -137,7 +137,7 @@ export default function GuestRSVP() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center space-y-6 mb-16"
+          className="text-center space-y-6 mb-4"
         >
           <motion.h2
             initial={{ opacity: 0, scale: 0.9 }}
