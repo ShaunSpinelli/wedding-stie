@@ -199,7 +199,7 @@
     "hero": {
       "save_the_date": "Save the Date",
       "married_announcement": "Are getting married",
-      "dear": "Dear:",
+      "dear": "Dear",
       "guest_title": "Our Honored Guest",
       "guest_name_fallback": "Guest Name",
       "invitation_message": "You are invited to our wedding",
@@ -627,7 +627,7 @@
     "hero": {
       "save_the_date": "Réservez la date",
       "married_announcement": "Se marient",
-      "dear": "Cher/Chère:",
+      "dear": "Cher/Chère",
       "guest_title": "Notre invité(e) d'honneur",
       "guest_name_fallback": "Nom de l'invité",
       "invitation_message": "Vous êtes invités à notre mariage",

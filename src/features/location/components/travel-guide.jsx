@@ -16,7 +16,7 @@ export default function TravelGuide() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          className="font-handwritten text-4xl md:text-5xl lg:text-6xl text-[#bc2c1a] leading-tight px-4 pt-8"
+          className="font-handwritten text-4xl md:text-5xl lg:text-6xl text-[#bc2c1a] leading-tight px-4 pt-8 relative z-10"
         >
           {t("travel.guide_title")}
         </motion.h2>
@@ -27,19 +27,13 @@ export default function TravelGuide() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 1 }}
-          className="relative max-w-lg mx-auto"
+          className="relative max-w-lg mx-auto -mt-8"
         >
-          <div className="relative overflow-hidden">
+          <div className="relative">
             <img
               src={getAssetPath("/images/travel-map.png")}
-              alt="How to get there map"
-              className="w-full h-auto grayscale"
-              style={{
-                maskImage:
-                  "radial-gradient(circle, black 60%, transparent 95%)",
-                WebkitMaskImage:
-                  "radial-gradient(circle, black 60%, transparent 95%)",
-              }}
+              alt="How to get there"
+              className="w-full h-auto"
             />
           </div>
         </motion.div>
