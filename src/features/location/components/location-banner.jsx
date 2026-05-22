@@ -11,7 +11,7 @@ export default function LocationBanner() {
 
   // --- CONFIGURATION: Adjust mobile image height here ---
   // Increase this value to make the image taller on mobile (e.g., "50vh", "400px")
-  const mobileHeight = "50vh";
+  const mobileHeight = "45vh";
   // -----------------------------------------------------
 
   return (
