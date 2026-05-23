@@ -199,24 +199,24 @@ export default function Hero() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="space-y-4 md:space-y-10"
+            className="space-y-1 md:space-y-2"
           >
             {/* Subtle decorative divider */}
             <div className="w-12 md:w-16 h-px bg-black/10" />
 
             {/* Guest Greeting */}
-            <div className="space-y-1 md:space-y-3 pb-2">
-              <p className="text-black font-handwritten text-base md:text-2xl lg:text-3xl">
+            <div className="space-y-0">
+              <p className="text-black font-handwritten text-base md:text-2xl lg:text-3xl leading-none">
                 {t("hero.dear")}
               </p>
-              <h2 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-handwritten text-black leading-tight">
+              <h2 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-handwritten text-black leading-[1.0]">
                 {displayName}
               </h2>
             </div>
 
             {/* Invitation Text */}
             <div className="max-w-[280px] sm:max-w-[350px] md:max-w-[500px]">
-              <p className="font-handwritten text-base sm:text-xl md:text-2xl lg:text-3xl text-black leading-tight whitespace-pre-line">
+              <p className="font-handwritten text-base sm:text-xl md:text-2xl lg:text-3xl text-black leading-[1.0] whitespace-pre-line">
                 {t("hero.invitation_message")}
               </p>
             </div>

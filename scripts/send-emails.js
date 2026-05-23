@@ -15,7 +15,7 @@ const DEFAULT_SLEEP_MS = 2000;
 // Email Subjects
 const SUBJECTS = {
   EN: "Pack your bags… you’re going to France 🇫🇷",
-  FR: "Oups… j’épouse un anglophone. Téléchargez Duolingo !",
+  FR: "Oups… Duolingo devient obligatoire 🇿🇦🇦🇺",
 };
 
 // Help message
