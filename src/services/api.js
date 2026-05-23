@@ -270,6 +270,23 @@ export async function searchSpotifyTracks(query) {
 }
 
 /**
+ * Get multiple track details from Spotify in one request
+ * @param {string} ids - Comma-separated Spotify track IDs
+ * @returns {Promise<object>}
+ */
+export async function fetchSpotifyTracksBatch(ids) {
+  const url = new URL(`${API_URL}/api/spotify/tracks`);
+  url.searchParams.set("ids", ids);
+
+  const response = await fetch(url, { headers: getHeaders() });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to fetch Spotify tracks batch");
+  }
+  return response.json();
+}
+
+/**
  * Get track details from Spotify
  * @param {string} id - Spotify track ID
  * @returns {Promise<object>}

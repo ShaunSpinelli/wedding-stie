@@ -98,6 +98,56 @@ spotifyRoutes.get("/search", async (c) => {
 });
 
 /**
+ * GET /api/spotify/tracks
+ * Get details for multiple tracks
+ * Query params: ids (comma-separated list of spotify track IDs, max 50)
+ */
+spotifyRoutes.get("/tracks", async (c) => {
+  const idsParam = c.req.query("ids");
+  if (!idsParam) {
+    return c.json({ success: false, error: "Track IDs required" }, 400);
+  }
+
+  // Spotify API allows max 50 IDs per request
+  const ids = idsParam.split(",").slice(0, 50).join(",");
+
+  try {
+    const token = await getSpotifyToken();
+    const response = await fetch(
+      `https://api.spotify.com/v1/tracks?ids=${ids}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Spotify bulk track request failed");
+    }
+
+    const data = await response.json();
+
+    // Map tracks, handling potential nulls if an ID was invalid
+    const tracks = (data.tracks || [])
+      .filter((track) => track !== null)
+      .map((track) => ({
+        id: track.id,
+        name: track.name,
+        artist: track.artists.map((a) => a.name).join(", "),
+        album: track.album.name,
+        imageUrl: track.album.images[0]?.url,
+        externalUrl: track.external_urls.spotify,
+      }));
+
+    return c.json({ success: true, data: tracks });
+  } catch (error) {
+    console.error("Spotify Bulk Tracks error:", error.message);
+    return c.json({ success: false, error: error.message }, 500);
+  }
+});
+
+/**
  * GET /api/spotify/tracks/:id
  * Get details for a specific track
  */

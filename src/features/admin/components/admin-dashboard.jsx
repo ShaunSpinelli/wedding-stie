@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
@@ -20,6 +20,7 @@ import {
   Link as LinkIcon,
   Check,
   Download,
+  Minus,
 } from "lucide-react";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import {
@@ -28,16 +29,16 @@ import {
   updateGuest,
   createGuest,
   deleteGuest,
+  fetchSpotifyTracksBatch,
 } from "@/services/api";
-import { useLanguage } from "@/lib/language-context";
 import { Link, useNavigate } from "react-router-dom";
 import { generateInvitationLink } from "@/utils/generate-invitation-link";
 
 export default function AdminDashboard() {
   const { uid } = useInvitation();
-  const { t } = useLanguage();
   const navigate = useNavigate();
   const [guests, setGuests] = useState([]);
+  const [guestSongs, setGuestSongs] = useState({});
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState(null);
 
@@ -73,7 +74,7 @@ export default function AdminDashboard() {
     return [];
   };
 
-  const loadGuests = async () => {
+  const loadGuests = useCallback(async () => {
     try {
       const response = await fetchGuests(uid);
       if (response.success) {
@@ -84,11 +85,53 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [uid]);
 
   useEffect(() => {
     if (uid) loadGuests();
-  }, [uid]);
+  }, [uid, loadGuests]);
+
+  // Batch fetch song details
+  useEffect(() => {
+    const songIdsToFetch = guests
+      .map((g) => g.spotify_song_id)
+      .filter((id) => id && !guestSongs[id]);
+
+    if (songIdsToFetch.length === 0) return;
+
+    // Get unique IDs
+    const uniqueIds = [...new Set(songIdsToFetch)];
+
+    const fetchBatch = async () => {
+      try {
+        // Spotify limit is 50, but we'll do batches of 50
+        const batches = [];
+        for (let i = 0; i < uniqueIds.length; i += 50) {
+          batches.push(uniqueIds.slice(i, i + 50).join(","));
+        }
+
+        const results = await Promise.all(
+          batches.map((batch) => fetchSpotifyTracksBatch(batch)),
+        );
+
+        setGuestSongs((prev) => {
+          const newSongsMap = { ...prev };
+          results.forEach((res) => {
+            if (res.success && res.data) {
+              res.data.forEach((track) => {
+                newSongsMap[track.id] = track;
+              });
+            }
+          });
+          return newSongsMap;
+        });
+      } catch (err) {
+        console.error("Failed to fetch song batch", err);
+      }
+    };
+
+    fetchBatch();
+  }, [guests, guestSongs]);
 
   const handleLogout = () => {
     setAdminSecret("");
@@ -264,11 +307,11 @@ export default function AdminDashboard() {
   const getStatusIcon = (status) => {
     switch (status) {
       case "ATTENDING":
-        return <CheckCircle className="w-4 h-4 text-emerald-500" />;
+        return <Check className="w-4 h-4 text-emerald-500" />;
       case "NOT_ATTENDING":
-        return <XCircle className="w-4 h-4 text-theme-main-3" />;
+        return <X className="w-4 h-4 text-rose-500" />;
       default:
-        return <HelpCircle className="w-4 h-4 text-theme-main-2" />;
+        return <Minus className="w-4 h-4 text-theme-main-3 opacity-40" />;
     }
   };
 
@@ -391,7 +434,8 @@ export default function AdminDashboard() {
               <thead>
                 <tr className="bg-theme-main-1/30 text-theme-accent font-bold text-[10px] uppercase tracking-widest">
                   <th className="px-6 py-5">Guest Info</th>
-                  <th className="px-6 py-5">RSVP Status</th>
+                  <th className="px-6 py-5 text-center">RSVP</th>
+                  <th className="px-6 py-5">Song Choice</th>
                   <th className="px-6 py-5">Dietary</th>
                   <th className="px-6 py-5">Notes</th>
                   <th className="px-6 py-5">Plus One</th>
@@ -419,20 +463,36 @@ export default function AdminDashboard() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-theme-support-1/20 shadow-sm">
+                      <div className="flex items-center justify-center">
                         {getStatusIcon(guest.attending)}
-                        <span className="text-[10px] font-bold">
-                          {t(
-                            `wishes.attendance.${guest.attending.toLowerCase()}`,
-                          )}
-                        </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
+                      {guest.spotify_song_id ? (
+                        <div className="flex flex-col max-w-[150px]">
+                          <span className="font-bold truncate">
+                            {guestSongs[guest.spotify_song_id]?.name || (
+                              <span className="opacity-30 italic animate-pulse">
+                                Loading...
+                              </span>
+                            )}
+                          </span>
+                          <span className="text-[10px] opacity-60 truncate">
+                            {guestSongs[guest.spotify_song_id]?.artist}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="opacity-10">—</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
                       {guest.dietary_requirements ? (
-                        <div className="flex items-center gap-2 text-xs text-theme-main-3">
-                          <Utensils className="w-3 h-3 opacity-40" />
-                          <span className="truncate max-w-[150px]">
+                        <div
+                          className="flex items-center gap-2 text-xs text-theme-main-3 cursor-help"
+                          title={guest.dietary_requirements}
+                        >
+                          <Utensils className="w-3 h-3 opacity-40 flex-shrink-0" />
+                          <span className="truncate max-w-[80px]">
                             {guest.dietary_requirements}
                           </span>
                         </div>
@@ -442,9 +502,12 @@ export default function AdminDashboard() {
                     </td>
                     <td className="px-6 py-4">
                       {guest.additional_info ? (
-                        <div className="flex items-center gap-2 text-xs text-theme-main-3 italic">
-                          <HelpCircle className="w-3 h-3 opacity-40" />
-                          <span className="truncate max-w-[150px]">
+                        <div
+                          className="flex items-center gap-2 text-xs text-theme-main-3 italic cursor-help"
+                          title={guest.additional_info}
+                        >
+                          <HelpCircle className="w-3 h-3 opacity-40 flex-shrink-0" />
+                          <span className="truncate max-w-[80px]">
                             {guest.additional_info}
                           </span>
                         </div>
