@@ -14,8 +14,8 @@ const DEFAULT_SLEEP_MS = 2000;
 
 // Email Subjects
 const SUBJECTS = {
-  EN: "You are invited to the Spinelli wedding",
-  FR: "Vous êtes invités au mariage Spinelli",
+  EN: "Pack your bags… you’re going to France 🇫🇷",
+  FR: "Oups… j’épouse un anglophone. Téléchargez Duolingo !",
 };
 
 // Help message
