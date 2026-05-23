@@ -78,33 +78,49 @@ export const uidParamSchema = z.object({
 });
 
 /**
- * Guest creation and update schemas
+ * Guest base schema (without defaults)
  */
-export const createGuestSchema = z
-  .object({
-    name: z.string().min(1, "Name is required").max(255).trim(),
-    email: z
-      .string()
-      .email("Invalid email address")
-      .optional()
-      .nullable()
-      .or(z.literal("")),
-    language: z.enum(["en", "fr"]).default("en"),
-    attending: z.enum(["ATTENDING", "NOT_ATTENDING", "MAYBE"]).default("MAYBE"),
-    country: z.string().max(100).optional().nullable().or(z.literal("")),
-    features: z.array(z.string()).default([]),
-    dietary_requirements: z.string().optional().nullable().or(z.literal("")),
-    has_plus_one: z.boolean().default(false),
-    plus_one_name: z.string().max(255).optional().nullable().or(z.literal("")),
-    plus_guests_allowed: z.number().int().min(0).max(5).default(0),
-    plus_guests: z.array(z.string().max(255)).max(5).default([]),
-    children_count: z.number().int().min(0).default(0),
-    additional_info: z.string().optional().nullable().or(z.literal("")),
-    spotify_song_id: z.string().optional().nullable().or(z.literal("")),
+const guestBaseSchema = z.object({
+  name: z.string().min(1, "Name is required").max(255).trim(),
+  email: z
+    .string()
+    .email("Invalid email address")
+    .optional()
+    .nullable()
+    .or(z.literal("")),
+  language: z.enum(["en", "fr"]),
+  attending: z.enum(["ATTENDING", "NOT_ATTENDING", "MAYBE"]),
+  country: z.string().max(100).optional().nullable().or(z.literal("")),
+  features: z.array(z.string()),
+  dietary_requirements: z.string().optional().nullable().or(z.literal("")),
+  has_plus_one: z.boolean(),
+  plus_one_name: z.string().max(255).optional().nullable().or(z.literal("")),
+  plus_guests_allowed: z.number().int().min(0).max(5),
+  plus_guests: z.array(z.string().max(255)).max(5),
+  children_count: z.number().int().min(0),
+  additional_info: z.string().optional().nullable().or(z.literal("")),
+  spotify_song_id: z.string().optional().nullable().or(z.literal("")),
+});
+
+/**
+ * Guest creation schema (with defaults)
+ */
+export const createGuestSchema = guestBaseSchema
+  .extend({
+    language: guestBaseSchema.shape.language.default("en"),
+    attending: guestBaseSchema.shape.attending.default("MAYBE"),
+    features: guestBaseSchema.shape.features.default([]),
+    has_plus_one: guestBaseSchema.shape.has_plus_one.default(false),
+    plus_guests_allowed: guestBaseSchema.shape.plus_guests_allowed.default(0),
+    plus_guests: guestBaseSchema.shape.plus_guests.default([]),
+    children_count: guestBaseSchema.shape.children_count.default(0),
   })
   .passthrough();
 
-export const updateGuestSchema = createGuestSchema.partial().passthrough();
+/**
+ * Guest update schema (partial, NO defaults)
+ */
+export const updateGuestSchema = guestBaseSchema.partial().passthrough();
 
 /**
  * Guest ID parameter schema
