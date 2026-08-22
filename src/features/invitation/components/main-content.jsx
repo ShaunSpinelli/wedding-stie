@@ -9,12 +9,16 @@ import FunnyCaptcha from "@/features/funny/components/funny-captcha";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import { FAQSection } from "@/features/faq";
 import { Playlist } from "@/features/playlist";
+import { useFeatureScrollHighlight } from "@/hooks/use-feature-scroll-highlight";
 
 // Main Invitation Content
 export default function MainContent() {
   const { hasFeature } = useInvitation();
   const [isCaptchaOpen, setIsCaptchaOpen] = useState(false);
   const [hasShownCaptcha, setHasShownCaptcha] = useState(false);
+
+  // Auto-scroll first-time visitors of a new release to the highlighted section
+  useFeatureScrollHighlight();
 
   useEffect(() => {
     // If user has the 'funny' tag and we haven't shown it yet this session

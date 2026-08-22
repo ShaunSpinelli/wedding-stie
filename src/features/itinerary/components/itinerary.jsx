@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { useInvitation } from "@/features/invitation";
@@ -9,6 +9,7 @@ export default function Itinerary() {
   const { t } = useLanguage();
   const { hasFeature } = useInvitation();
   const [flippedCards, setFlippedCards] = useState({});
+  const itemRefs = useRef({});
 
   const itineraryEvents = useMemo(
     () => [
@@ -63,6 +64,18 @@ export default function Itinerary() {
 
   const handleFlip = (id) => {
     setFlippedCards((prev) => ({ ...prev, [id]: true }));
+
+    // Smoothly scroll the card row into frame
+    setTimeout(() => {
+      const element = itemRefs.current[id];
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest",
+        });
+      }
+    }, 150);
   };
 
   if (visibleEvents.length === 0) return null;
@@ -70,7 +83,7 @@ export default function Itinerary() {
   return (
     <section
       id="itinerary"
-      className="py-16 md:py-24 px-4 bg-white overflow-hidden"
+      className="scroll-mt-12 md:scroll-mt-20 pt-0 pb-16 md:pb-24 px-4 bg-white overflow-hidden"
     >
       <div className="max-w-6xl mx-auto text-center space-y-8">
         <div className="space-y-2">
@@ -152,6 +165,9 @@ export default function Itinerary() {
             return (
               <div
                 key={event.id}
+                ref={(el) => {
+                  if (el) itemRefs.current[event.id] = el;
+                }}
                 className="grid grid-cols-2 gap-3 sm:gap-8 md:gap-12 items-center w-full"
               >
                 {isRight ? (
