@@ -32,7 +32,11 @@ export default function MainContent() {
     <>
       <Hero useAltBg={false} />
       <LocationBanner />
-      <Itinerary />
+
+      <FeatureGate feature="dev">
+        <Itinerary />
+      </FeatureGate>
+
       <TravelGuide />
       <GuestRSVP useAltBg={true} />
 

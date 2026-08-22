@@ -1,19 +1,26 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { getAssetPath } from "@/utils/asset-path";
+import ItineraryCard from "./itinerary-card";
 
 export default function Itinerary() {
   const { t } = useLanguage();
+  const [flippedCards, setFlippedCards] = useState({});
 
   const cardImage = getAssetPath("/images/itinerary-card-city-hall.jpeg");
   const cards = [1, 2, 3];
+
+  const handleFlip = (num) => {
+    setFlippedCards((prev) => ({ ...prev, [num]: true }));
+  };
 
   return (
     <section
       id="itinerary"
       className="py-16 md:py-24 px-4 bg-white overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto text-center space-y-6">
+      <div className="max-w-6xl mx-auto text-center space-y-8">
         <div className="space-y-2">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -36,8 +43,8 @@ export default function Itinerary() {
           </motion.h2>
         </div>
 
-        {/* 3 Cards Side-by-Side */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-6">
+        {/* 3 Flippable Playing Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-4">
           {cards.map((num, index) => (
             <motion.div
               key={num}
@@ -45,12 +52,13 @@ export default function Itinerary() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: index * 0.15 }}
-              className="group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-black/5 bg-gray-50"
             >
-              <img
-                src={cardImage}
+              <ItineraryCard
+                index={num}
+                frontImage={cardImage}
+                isFlipped={Boolean(flippedCards[num])}
+                onFlip={() => handleFlip(num)}
                 alt={`Itinerary Event ${num}`}
-                className="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-500"
               />
             </motion.div>
           ))}

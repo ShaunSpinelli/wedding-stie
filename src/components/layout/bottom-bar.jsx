@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-context";
+import { useInvitation } from "@/features/invitation/invitation-context";
 
 const menuItems = [
   { icon: Home, labelKey: "nav.home", href: "#home", id: "home" },
@@ -21,6 +22,7 @@ const menuItems = [
     labelKey: "nav.itinerary",
     href: "#itinerary",
     id: "itinerary",
+    feature: "dev",
   },
   { icon: Plane, labelKey: "nav.travel", href: "#travel", id: "travel" },
   { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
@@ -47,6 +49,13 @@ const menuItems = [
 const BottomBar = () => {
   const [active, setActive] = React.useState("home");
   const { t } = useLanguage();
+  const { hasFeature } = useInvitation();
+
+  const visibleMenuItems = React.useMemo(() => {
+    return menuItems.filter(
+      (item) => !item.feature || hasFeature(item.feature),
+    );
+  }, [hasFeature]);
 
   // Function to handle smooth scrolling when clicking menu items
   const handleMenuClick = useCallback((e, href, id) => {
@@ -78,7 +87,7 @@ const BottomBar = () => {
           const sectionId = entry.target.id;
 
           // Only update if it's a valid menu section
-          const isValidSection = menuItems.some(
+          const isValidSection = visibleMenuItems.some(
             (item) => item.id === sectionId,
           );
           if (isValidSection) {
@@ -94,7 +103,7 @@ const BottomBar = () => {
     );
 
     // Observe all sections that correspond to menu items
-    menuItems.forEach((item) => {
+    visibleMenuItems.forEach((item) => {
       const element = document.getElementById(item.id);
       if (element) {
         observer.observe(element);
@@ -105,7 +114,7 @@ const BottomBar = () => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [visibleMenuItems]);
 
   return (
     <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">
@@ -117,7 +126,7 @@ const BottomBar = () => {
       >
         <div className="backdrop-blur-md bg-white/90 border border-gray-200/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.07)] px-3 py-2">
           <nav className="flex items-center gap-1">
-            {menuItems.map((item) => (
+            {visibleMenuItems.map((item) => (
               <motion.a
                 key={item.labelKey}
                 href={item.href}
