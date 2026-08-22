@@ -48,25 +48,33 @@ export default function Itinerary() {
           </motion.h2>
         </div>
 
-        {/* 3 Flippable Playing Cards (Friday, Saturday, Sunday) */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8 pt-4 px-1 sm:px-4 max-w-5xl mx-auto">
-          {itineraryEvents.map((event, index) => (
-            <motion.div
-              key={event.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: index * 0.15 }}
-            >
-              <ItineraryCard
-                index={event.id}
-                frontImage={event.image}
-                isFlipped={Boolean(flippedCards[event.id])}
-                onFlip={() => handleFlip(event.id)}
-                alt={event.title}
-              />
-            </motion.div>
-          ))}
+        {/* Alternating Zigzag Layout: Strictly 1 Card Per Row (Left, Right, Left) */}
+        <div className="flex flex-col space-y-10 sm:space-y-16 md:space-y-20 max-w-4xl mx-auto pt-6 px-2 sm:px-6">
+          {itineraryEvents.map((event, index) => {
+            const isRight = index % 2 === 1; // 0: Left (Friday), 1: Right (Saturday), 2: Left (Sunday)
+            return (
+              <div
+                key={event.id}
+                className={`w-full flex ${isRight ? "justify-end" : "justify-start"}`}
+              >
+                <motion.div
+                  initial={{ opacity: 0, x: isRight ? 30 : -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.1 }}
+                  className="w-[50%] max-w-[280px] sm:max-w-xs md:max-w-sm"
+                >
+                  <ItineraryCard
+                    index={event.id}
+                    frontImage={event.image}
+                    isFlipped={Boolean(flippedCards[event.id])}
+                    onFlip={() => handleFlip(event.id)}
+                    alt={event.title}
+                  />
+                </motion.div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
