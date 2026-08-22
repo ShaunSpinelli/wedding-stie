@@ -5,8 +5,17 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import dotenv from "dotenv";
 import app from "../src/server/index.js";
 import { getDbClient } from "../src/server/lib/db-client.js";
+
+dotenv.config();
+
+// Ensure DATABASE_URL is available for the test environment
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL =
+    "postgresql://postgres:password@localhost:5432/wedding_db";
+}
 
 const TEST_UID = "guest-mode-test";
 
