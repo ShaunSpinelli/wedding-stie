@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Hero from "@/features/invitation/components/hero";
 import { LocationBanner, TravelGuide } from "@/features/location";
+import { Itinerary } from "@/features/itinerary";
 import { GuestRSVP } from "@/features/guests";
 import { FeatureGate } from "@/components/ui/feature-gate";
 import Funny from "@/features/funny/components/funny";
@@ -31,6 +32,7 @@ export default function MainContent() {
     <>
       <Hero useAltBg={false} />
       <LocationBanner />
+      <Itinerary />
       <TravelGuide />
       <GuestRSVP useAltBg={true} />
 

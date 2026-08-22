@@ -5,6 +5,7 @@ import {
   Home,
   HeartHandshake,
   MapPin,
+  Calendar,
   Plane,
   HelpCircle,
   Music,
@@ -15,6 +16,12 @@ import { useLanguage } from "@/lib/language-context";
 const menuItems = [
   { icon: Home, labelKey: "nav.home", href: "#home", id: "home" },
   { icon: MapPin, labelKey: "nav.location", href: "#location", id: "location" },
+  {
+    icon: Calendar,
+    labelKey: "nav.itinerary",
+    href: "#itinerary",
+    id: "itinerary",
+  },
   { icon: Plane, labelKey: "nav.travel", href: "#travel", id: "travel" },
   { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
   { icon: Music, labelKey: "nav.playlist", href: "#playlist", id: "playlist" },

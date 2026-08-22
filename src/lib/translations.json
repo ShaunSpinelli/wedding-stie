@@ -374,6 +374,10 @@
       "menu": "Menu",
       "faq": "FAQ"
     },
+    "itinerary": {
+      "title": "Itinerary",
+      "subtitle": "Weekend Schedule"
+    },
     "faq": {
       "title": "FAQ",
       "subtitle": "Everything you need to know",
@@ -787,6 +791,10 @@
       "playlist": "Playlist",
       "menu": "Menu",
       "faq": "FAQ"
+    },
+    "itinerary": {
+      "title": "Programme",
+      "subtitle": "Déroulement du week-end"
     },
     "faq": {
       "title": "Foire Aux Questions",
