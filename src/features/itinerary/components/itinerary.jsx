@@ -8,11 +8,26 @@ export default function Itinerary() {
   const { t } = useLanguage();
   const [flippedCards, setFlippedCards] = useState({});
 
-  const cardImage = getAssetPath("/images/itinerary-card-city-hall.jpeg");
-  const cards = [1, 2, 3];
+  const itineraryEvents = [
+    {
+      id: 1,
+      title: "Friday Braai",
+      image: getAssetPath("/images/friday-braai.png"),
+    },
+    {
+      id: 2,
+      title: "Saturday Wedding",
+      image: getAssetPath("/images/saturday-wedding.png"),
+    },
+    {
+      id: 3,
+      title: "Sunday Pizza",
+      image: getAssetPath("/images/sunday-pizza.png"),
+    },
+  ];
 
-  const handleFlip = (num) => {
-    setFlippedCards((prev) => ({ ...prev, [num]: true }));
+  const handleFlip = (id) => {
+    setFlippedCards((prev) => ({ ...prev, [id]: true }));
   };
 
   return (
@@ -22,16 +37,6 @@ export default function Itinerary() {
     >
       <div className="max-w-6xl mx-auto text-center space-y-8">
         <div className="space-y-2">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 0.6, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-black uppercase tracking-[0.3em] text-xs font-semibold"
-          >
-            {t("itinerary.subtitle") || "Weekend Schedule"}
-          </motion.p>
-
           <motion.h2
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -43,22 +48,22 @@ export default function Itinerary() {
           </motion.h2>
         </div>
 
-        {/* 3 Flippable Playing Cards (3 Aligned on Mobile and Desktop) */}
+        {/* 3 Flippable Playing Cards (Friday, Saturday, Sunday) */}
         <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8 pt-4 px-1 sm:px-4 max-w-5xl mx-auto">
-          {cards.map((num, index) => (
+          {itineraryEvents.map((event, index) => (
             <motion.div
-              key={num}
+              key={event.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: index * 0.15 }}
             >
               <ItineraryCard
-                index={num}
-                frontImage={cardImage}
-                isFlipped={Boolean(flippedCards[num])}
-                onFlip={() => handleFlip(num)}
-                alt={`Itinerary Event ${num}`}
+                index={event.id}
+                frontImage={event.image}
+                isFlipped={Boolean(flippedCards[event.id])}
+                onFlip={() => handleFlip(event.id)}
+                alt={event.title}
               />
             </motion.div>
           ))}

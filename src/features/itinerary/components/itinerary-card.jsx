@@ -16,7 +16,7 @@ export default function ItineraryCard({
   };
 
   return (
-    <div className="relative w-full aspect-[853/1280] max-w-sm mx-auto [perspective:1400px]">
+    <div className="relative w-full aspect-[2/3] max-w-sm mx-auto [perspective:1400px]">
       <motion.div
         className="w-full h-full relative [transform-style:preserve-3d] transition-shadow duration-500 rounded-3xl"
         initial={false}
@@ -50,7 +50,7 @@ export default function ItineraryCard({
           <img
             src={frontImage}
             alt={alt}
-            className="w-full h-full object-cover select-none pointer-events-none"
+            className="w-full h-full object-cover select-none pointer-events-none transform scale-[1.05]"
             loading="lazy"
           />
         </div>
