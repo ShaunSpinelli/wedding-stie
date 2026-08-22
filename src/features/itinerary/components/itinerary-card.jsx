@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
-import PlayingCardBack from "./playing-card-back";
+import { getAssetPath } from "@/utils/asset-path";
 
 export default function ItineraryCard({
-  index = 1,
   frontImage,
   isFlipped = false,
   onFlip,
   alt = "Itinerary Event",
 }) {
+  const cardBackImage = getAssetPath("/images/card-back.png");
+
   const handleClick = () => {
     // Only flip if not already flipped (one-way reveal)
     if (!isFlipped && onFlip) {
@@ -18,7 +19,9 @@ export default function ItineraryCard({
   return (
     <div className="relative w-full aspect-[2/3] max-w-sm mx-auto [perspective:1400px]">
       <motion.div
-        className="w-full h-full relative [transform-style:preserve-3d] transition-shadow duration-500 rounded-3xl"
+        className={`w-full h-full relative [transform-style:preserve-3d] transition-shadow duration-500 rounded-xl sm:rounded-2xl md:rounded-3xl ${
+          !isFlipped ? "cursor-pointer" : "cursor-default"
+        }`}
         initial={false}
         animate={{
           rotateY: isFlipped ? 180 : 0,
@@ -41,8 +44,13 @@ export default function ItineraryCard({
         onClick={handleClick}
       >
         {/* BACK OF CARD (Visible initially at 0deg) */}
-        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(0deg)] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-md sm:shadow-lg hover:shadow-2xl transition-shadow duration-300">
-          <PlayingCardBack index={index} />
+        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(0deg)] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-md sm:shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-gray-50 border border-black/5">
+          <img
+            src={cardBackImage}
+            alt="Card Back"
+            className="w-full h-full object-cover select-none pointer-events-none transform scale-[1.05]"
+            loading="lazy"
+          />
         </div>
 
         {/* FRONT OF CARD (Visible after 180deg flip) */}
