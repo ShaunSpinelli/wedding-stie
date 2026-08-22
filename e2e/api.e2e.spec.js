@@ -4,9 +4,12 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import dotenv from "dotenv";
 import app from "../src/server/index.js";
 import { getDbClient } from "../src/server/lib/db-client.js";
 import { TEST_ADMIN_SECRET } from "../src/server/test-utils.js";
+
+dotenv.config();
 
 // Ensure DATABASE_URL is available for the test environment
 if (!process.env.DATABASE_URL) {
