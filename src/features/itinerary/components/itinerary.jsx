@@ -1,46 +1,71 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { useInvitation } from "@/features/invitation";
 import { getAssetPath } from "@/utils/asset-path";
 import ItineraryCard from "./itinerary-card";
 
 export default function Itinerary() {
   const { t } = useLanguage();
+  const { hasFeature } = useInvitation();
   const [flippedCards, setFlippedCards] = useState({});
 
-  const itineraryEvents = [
-    {
-      id: 1,
-      day: "Friday, May 21",
-      title: "Welcome Braai",
-      time: "6:00 PM onwards",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.",
-      image: getAssetPath("/images/friday-braai.png"),
-    },
-    {
-      id: 2,
-      day: "Saturday, May 22",
-      title: "The Wedding Day",
-      time: "3:30 PM until late",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nisi nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris fusce nec tellus sed augue.",
-      image: getAssetPath("/images/saturday-wedding.png"),
-    },
-    {
-      id: 3,
-      day: "Sunday, May 23",
-      title: "Pizza & Recovery",
-      time: "12:00 PM - 4:00 PM",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-      image: getAssetPath("/images/sunday-pizza.png"),
-    },
-  ];
+  const itineraryEvents = useMemo(
+    () => [
+      {
+        id: 1,
+        day: "Friday, May 21",
+        title: "City Hall Ceremony",
+        time: "2:00 PM",
+        feature: "CIVIL",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+        image: getAssetPath("/images/friday-city-hall.png"),
+      },
+      {
+        id: 2,
+        day: "Friday, May 21",
+        title: "Welcome Braai",
+        time: "6:00 PM onwards",
+        feature: "WEEKEND",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.",
+        image: getAssetPath("/images/friday-braai.png"),
+      },
+      {
+        id: 3,
+        day: "Saturday, May 22",
+        title: "The Wedding Day",
+        time: "3:30 PM until late",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nisi nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris fusce nec tellus sed augue.",
+        image: getAssetPath("/images/saturday-wedding.png"),
+      },
+      {
+        id: 4,
+        day: "Sunday, May 23",
+        title: "Pizza & Recovery",
+        time: "12:00 PM - 4:00 PM",
+        feature: "WEEKEND",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
+        image: getAssetPath("/images/sunday-pizza.png"),
+      },
+    ],
+    [],
+  );
+
+  const visibleEvents = useMemo(() => {
+    return itineraryEvents.filter(
+      (event) => !event.feature || hasFeature(event.feature),
+    );
+  }, [itineraryEvents, hasFeature]);
 
   const handleFlip = (id) => {
     setFlippedCards((prev) => ({ ...prev, [id]: true }));
   };
+
+  if (visibleEvents.length === 0) return null;
 
   return (
     <section
@@ -62,7 +87,7 @@ export default function Itinerary() {
 
         {/* Alternating Zigzag Layout with Text & Cards */}
         <div className="flex flex-col space-y-12 sm:space-y-16 md:space-y-24 max-w-4xl mx-auto pt-6 px-2 sm:px-6">
-          {itineraryEvents.map((event, index) => {
+          {visibleEvents.map((event, index) => {
             const isRight = index % 2 === 1; // 0: Left Card / Right Text, 1: Left Text / Right Card, 2: Left Card / Right Text
 
             const cardElement = (
@@ -113,9 +138,11 @@ export default function Itinerary() {
                 <h3 className="font-serif text-base min-[360px]:text-lg sm:text-2xl md:text-3xl text-gray-900 font-medium leading-snug">
                   {event.title}
                 </h3>
+                {/* Event time commented out for now:
                 <p className="text-gray-500 font-serif text-[9px] min-[360px]:text-[10px] sm:text-xs tracking-wider">
                   {event.time}
                 </p>
+                */}
                 <p className="text-gray-600 font-serif text-[9px] min-[360px]:text-[11px] sm:text-sm md:text-base leading-relaxed pt-1 sm:pt-2 text-opacity-90">
                   {event.description}
                 </p>
