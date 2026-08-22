@@ -43,8 +43,8 @@ export default function Itinerary() {
           </motion.h2>
         </div>
 
-        {/* 3 Flippable Playing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-4">
+        {/* 3 Flippable Playing Cards (3 Aligned on Mobile and Desktop) */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8 pt-4 px-1 sm:px-4 max-w-5xl mx-auto">
           {cards.map((num, index) => (
             <motion.div
               key={num}

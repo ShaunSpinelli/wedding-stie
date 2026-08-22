@@ -41,12 +41,12 @@ export default function ItineraryCard({
         onClick={handleClick}
       >
         {/* BACK OF CARD (Visible initially at 0deg) */}
-        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(0deg)] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(0deg)] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-md sm:shadow-lg hover:shadow-2xl transition-shadow duration-300">
           <PlayingCardBack index={index} />
         </div>
 
         {/* FRONT OF CARD (Visible after 180deg flip) */}
-        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-3xl overflow-hidden shadow-xl border border-black/5 bg-gray-50">
+        <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-md sm:shadow-xl border border-black/5 bg-gray-50">
           <img
             src={frontImage}
             alt={alt}
