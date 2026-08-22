@@ -51,6 +51,21 @@ export default function ItineraryCard({
             className="w-full h-full object-cover select-none pointer-events-none transform scale-[1.05]"
             loading="lazy"
           />
+
+          {/* Floating 'Tap to reveal' Prompt Badge (Positioned higher, no icon) */}
+          <div className="absolute inset-x-0 bottom-8 sm:bottom-12 md:bottom-14 flex justify-center items-center z-10 pointer-events-none px-2">
+            <motion.div
+              animate={{ scale: [1, 1.05, 1], opacity: [0.88, 1, 0.88] }}
+              transition={{
+                duration: 2.2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full bg-[#FAF8F5]/90 border border-[#bc2c1a]/30 shadow-md backdrop-blur-sm flex items-center justify-center text-[#bc2c1a] text-[8px] min-[360px]:text-[9px] sm:text-xs font-bold tracking-wider sm:tracking-widest uppercase"
+            >
+              <span className="whitespace-nowrap">Tap to reveal</span>
+            </motion.div>
+          </div>
         </div>
 
         {/* FRONT OF CARD (Visible after 180deg flip) */}
