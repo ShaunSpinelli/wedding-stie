@@ -116,6 +116,7 @@ export function createMockGuest(overrides = {}) {
     plus_guests_allowed: 0,
     plus_guests: [],
     children_count: 0,
+    last_visited_at: null,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     ...overrides,

@@ -230,6 +230,25 @@ export async function updateGuest(uid, id, updates) {
 }
 
 /**
+ * Record a guest visit timestamp
+ * @param {string} uid - Invitation UID
+ * @param {string} id - Guest ID (UUID)
+ * @returns {Promise<object>} Response with updated lastVisitedAt
+ */
+export async function recordGuestVisit(uid, id) {
+  const response = await fetch(`${API_URL}/api/${uid}/guests/${id}/visit`, {
+    method: "POST",
+    headers: getHeaders(),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to record guest visit");
+  }
+  return response.json();
+}
+
+/**
  * Delete a guest
  * @param {string} uid - Invitation UID
  * @param {string} id - Guest ID (UUID)

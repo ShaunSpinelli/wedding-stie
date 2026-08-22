@@ -100,6 +100,7 @@ const guestBaseSchema = z.object({
   children_count: z.number().int().min(0),
   additional_info: z.string().optional().nullable().or(z.literal("")),
   spotify_song_id: z.string().optional().nullable().or(z.literal("")),
+  last_visited_at: z.string().optional().nullable().or(z.literal("")),
 });
 
 /**

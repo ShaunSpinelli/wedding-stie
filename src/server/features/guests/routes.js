@@ -39,6 +39,7 @@ const mapGuestResponse = (guest) => ({
       ? JSON.parse(guest.plus_guests)
       : [],
   children_count: guest.children_count ?? 0,
+  lastVisitedAt: guest.last_visited_at || null,
   createdAt: guest.created_at,
   updatedAt: guest.updated_at,
 });
@@ -220,6 +221,8 @@ guestsRoutes.patch(
       children_count: "children_count",
       additional_info: "additional_info",
       spotify_song_id: "spotify_song_id",
+      last_visited_at: "last_visited_at",
+      lastVisitedAt: "last_visited_at",
     };
 
     let updates = {};
@@ -270,6 +273,44 @@ guestsRoutes.patch(
       return c.json({ success: true, data: mapGuestResponse(result.rows[0]) });
     } catch (error) {
       console.error("Update error:", error);
+      return c.json({ success: false, error: "Internal server error" }, 500);
+    }
+  },
+);
+
+/**
+ * POST /api/:uid/guests/:id/visit
+ * Record a guest visit timestamp (triggered on site load)
+ */
+guestsRoutes.post(
+  "/:id/visit",
+  zValidator("param", guestIdParamSchema),
+  async (c) => {
+    const { uid, id } = c.req.valid("param");
+
+    try {
+      const pool = await getDbClient(c);
+      const result = await pool.query(
+        `UPDATE guests
+       SET last_visited_at = CURRENT_TIMESTAMP
+       WHERE invitation_uid = $1 AND id = $2
+       RETURNING id, last_visited_at`,
+        [uid, id],
+      );
+
+      if (result.rows.length === 0) {
+        return c.json({ success: false, error: "Guest not found" }, 404);
+      }
+
+      return c.json({
+        success: true,
+        data: {
+          id: result.rows[0].id,
+          lastVisitedAt: result.rows[0].last_visited_at,
+        },
+      });
+    } catch (error) {
+      console.error("Error recording guest visit:", error);
       return c.json({ success: false, error: "Internal server error" }, 500);
     }
   },

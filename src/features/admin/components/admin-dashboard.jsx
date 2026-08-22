@@ -74,6 +74,27 @@ export default function AdminDashboard() {
     return [];
   };
 
+  const formatRelativeTime = (dateStr) => {
+    if (!dateStr) return null;
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return null;
+    const now = new Date();
+    const diffMs = now - date;
+    if (diffMs < 0) return "just now";
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    if (diffMins < 1) return "just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays === 1) return "yesterday";
+    if (diffDays < 30) return `${diffDays}d ago`;
+    return date.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   const loadGuests = useCallback(async () => {
     try {
       const response = await fetchGuests(uid);
@@ -460,6 +481,20 @@ export default function AdminDashboard() {
                           <Mail className="w-3 h-3" />{" "}
                           {guest.email || "No email"}
                         </span>
+                        {guest.lastVisitedAt ? (
+                          <span
+                            className="text-[9px] text-emerald-700 font-medium flex items-center gap-1 mt-0.5"
+                            title={`Last visited: ${new Date(guest.lastVisitedAt).toLocaleString()}`}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse flex-shrink-0" />
+                            Visited {formatRelativeTime(guest.lastVisitedAt)}
+                          </span>
+                        ) : (
+                          <span className="text-[9px] opacity-30 flex items-center gap-1 mt-0.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-theme-support-1/30 inline-block flex-shrink-0" />
+                            Never visited
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4">

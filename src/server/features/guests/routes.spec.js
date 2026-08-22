@@ -130,12 +130,13 @@ describe("guests routes", () => {
   });
 
   describe("GET /:uid/guests/:id", () => {
-    it("should return plus N fields", async () => {
+    it("should return plus N fields and lastVisitedAt", async () => {
       const guestId = "550e8400-e29b-41d4-a716-446655440000";
       const mockGuest = createMockGuest({
         id: guestId,
         plus_guests_allowed: 3,
         plus_guests: ["A", "B"],
+        last_visited_at: "2026-08-22T14:00:00.000Z",
       });
 
       mockPool = createMockPool({
@@ -150,6 +151,71 @@ describe("guests routes", () => {
       expect(res.status).toBe(200);
       expect(json.data.plus_guests_allowed).toBe(3);
       expect(json.data.plus_guests).toEqual(["A", "B"]);
+      expect(json.data.lastVisitedAt).toBe("2026-08-22T14:00:00.000Z");
+    });
+  });
+
+  describe("POST /:uid/guests/:id/visit", () => {
+    it("should record guest visit timestamp and return updated date", async () => {
+      const guestId = "550e8400-e29b-41d4-a716-446655440000";
+      const visitDate = "2026-08-22T14:45:00.000Z";
+
+      mockPool = createMockPool({
+        "UPDATE guests": {
+          rows: [
+            {
+              id: guestId,
+              last_visited_at: visitDate,
+            },
+          ],
+        },
+      });
+
+      getDbClient.mockResolvedValue(mockPool);
+
+      const res = await app.request(`/test-wedding/guests/${guestId}/visit`, {
+        method: "POST",
+      });
+      const json = await res.json();
+
+      expect(res.status).toBe(200);
+      expect(json.success).toBe(true);
+      expect(json.data.id).toBe(guestId);
+      expect(json.data.lastVisitedAt).toBe(visitDate);
+
+      // Verify query includes last_visited_at = CURRENT_TIMESTAMP
+      const updateCall = mockPool.query.mock.calls.find((c) =>
+        c[0].includes("SET last_visited_at = CURRENT_TIMESTAMP"),
+      );
+      expect(updateCall).toBeDefined();
+      expect(updateCall[1]).toEqual(["test-wedding", guestId]);
+    });
+
+    it("should return 404 when guest is not found", async () => {
+      const guestId = "550e8400-e29b-41d4-a716-446655440000";
+
+      mockPool = createMockPool({
+        "UPDATE guests": { rows: [] },
+      });
+
+      getDbClient.mockResolvedValue(mockPool);
+
+      const res = await app.request(`/test-wedding/guests/${guestId}/visit`, {
+        method: "POST",
+      });
+      const json = await res.json();
+
+      expect(res.status).toBe(404);
+      expect(json.success).toBe(false);
+      expect(json.error).toBe("Guest not found");
+    });
+
+    it("should reject invalid guest UUID format", async () => {
+      const res = await app.request("/test-wedding/guests/invalid-uuid/visit", {
+        method: "POST",
+      });
+
+      expect(res.status).toBe(400);
     });
   });
 });

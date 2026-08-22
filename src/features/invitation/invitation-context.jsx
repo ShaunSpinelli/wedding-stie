@@ -8,7 +8,7 @@ import {
 } from "react";
 import { storeGuestName, getGuestName } from "@/lib/invitation-storage";
 import { safeBase64 } from "@/lib/base64";
-import { fetchInvitation, searchGuest } from "@/services/api";
+import { fetchInvitation, searchGuest, recordGuestVisit } from "@/services/api";
 import { useLanguage } from "@/lib/language-context";
 
 const InvitationContext = createContext();
@@ -176,6 +176,33 @@ export function InvitationProvider({ children }) {
 
     identifyGuest();
   }, [invitationUid, lookupGuest]);
+
+  // 3. Track Guest Site Visit on Load (throttled by session key visit_recorded_${guest.id})
+  useEffect(() => {
+    if (guest?.id && invitationUid) {
+      const sessionKey = `visit_recorded_${guest.id}`;
+      try {
+        if (sessionStorage.getItem(sessionKey)) return;
+        sessionStorage.setItem(sessionKey, "true");
+      } catch {
+        // Ignore sessionStorage errors (e.g. disabled storage or strict privacy mode)
+      }
+
+      recordGuestVisit(invitationUid, guest.id)
+        .then((res) => {
+          if (res.success && res.data?.lastVisitedAt) {
+            setGuest((prev) =>
+              prev && prev.id === guest.id
+                ? { ...prev, lastVisitedAt: res.data.lastVisitedAt }
+                : prev,
+            );
+          }
+        })
+        .catch((err) => {
+          console.warn("[InvitationProvider] Visit tracking failed:", err);
+        });
+    }
+  }, [guest?.id, invitationUid]);
 
   // Helper to check if guest has a specific feature tag
   const hasFeature = useCallback(
