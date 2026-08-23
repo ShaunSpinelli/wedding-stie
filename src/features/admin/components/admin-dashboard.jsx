@@ -21,6 +21,7 @@ import {
   Check,
   Download,
   Minus,
+  Plus,
 } from "lucide-react";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import {
@@ -33,6 +34,18 @@ import {
 } from "@/services/api";
 import { Link, useNavigate } from "react-router-dom";
 import { generateInvitationLink } from "@/utils/generate-invitation-link";
+import { cn } from "@/lib/utils";
+
+const AVAILABLE_TAGS = ["CIVIL", "WEEKEND", "STAYING"];
+
+const parseTags = (featuresStr) => {
+  if (!featuresStr) return [];
+  if (Array.isArray(featuresStr)) return featuresStr.filter(Boolean);
+  return featuresStr
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+};
 
 export default function AdminDashboard() {
   const { uid } = useInvitation();
@@ -72,6 +85,29 @@ export default function AdminDashboard() {
       }
     }
     return [];
+  };
+
+  const handleToggleTag = (tag, isAdd = false) => {
+    const form = isAdd ? addForm : editForm;
+    const setForm = isAdd ? setAddForm : setEditForm;
+    if (!form) return;
+    const currentTags = parseTags(form.features);
+    const exists = currentTags.some(
+      (t) => t.toUpperCase() === tag.toUpperCase(),
+    );
+
+    let newTags;
+    if (exists) {
+      newTags = currentTags.filter(
+        (t) => t.toUpperCase() !== tag.toUpperCase(),
+      );
+    } else {
+      newTags = [...currentTags, tag];
+    }
+    setForm({
+      ...form,
+      features: newTags.join(", "),
+    });
   };
 
   const formatRelativeTime = (dateStr) => {
@@ -783,10 +819,48 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase opacity-40">
-                    Tags (Comma separated)
-                  </label>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Tags / Features (Comma separated)
+                    </label>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      Click to toggle
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 flex-wrap pb-1">
+                    <span className="text-xs text-gray-600 font-semibold">
+                      Available:
+                    </span>
+                    {AVAILABLE_TAGS.map((tag) => {
+                      const tags = parseTags(addForm.features);
+                      const isSelected = tags.some(
+                        (t) => t.toUpperCase() === tag.toUpperCase(),
+                      );
+                      return (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => handleToggleTag(tag, true)}
+                          className={cn(
+                            "px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none",
+                            isSelected
+                              ? "bg-theme-main-2 text-white shadow-sm ring-2 ring-theme-main-2/30 border border-theme-main-2"
+                              : "bg-white text-gray-700 hover:bg-gray-100 hover:text-gray-900 border border-gray-300 shadow-xs",
+                          )}
+                        >
+                          {isSelected ? (
+                            <Check className="w-3.5 h-3.5" />
+                          ) : (
+                            <Plus className="w-3.5 h-3.5 text-gray-400" />
+                          )}
+                          {tag}
+                        </button>
+                      );
+                    })}
+                  </div>
+
                   <input
                     type="text"
                     value={addForm.features}
@@ -794,7 +868,7 @@ export default function AdminDashboard() {
                       setAddForm({ ...addForm, features: e.target.value })
                     }
                     className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
-                    placeholder="VIP, FAMILY, VEGETARIAN"
+                    placeholder="CIVIL, WEEKEND, VIP"
                   />
                 </div>
 
@@ -1021,10 +1095,48 @@ export default function AdminDashboard() {
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase opacity-40">
-                    Tags / Features (Comma separated)
-                  </label>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Tags / Features (Comma separated)
+                    </label>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      Click to toggle
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 flex-wrap pb-1">
+                    <span className="text-xs text-gray-600 font-semibold">
+                      Available:
+                    </span>
+                    {AVAILABLE_TAGS.map((tag) => {
+                      const tags = parseTags(editForm.features);
+                      const isSelected = tags.some(
+                        (t) => t.toUpperCase() === tag.toUpperCase(),
+                      );
+                      return (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => handleToggleTag(tag, false)}
+                          className={cn(
+                            "px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none",
+                            isSelected
+                              ? "bg-theme-main-2 text-white shadow-sm ring-2 ring-theme-main-2/30 border border-theme-main-2"
+                              : "bg-white text-gray-700 hover:bg-gray-100 hover:text-gray-900 border border-gray-300 shadow-xs",
+                          )}
+                        >
+                          {isSelected ? (
+                            <Check className="w-3.5 h-3.5" />
+                          ) : (
+                            <Plus className="w-3.5 h-3.5 text-gray-400" />
+                          )}
+                          {tag}
+                        </button>
+                      );
+                    })}
+                  </div>
+
                   <input
                     type="text"
                     value={editForm.features}
@@ -1032,7 +1144,7 @@ export default function AdminDashboard() {
                       setEditForm({ ...editForm, features: e.target.value })
                     }
                     className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
-                    placeholder="VIP, VEGETARIAN, FAMILY"
+                    placeholder="CIVIL, WEEKEND, VIP"
                   />
                 </div>
 
