@@ -11,6 +11,39 @@ const EVENT_IMAGES = {
   white_pizza_party: getAssetPath("/images/sunday-pizza.png"),
 };
 
+const renderFormattedText = (text) => {
+  if (!text) return null;
+  const parts = [];
+  const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+    parts.push(
+      <a
+        key={match.index}
+        href={match[2]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-4 text-[#bc2c1a] hover:text-[#932214] font-semibold transition-colors cursor-pointer inline-flex items-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {match[1]}
+      </a>,
+    );
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : text;
+};
+
 export default function Itinerary() {
   const { t, language } = useLanguage();
   const { hasFeature } = useInvitation();
@@ -131,7 +164,7 @@ export default function Itinerary() {
                 )}
                 {event.description && (
                   <div className="text-gray-600 font-serif text-[9px] min-[360px]:text-[11px] sm:text-sm md:text-base leading-relaxed pt-1 sm:pt-2 text-opacity-90 space-y-1 sm:space-y-1.5 whitespace-pre-line">
-                    {event.description}
+                    {renderFormattedText(event.description)}
                   </div>
                 )}
                 {event.dressCode && (
@@ -141,7 +174,7 @@ export default function Itinerary() {
                         isRight ? "text-right" : "text-left"
                       }`}
                     >
-                      {event.dressCode}
+                      {renderFormattedText(event.dressCode)}
                     </p>
                   </div>
                 )}

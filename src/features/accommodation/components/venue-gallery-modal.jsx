@@ -13,6 +13,14 @@ const GALLERY_IMAGES = [
   getAssetPath("/images/rooms/8.jpg"),
   getAssetPath("/images/rooms/11.jpg"),
   getAssetPath("/images/rooms/12.jpg"),
+  getAssetPath("/images/rooms/room-extra-1.png"),
+  getAssetPath("/images/rooms/room-extra-2.png"),
+  getAssetPath("/images/rooms/room-extra-3.png"),
+  getAssetPath("/images/rooms/room-extra-4.png"),
+  getAssetPath("/images/rooms/room-extra-5.png"),
+  getAssetPath("/images/rooms/room-extra-6.png"),
+  getAssetPath("/images/rooms/room-extra-7.png"),
+  getAssetPath("/images/rooms/room-extra-8.png"),
 ];
 
 export default function VenueGalleryModal({ isOpen, onClose }) {
