@@ -195,7 +195,7 @@
       "subtitle": "The Journey of Love"
     },
     "schedule": {
-      "title": "Itinerary",
+      "title": "The Program",
       "subtitle": "Wedding Weekend",
       "days": {
         "Friday": "Friday",
@@ -341,7 +341,7 @@
       "rsvp": "RSVP",
       "travel": "Travel",
       "story": "Story",
-      "itinerary": "Itinerary",
+      "itinerary": "The Program",
       "accommodation": "Accommodation",
       "events": "Events",
       "location": "Location",
@@ -351,7 +351,7 @@
       "faq": "FAQ"
     },
     "itinerary": {
-      "title": "Itinerary",
+      "title": "The Program",
       "subtitle": "Weekend Schedule",
       "tap_to_reveal": "Tap to reveal",
       "events": [
@@ -803,7 +803,7 @@
       "rsvp": "RSVP",
       "travel": "Voyage",
       "story": "Histoire",
-      "itinerary": "Programme",
+      "itinerary": "Le Programme",
       "accommodation": "Hébergement",
       "events": "Événements",
       "location": "Lieu",
@@ -813,7 +813,7 @@
       "faq": "FAQ"
     },
     "itinerary": {
-      "title": "Programme",
+      "title": "Le Programme",
       "subtitle": "Déroulement du week-end",
       "tap_to_reveal": "Appuyez pour découvrir",
       "events": [

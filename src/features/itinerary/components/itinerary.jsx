@@ -100,7 +100,7 @@ export default function Itinerary() {
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="font-handwritten text-5xl md:text-7xl lg:text-8xl text-[#bc2c1a] leading-tight"
           >
-            {t("itinerary.title") || "Itinerary"}
+            {t("itinerary.title") || "The Program"}
           </motion.h2>
         </div>
 
