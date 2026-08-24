@@ -141,7 +141,12 @@ async function main() {
 
   // Generate Summary CSV
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const dataDir = path.join(__dirname, "../data");
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
   const summaryFilename = `summary_${timestamp}.csv`;
+  const summaryPath = path.join(dataDir, summaryFilename);
   const summaryHeader = "email,language,status,error\n";
   const summaryRows = results
     .map(
@@ -150,9 +155,9 @@ async function main() {
     )
     .join("\n");
 
-  fs.writeFileSync(summaryFilename, summaryHeader + summaryRows);
+  fs.writeFileSync(summaryPath, summaryHeader + summaryRows);
 
-  console.log(`\nSummary report generated: ${summaryFilename}`);
+  console.log(`\nSummary report generated: data/${summaryFilename}`);
   console.log(
     `Successfully processed: ${results.filter((r) => r.status !== "FAILED").length}/${guests.length}`,
   );

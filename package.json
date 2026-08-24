@@ -32,6 +32,8 @@
     "preview": "vite preview",
     "server": "bun src/server/server.js",
     "generate-links": "bun generate-links-example.js",
+    "send:update-emails": "bun scripts/send-update-emails.js",
+    "send:emails": "bun scripts/send-emails.js",
     "deploy": "bun run build && wrangler deploy",
     "cf:dev": "wrangler dev",
     "cf:deploy": "wrangler deploy",
