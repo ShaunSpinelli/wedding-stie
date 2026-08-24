@@ -6,9 +6,9 @@ import { getAssetPath } from "@/utils/asset-path";
 import ItineraryCard from "./itinerary-card";
 
 const EVENT_IMAGES = {
-  welcome_braai: getAssetPath("/images/friday-braai.png"),
-  big_day: getAssetPath("/images/saturday-wedding.png"),
-  white_pizza_party: getAssetPath("/images/sunday-pizza.png"),
+  welcome_braai: getAssetPath("/images/friday-braai.webp"),
+  big_day: getAssetPath("/images/saturday-wedding.webp"),
+  white_pizza_party: getAssetPath("/images/sunday-pizza.webp"),
 };
 
 const renderFormattedText = (text) => {
@@ -58,7 +58,7 @@ export default function Itinerary() {
       image:
         event.image ||
         EVENT_IMAGES[event.id] ||
-        getAssetPath(`/images/${event.id}.png`),
+        getAssetPath(`/images/${event.id}.webp`),
     }));
   }, [t, language]);
 

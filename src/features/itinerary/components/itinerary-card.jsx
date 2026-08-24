@@ -9,7 +9,7 @@ export default function ItineraryCard({
   alt = "Itinerary Event",
 }) {
   const { t } = useLanguage();
-  const cardBackImage = getAssetPath("/images/card-back.png");
+  const cardBackImage = getAssetPath("/images/card-back.webp");
 
   const handleClick = () => {
     // Only flip if not already flipped (one-way reveal)
