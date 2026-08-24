@@ -39,6 +39,10 @@ const mapGuestResponse = (guest) => ({
       ? JSON.parse(guest.plus_guests)
       : [],
   children_count: guest.children_count ?? 0,
+  staying_onsite: guest.staying_onsite || null,
+  stayingOnsite: guest.staying_onsite || null,
+  staying_extra_night: guest.staying_extra_night || null,
+  stayingExtraNight: guest.staying_extra_night || null,
   lastVisitedAt: guest.last_visited_at || null,
   createdAt: guest.created_at,
   updatedAt: guest.updated_at,
@@ -137,8 +141,8 @@ guestsRoutes.post(
       const features = isRequestAdmin ? guestData.features || [] : [];
 
       const result = await pool.query(
-        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, plus_guests_allowed, plus_guests, children_count, additional_info, spotify_song_id)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+        `INSERT INTO guests (invitation_uid, name, email, language, attending, country, features, dietary_requirements, has_plus_one, plus_one_name, plus_guests_allowed, plus_guests, children_count, additional_info, spotify_song_id, staying_onsite, staying_extra_night)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
          RETURNING *`,
         [
           uid,
@@ -156,6 +160,8 @@ guestsRoutes.post(
           guestData.children_count || 0,
           guestData.additional_info || null,
           guestData.spotify_song_id || null,
+          guestData.staying_onsite || null,
+          guestData.staying_extra_night || null,
         ],
       );
 
@@ -221,6 +227,10 @@ guestsRoutes.patch(
       children_count: "children_count",
       additional_info: "additional_info",
       spotify_song_id: "spotify_song_id",
+      staying_onsite: "staying_onsite",
+      stayingOnsite: "staying_onsite",
+      staying_extra_night: "staying_extra_night",
+      stayingExtraNight: "staying_extra_night",
       last_visited_at: "last_visited_at",
       lastVisitedAt: "last_visited_at",
     };

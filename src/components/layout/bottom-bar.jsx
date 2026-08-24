@@ -1,4 +1,3 @@
-// src/components/bottom-bar/BottomBar.jsx
 import React, { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
@@ -6,6 +5,7 @@ import {
   HeartHandshake,
   MapPin,
   Calendar,
+  Bed,
   Plane,
   HelpCircle,
   Music,
@@ -23,6 +23,13 @@ const menuItems = [
     href: "#itinerary",
     id: "itinerary",
     feature: "dev",
+  },
+  {
+    icon: Bed,
+    labelKey: "nav.accommodation",
+    href: "#accommodation",
+    id: "accommodation",
+    features: ["dev", "staying"],
   },
   { icon: Plane, labelKey: "nav.travel", href: "#travel", id: "travel" },
   { icon: HeartHandshake, labelKey: "nav.rsvp", href: "#rsvp", id: "rsvp" },
@@ -52,9 +59,13 @@ const BottomBar = () => {
   const { hasFeature } = useInvitation();
 
   const visibleMenuItems = React.useMemo(() => {
-    return menuItems.filter(
-      (item) => !item.feature || hasFeature(item.feature),
-    );
+    return menuItems.filter((item) => {
+      if (item.feature && !hasFeature(item.feature)) return false;
+      if (item.features && !item.features.every((f) => hasFeature(f))) {
+        return false;
+      }
+      return true;
+    });
   }, [hasFeature]);
 
   // Function to handle smooth scrolling when clicking menu items

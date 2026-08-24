@@ -22,6 +22,7 @@ import {
   Download,
   Minus,
   Plus,
+  Bed,
 } from "lucide-react";
 import { useInvitation } from "@/features/invitation/invitation-context";
 import {
@@ -36,7 +37,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { generateInvitationLink } from "@/utils/generate-invitation-link";
 import { cn } from "@/lib/utils";
 
-const AVAILABLE_TAGS = ["CIVIL", "WEEKEND", "STAYING"];
+const AVAILABLE_TAGS = ["DEV", "CIVIL", "WEEKEND", "STAYING"];
 
 const parseTags = (featuresStr) => {
   if (!featuresStr) return [];
@@ -71,6 +72,8 @@ export default function AdminDashboard() {
     plus_guests_allowed: 0,
     plus_guests: [],
     additional_info: "",
+    staying_onsite: "",
+    staying_extra_night: "",
   });
   const [saving, setSaving] = useState(false);
 
@@ -219,6 +222,9 @@ export default function AdminDashboard() {
       plus_guests: paddedPlusGuests,
       features: guest.features?.join(", ") || "",
       additional_info: guest.additional_info || "",
+      staying_onsite: guest.staying_onsite || guest.stayingOnsite || "",
+      staying_extra_night:
+        guest.staying_extra_night || guest.stayingExtraNight || "",
     });
   };
 
@@ -238,6 +244,8 @@ export default function AdminDashboard() {
           .map((name) => name?.trim() || "")
           .slice(0, parseInt(editForm.plus_guests_allowed) || 0),
         additional_info: editForm.additional_info,
+        staying_onsite: editForm.staying_onsite || null,
+        staying_extra_night: editForm.staying_extra_night || null,
       };
       const response = await updateGuest(uid, editingGuest.id, payload);
       if (response.success) {
@@ -270,6 +278,8 @@ export default function AdminDashboard() {
           .map((name) => name?.trim() || "")
           .slice(0, parseInt(addForm.plus_guests_allowed) || 0),
         additional_info: addForm.additional_info,
+        staying_onsite: addForm.staying_onsite || null,
+        staying_extra_night: addForm.staying_extra_night || null,
       };
       const response = await createGuest(uid, payload);
       if (response.success) {
@@ -287,6 +297,8 @@ export default function AdminDashboard() {
           plus_guests_allowed: 0,
           plus_guests: [],
           additional_info: "",
+          staying_onsite: "",
+          staying_extra_night: "",
         });
       }
     } catch {
@@ -328,8 +340,15 @@ export default function AdminDashboard() {
       return;
     }
 
-    // Format for email script: email,language,name,plus_ones
-    const header = ["email", "language", "name", "plus_ones"];
+    // Format for email script: email,language,name,plus_ones,staying_onsite,staying_extra_night
+    const header = [
+      "email",
+      "language",
+      "name",
+      "plus_ones",
+      "staying_onsite",
+      "staying_extra_night",
+    ];
     const rows = guests.map((guest) => {
       const plusOnes = safeParsePlusGuests(guest.plus_guests)
         .map((name) => name?.trim())
@@ -341,6 +360,8 @@ export default function AdminDashboard() {
         (guest.language || "en").toUpperCase(),
         guest.name || "",
         plusOnes || guest.plus_one_name?.trim() || "",
+        guest.staying_onsite || "",
+        guest.staying_extra_night || "",
       ].map((val) => `"${val.replace(/"/g, '""')}"`); // Escape quotes
     });
 
@@ -428,7 +449,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
             {
               label: "Attending Guests",
@@ -442,6 +463,14 @@ export default function AdminDashboard() {
                 .length,
               icon: XCircle,
               color: "text-theme-main-3",
+            },
+            {
+              label: "On-Site Stay",
+              count: guests.filter(
+                (g) => g.staying_onsite === "YES" || g.stayingOnsite === "YES",
+              ).length,
+              icon: Bed,
+              color: "text-amber-600",
             },
             {
               label: "Total Children",
@@ -487,7 +516,7 @@ export default function AdminDashboard() {
         {/* Guest Table */}
         <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-theme-support-1/20 shadow-xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[1000px]">
+            <table className="w-full text-left border-collapse min-w-[1100px]">
               <thead>
                 <tr className="bg-theme-main-1/30 text-theme-accent font-bold text-[10px] uppercase tracking-widest">
                   <th className="px-6 py-5">Guest Info</th>
@@ -499,6 +528,7 @@ export default function AdminDashboard() {
                   <th className="px-6 py-5">Kids</th>
                   <th className="px-6 py-5">Lang</th>
                   <th className="px-6 py-5">Origin / Tags</th>
+                  <th className="px-6 py-5">Accommodation</th>
                   <th className="px-6 py-5 text-center">Action</th>
                 </tr>
               </thead>
@@ -645,6 +675,30 @@ export default function AdminDashboard() {
                             </span>
                           ))}
                         </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col gap-1">
+                        {guest.staying_onsite || guest.stayingOnsite ? (
+                          <span
+                            className={`px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider inline-flex items-center gap-1 w-fit ${
+                              (guest.staying_onsite || guest.stayingOnsite) ===
+                              "YES"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : "bg-gray-100 text-gray-600 border border-gray-200"
+                            }`}
+                          >
+                            Stay: {guest.staying_onsite || guest.stayingOnsite}
+                          </span>
+                        ) : (
+                          <span className="opacity-20 text-xs">—</span>
+                        )}
+                        {(guest.staying_extra_night ||
+                          guest.stayingExtraNight) === "YES" && (
+                          <span className="px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200 w-fit">
+                            +Sun Night
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -816,6 +870,46 @@ export default function AdminDashboard() {
                       }
                       className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
                     />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Stay On-Site (Weekend)
+                    </label>
+                    <select
+                      value={addForm.staying_onsite}
+                      onChange={(e) =>
+                        setAddForm({
+                          ...addForm,
+                          staying_onsite: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                    >
+                      <option value="">No response / Pending</option>
+                      <option value="YES">Yes, stay on-site</option>
+                      <option value="NO">No, own accommodation</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Extra Sunday Night
+                    </label>
+                    <select
+                      value={addForm.staying_extra_night}
+                      onChange={(e) =>
+                        setAddForm({
+                          ...addForm,
+                          staying_extra_night: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all text-sm"
+                    >
+                      <option value="">No response / Pending</option>
+                      <option value="YES">Yes, interested in Sunday</option>
+                      <option value="NO">No, thank you</option>
+                    </select>
                   </div>
                 </div>
 
@@ -1058,6 +1152,44 @@ export default function AdminDashboard() {
                       <option value="MAYBE">Maybe</option>
                       <option value="ATTENDING">Attending</option>
                       <option value="NOT_ATTENDING">Not Attending</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Stay On-Site (Weekend)
+                    </label>
+                    <select
+                      value={editForm.staying_onsite || ""}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          staying_onsite: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    >
+                      <option value="">No response / Pending</option>
+                      <option value="YES">Yes, stay on-site</option>
+                      <option value="NO">No, own accommodation</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase opacity-40">
+                      Extra Sunday Night
+                    </label>
+                    <select
+                      value={editForm.staying_extra_night || ""}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          staying_extra_night: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 rounded-xl bg-theme-support-3/30 border border-theme-support-1/10 focus:border-theme-main-2 outline-none transition-all"
+                    >
+                      <option value="">No response / Pending</option>
+                      <option value="YES">Yes, interested in Sunday</option>
+                      <option value="NO">No, thank you</option>
                     </select>
                   </div>
                 </div>

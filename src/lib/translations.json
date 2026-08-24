@@ -69,19 +69,9 @@
           "day": "Friday",
           "events": [
             {
-              "time": "4:00 PM - 6:00 PM",
-              "title": "Arrival & Check-in",
-              "description": "Welcome to the countryside! Settle into your rooms."
-            },
-            {
-              "time": "6:00 PM - 7:00 PM",
-              "title": "Welcome Drinks",
-              "description": "Join us for local wine and appetizers on the terrace."
-            },
-            {
-              "time": "7:00 PM - Late",
-              "title": "BBQ & Festivities",
-              "description": "Casual outdoor dinner and music to kick off the weekend."
+              "time": "Late Afternoon",
+              "title": "Welcome Braai",
+              "description": "Inspired by Shaun’s South African roots, our Welcome Braai will bring everyone together for a relaxed evening of barbecue, drinks, and good company."
             }
           ]
         },
@@ -89,24 +79,9 @@
           "day": "Saturday",
           "events": [
             {
-              "time": "11:00 AM",
-              "title": "Garden Yoga",
-              "description": "Optional morning stretch for early birds."
-            },
-            {
-              "time": "3:30 PM",
-              "title": "Wedding Ceremony",
-              "description": "The main event under the big oak tree."
-            },
-            {
-              "time": "5:00 PM",
-              "title": "Cocktail Hour",
-              "description": "Drinks and music in the courtyard."
-            },
-            {
-              "time": "7:00 PM",
-              "title": "Dinner & Dancing",
-              "description": "Feast, speeches, and plenty of dancing."
+              "time": "Early Afternoon",
+              "title": "The Big Day",
+              "description": "The main event! Refreshments before the ceremony, cocktail hour, dinner, and dancing together until late into the morning."
             }
           ]
         },
@@ -114,9 +89,9 @@
           "day": "Sunday",
           "events": [
             {
-              "time": "10:00 AM",
-              "title": "Farewell Brunch",
-              "description": "A relaxed morning meal before we say our goodbyes."
+              "time": "Late Morning",
+              "title": "The White Pizza Party",
+              "description": "A relaxed Sunday by the pool with good music, cold drinks, and wood-fired pizza."
             }
           ]
         }
@@ -367,6 +342,7 @@
       "travel": "Travel",
       "story": "Story",
       "itinerary": "Itinerary",
+      "accommodation": "Accommodation",
       "events": "Events",
       "location": "Location",
       "wishes": "Wishes",
@@ -376,7 +352,75 @@
     },
     "itinerary": {
       "title": "Itinerary",
-      "subtitle": "Weekend Schedule"
+      "subtitle": "Weekend Schedule",
+      "tap_to_reveal": "Tap to reveal",
+      "events": [
+        {
+          "id": "welcome_braai",
+          "day": "Friday, May 21 — Late Afternoon",
+          "title": "Welcome Braai",
+          "subtitle": "Let the celebrations begin!",
+          "description": "Inspired by Shaun’s South African roots, our Welcome Braai will bring everyone together for a relaxed evening of barbecue, drinks, and good company.\n\nAs guests arrive and settle into their accommodation, join us for a drink, something delicious from the grill, and a chance to meet, reconnect, and get to know one another before the Big Day.",
+          "dressCode": "Dress code : Come as you are",
+          "feature": "WEEKEND"
+        },
+        {
+          "id": "big_day",
+          "day": "Saturday, May 22 — Early Afternoon",
+          "title": "The Big Day",
+          "subtitle": "",
+          "description": "The reason we are all here! Join us as we celebrate one of the most special days of our lives, surrounded by the people we love most.\n\nThe afternoon will begin with refreshments before our ceremony, expect a few happy tears! From there, we’ll raise a glass at cocktail hour, enjoy the golden South of France light, sit down for a beautiful dinner, and then dance together until late into the morning.\n\nCome ready to celebrate, laugh, eat, drink, dance… and make some unforgettable memories with us.",
+          "dressCode": "Dress Code — Romantic Garden South of France\nLet our wedding palette inspire your look: mauve, dusty rose, wine, burgundy, terracotta, peach, champagne, and taupe can offer some inspiration for your outfit.",
+          "feature": null
+        },
+        {
+          "id": "white_pizza_party",
+          "day": "Sunday, May 23 — Late Morning",
+          "title": "The White Pizza Party",
+          "subtitle": "One last celebration before we say goodbye!",
+          "description": "After dancing late into the night, join us for a relaxed Sunday by the pool with good music, cold drinks, and wood-fired pizza.\n\nThe White Party is a tradition in the bride’s family, and this year we’re giving it a little Italian twist. So put on your favourite white outfit, grab a slice of pizza, and spend one last afternoon eating, laughing, swimming, and recovering together.",
+          "dressCode": "Dress Code — All White\nThis time, white isn’t just allowed — it’s encouraged!\nThe perfect way to end an unforgettable weekend. 🤍",
+          "feature": "WEEKEND"
+        }
+      ]
+    },
+    "accommodation": {
+      "title": "Accommodation Update",
+      "subtitle": "Stay With Us On-Site",
+      "badge": "On-Site Stay",
+      "intro_1": "Our venue can accommodate 40 guests on-site from Friday to Sunday, and we would love for you to stay with us for the whole wedding weekend.",
+      "intro_2": "Accommodation nearby is limited, and staying on-site means you can be close to everything without needing to arrange transport after the celebrations. It also means we can spend more time together over the weekend, from Friday through to Sunday morning.",
+      "includes_title": "The accommodation includes:",
+      "amenities": [
+        "Access to 57 hectares of grounds in the Cévennes",
+        "Two swimming pools and relaxation areas",
+        "Breakfast",
+        "Gardens, olive trees and lavender fields",
+        "Pétanque and a botanical walking trail",
+        "Terraces with panoramic views",
+        "Comfortable rooms, most with a private entrance and terrace",
+        "No need to drive after the wedding"
+      ],
+      "pricing": "€125 per person (€250 per couple) for the weekend",
+      "gallery_button": "Click here to see a few examples of the rooms and the venue outside",
+      "gallery_title": "Rooms & Venue Examples",
+      "question_weekend": "Would you like to stay with us at the venue for the wedding weekend?",
+      "options_weekend": {
+        "yes": "Yes, we'd love to!",
+        "no": "No, we'll arrange our own accommodation."
+      },
+      "extra_night_title": "Optional Extra Night",
+      "extra_night_description": "We may also be able to keep the venue for one extra night on Sunday, with departure on Monday 24th, for an additional €50 per person.\n\nThis will depend on how many people are interested, so please let us know if you would consider staying an extra night.",
+      "question_extra_night": "Would you be interested in staying for the additional Sunday night?",
+      "options_extra_night": {
+        "yes": "Yes, we'd be interested!",
+        "no": "No, thank you."
+      },
+      "status_saved": "Preference saved!",
+      "status_saving": "Saving...",
+      "login_prompt": "Please enter your email to save your accommodation preferences.",
+      "btn_update": "Update Preference",
+      "btn_saved": "Saved"
     },
     "faq": {
       "title": "FAQ",
@@ -487,19 +531,9 @@
           "day": "Vendredi",
           "events": [
             {
-              "time": "16:00 - 18:00",
-              "title": "Arrivée & Installation",
-              "description": "Bienvenue à la campagne ! Installez-vous dans vos chambres."
-            },
-            {
-              "time": "18:00 - 19:00",
-              "title": "Verre de Bienvenue",
-              "description": "Rejoignez-nous pour déguster du vin local et des amuse-bouches sur la terrasse."
-            },
-            {
-              "time": "19:00 - Tard",
-              "title": "BBQ & Festivities",
-              "description": "Dîner décontracté en plein air et musique pour lancer le week-end."
+              "time": "Fin d'après-midi",
+              "title": "Welcome Braai",
+              "description": "Inspiré des origines sud-africaines de Shaun, une soirée barbecue conviviale, des verres et de la bonne compagnie."
             }
           ]
         },
@@ -507,24 +541,9 @@
           "day": "Samedi",
           "events": [
             {
-              "time": "11:00",
-              "title": "Yoga dans le Jardin",
-              "description": "Étirements matinaux optionnels pour les lève-tôt."
-            },
-            {
-              "time": "15:30",
-              "title": "Cérémonie de Mariage",
-              "description": "L'événement principal sous le grand chêne."
-            },
-            {
-              "time": "17:00",
-              "title": "Cocktail",
-              "description": "Boissons et musique dans la cour."
-            },
-            {
-              "time": "19:00",
-              "title": "Dîner & Danse",
-              "description": "Festin, discours et beaucoup de danse."
+              "time": "Début d'après-midi",
+              "title": "Le Grand Jour",
+              "description": "Le grand événement ! Rafraîchissements avant la cérémonie, cocktail, dîner et danse ensemble jusqu'au bout de la nuit."
             }
           ]
         },
@@ -532,9 +551,9 @@
           "day": "Dimanche",
           "events": [
             {
-              "time": "10:00",
-              "title": "Brunch d'Adieu",
-              "description": "Un repas matinal détendu avant de se dire au revoir."
+              "time": "Fin de matinée",
+              "title": "La White Pizza Party",
+              "description": "Un dimanche détendu au bord de la piscine avec bonne musique, boissons fraîches et pizzas au feu de bois."
             }
           ]
         }
@@ -785,6 +804,7 @@
       "travel": "Voyage",
       "story": "Histoire",
       "itinerary": "Programme",
+      "accommodation": "Hébergement",
       "events": "Événements",
       "location": "Lieu",
       "wishes": "Vœux",
@@ -794,7 +814,75 @@
     },
     "itinerary": {
       "title": "Programme",
-      "subtitle": "Déroulement du week-end"
+      "subtitle": "Déroulement du week-end",
+      "tap_to_reveal": "Appuyez pour découvrir",
+      "events": [
+        {
+          "id": "welcome_braai",
+          "day": "Vendredi 21 mai — Fin d'après-midi",
+          "title": "Welcome Braai",
+          "subtitle": "Que les festivités commencent !",
+          "description": "Inspiré des origines sud-africaines de Shaun, notre Welcome Braai rassemblera tout le monde pour une soirée conviviale autour d'un barbecue, de verres et de bonne compagnie.\n\nÀ votre arrivée et installation dans vos hébergements, rejoignez-nous pour boire un verre, déguster de délicieuses grillades et faire connaissance ou se retrouver avant le grand jour.",
+          "dressCode": "Code vestimentaire : Venez comme vous êtes",
+          "feature": "WEEKEND"
+        },
+        {
+          "id": "big_day",
+          "day": "Samedi 22 mai — Début d'après-midi",
+          "title": "Le Grand Jour",
+          "subtitle": "",
+          "description": "La raison de notre présence à tous ! Rejoignez-nous pour célébrer l'un des jours les plus précieux de notre vie, entourés de ceux que nous aimons le plus.\n\nL'après-midi débutera par quelques rafraîchissements avant la cérémonie — préparez-vous à quelques larmes de bonheur ! Nous lèverons ensuite notre verre lors du cocktail sous la douce lumière dorée du sud de la France, partagerons un magnifique dîner, puis danserons ensemble jusqu'au bout de la nuit.\n\nVenez prêts à faire la fête, rire, manger, boire, danser… et créer des souvenirs inoubliables avec nous.",
+          "dressCode": "Code vestimentaire — Romantic Garden Sud de la France\nLaissez notre palette de mariage inspirer votre tenue : mauve, vieux rose, bordeaux, terracotta, pêche, champagne et taupe sauront vous inspirer.",
+          "feature": null
+        },
+        {
+          "id": "white_pizza_party",
+          "day": "Dimanche 23 mai — En fin de matinée",
+          "title": "La White Pizza Party",
+          "subtitle": "Une toute dernière fête avant de se dire au revoir !",
+          "description": "Après avoir dansé jusqu'au bout de la nuit, rejoignez-nous pour un dimanche détendu au bord de la piscine avec de la bonne musique, des boissons fraîches et des pizzas au feu de bois.\n\nLa White Party est une tradition dans la famille de la mariée, et cette année nous y ajoutons une petite touche italienne. Enfilez votre plus belle tenue blanche, prenez une part de pizza et passez ce dernier après-midi à manger, rire, vous baigner et vous remettre ensemble de ce week-end.",
+          "dressCode": "Code vestimentaire — Tout en blanc\nCette fois, le blanc n'est pas seulement autorisé — il est vivement encouragé !\nLa façon idéale de clôturer un week-end inoubliable. 🤍",
+          "feature": "WEEKEND"
+        }
+      ]
+    },
+    "accommodation": {
+      "title": "Mise à jour hébergement",
+      "subtitle": "Séjournez sur place avec nous",
+      "badge": "Hébergement sur place",
+      "intro_1": "Notre domaine peut accueillir 40 personnes sur place du vendredi au dimanche, et nous serions ravis que vous passiez tout le week-end de mariage avec nous.",
+      "intro_2": "Les possibilités d'hébergement aux alentours sont limitées, et loger sur place vous permet d'être au plus près des festivités sans avoir à organiser de transport pour rentrer après la soirée. Cela nous permettra également de profiter pleinement de chaque instant ensemble, du vendredi au dimanche matin.",
+      "includes_title": "L'hébergement comprend :",
+      "amenities": [
+        "Accès à 57 hectares de domaine dans les Cévennes",
+        "Deux piscines et espaces de détente",
+        "Petit-déjeuner",
+        "Jardins, oliviers et champs de lavande",
+        "Pétanque et parcours botanique",
+        "Terrasses avec vues panoramiques",
+        "Chambres confortables, la plupart avec entrée et terrasse privatives",
+        "Pas besoin de conduire après la fête"
+      ],
+      "pricing": "125 € par personne (250 € par couple) pour le week-end",
+      "gallery_button": "Cliquez ici pour voir des exemples des chambres et des extérieurs",
+      "gallery_title": "Aperçu des chambres et du domaine",
+      "question_weekend": "Souhaitez-vous séjourner avec nous sur le domaine pendant le week-end du mariage ?",
+      "options_weekend": {
+        "yes": "Oui, nous serions ravis !",
+        "no": "Non, nous nous logerons par nos propres moyens."
+      },
+      "extra_night_title": "Nuit supplémentaire optionnelle",
+      "extra_night_description": "Nous pourrions également conserver le domaine pour une nuit supplémentaire le dimanche, avec départ le lundi 24, pour 50 € de plus par personne.\n\nCela dépendra du nombre de personnes intéressées, merci de nous indiquer si vous envisageriez de rester une nuit de plus.",
+      "question_extra_night": "Seriez-vous intéressé(e) par cette nuit supplémentaire du dimanche ?",
+      "options_extra_night": {
+        "yes": "Oui, cela nous intéresse !",
+        "no": "Non, merci."
+      },
+      "status_saved": "Préférence enregistrée !",
+      "status_saving": "Enregistrement...",
+      "login_prompt": "Veuillez entrer votre adresse e-mail pour enregistrer vos préférences d'hébergement.",
+      "btn_update": "Modifier la réponse",
+      "btn_saved": "Enregistré"
     },
     "faq": {
       "title": "Foire Aux Questions",

@@ -9,10 +9,18 @@ import { useInvitation } from "@/features/invitation/invitation-context";
  * @param {string} feature - The name of the feature tag required
  * @param {React.ReactNode} children - The component to render if allowed
  */
-export function FeatureGate({ feature, children }) {
+export function FeatureGate({ feature, features, children }) {
   const { hasFeature } = useInvitation();
 
-  if (!hasFeature(feature)) {
+  if (feature && !hasFeature(feature)) {
+    return null;
+  }
+
+  if (
+    features &&
+    Array.isArray(features) &&
+    !features.every((f) => hasFeature(f))
+  ) {
     return null;
   }
 

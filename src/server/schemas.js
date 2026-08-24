@@ -101,6 +101,12 @@ const guestBaseSchema = z.object({
   additional_info: z.string().optional().nullable().or(z.literal("")),
   spotify_song_id: z.string().optional().nullable().or(z.literal("")),
   last_visited_at: z.string().optional().nullable().or(z.literal("")),
+  staying_onsite: z.enum(["YES", "NO"]).optional().nullable().or(z.literal("")),
+  staying_extra_night: z
+    .enum(["YES", "NO"])
+    .optional()
+    .nullable()
+    .or(z.literal("")),
 });
 
 /**

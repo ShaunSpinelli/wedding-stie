@@ -5,62 +5,35 @@ import { useInvitation } from "@/features/invitation";
 import { getAssetPath } from "@/utils/asset-path";
 import ItineraryCard from "./itinerary-card";
 
+const EVENT_IMAGES = {
+  welcome_braai: getAssetPath("/images/friday-braai.png"),
+  big_day: getAssetPath("/images/saturday-wedding.png"),
+  white_pizza_party: getAssetPath("/images/sunday-pizza.png"),
+};
+
 export default function Itinerary() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { hasFeature } = useInvitation();
   const [flippedCards, setFlippedCards] = useState({});
   const itemRefs = useRef({});
 
-  const itineraryEvents = useMemo(
-    () => [
-      {
-        id: 1,
-        day: "Friday, May 21",
-        title: "City Hall Ceremony",
-        time: "2:00 PM",
-        feature: "CIVIL",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-        image: getAssetPath("/images/friday-city-hall.png"),
-      },
-      {
-        id: 2,
-        day: "Friday, May 21",
-        title: "Welcome Braai",
-        time: "6:00 PM onwards",
-        feature: "WEEKEND",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.",
-        image: getAssetPath("/images/friday-braai.png"),
-      },
-      {
-        id: 3,
-        day: "Saturday, May 22",
-        title: "The Wedding Day",
-        time: "3:30 PM until late",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nisi nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris fusce nec tellus sed augue.",
-        image: getAssetPath("/images/saturday-wedding.png"),
-      },
-      {
-        id: 4,
-        day: "Sunday, May 23",
-        title: "Pizza & Recovery",
-        time: "12:00 PM - 4:00 PM",
-        feature: "WEEKEND",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-        image: getAssetPath("/images/sunday-pizza.png"),
-      },
-    ],
-    [],
-  );
+  const eventsData = useMemo(() => {
+    const rawEvents = t("itinerary.events");
+    if (!Array.isArray(rawEvents)) return [];
+    return rawEvents.map((event) => ({
+      ...event,
+      image:
+        event.image ||
+        EVENT_IMAGES[event.id] ||
+        getAssetPath(`/images/${event.id}.png`),
+    }));
+  }, [t, language]);
 
   const visibleEvents = useMemo(() => {
-    return itineraryEvents.filter(
+    return eventsData.filter(
       (event) => !event.feature || hasFeature(event.feature),
     );
-  }, [itineraryEvents, hasFeature]);
+  }, [eventsData, hasFeature]);
 
   const handleFlip = (id) => {
     setFlippedCards((prev) => ({ ...prev, [id]: true }));
@@ -151,14 +124,27 @@ export default function Itinerary() {
                 <h3 className="font-serif text-base min-[360px]:text-lg sm:text-2xl md:text-3xl text-gray-900 font-medium leading-snug">
                   {event.title}
                 </h3>
-                {/* Event time commented out for now:
-                <p className="text-gray-500 font-serif text-[9px] min-[360px]:text-[10px] sm:text-xs tracking-wider">
-                  {event.time}
-                </p>
-                */}
-                <p className="text-gray-600 font-serif text-[9px] min-[360px]:text-[11px] sm:text-sm md:text-base leading-relaxed pt-1 sm:pt-2 text-opacity-90">
-                  {event.description}
-                </p>
+                {event.subtitle && (
+                  <p className="font-serif italic text-[10px] min-[360px]:text-xs sm:text-sm md:text-base text-gray-800 font-medium">
+                    {event.subtitle}
+                  </p>
+                )}
+                {event.description && (
+                  <div className="text-gray-600 font-serif text-[9px] min-[360px]:text-[11px] sm:text-sm md:text-base leading-relaxed pt-1 sm:pt-2 text-opacity-90 space-y-1 sm:space-y-1.5 whitespace-pre-line">
+                    {event.description}
+                  </div>
+                )}
+                {event.dressCode && (
+                  <div className="pt-2 sm:pt-3">
+                    <p
+                      className={`font-serif text-[8px] min-[360px]:text-[10px] sm:text-xs md:text-sm text-gray-700 italic border-t border-gray-200/80 pt-1.5 sm:pt-2 whitespace-pre-line ${
+                        isRight ? "text-right" : "text-left"
+                      }`}
+                    >
+                      {event.dressCode}
+                    </p>
+                  </div>
+                )}
               </motion.div>
             );
 

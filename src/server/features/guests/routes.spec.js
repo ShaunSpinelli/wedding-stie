@@ -127,6 +127,39 @@ describe("guests routes", () => {
       );
       expect(updateCall[1]).toContain(JSON.stringify(["Alice", "Bob"]));
     });
+
+    it("should update accommodation preferences", async () => {
+      const guestId = "550e8400-e29b-41d4-a716-446655440000";
+      const updatedGuest = createMockGuest({
+        id: guestId,
+        staying_onsite: "YES",
+        staying_extra_night: "NO",
+      });
+
+      mockPool = createMockPool({
+        "UPDATE guests": { rows: [updatedGuest] },
+      });
+
+      getDbClient.mockResolvedValue(mockPool);
+
+      const res = await app.request(`/test-wedding/guests/${guestId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          staying_onsite: "YES",
+          staying_extra_night: "NO",
+        }),
+      });
+
+      const json = await res.json();
+
+      expect(res.status).toBe(200);
+      expect(json.success).toBe(true);
+      expect(json.data.staying_onsite).toBe("YES");
+      expect(json.data.staying_extra_night).toBe("NO");
+    });
   });
 
   describe("GET /:uid/guests/:id", () => {

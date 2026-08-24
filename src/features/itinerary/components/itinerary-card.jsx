@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { getAssetPath } from "@/utils/asset-path";
+import { useLanguage } from "@/lib/language-context";
 
 export default function ItineraryCard({
   frontImage,
@@ -7,6 +8,7 @@ export default function ItineraryCard({
   onFlip,
   alt = "Itinerary Event",
 }) {
+  const { t } = useLanguage();
   const cardBackImage = getAssetPath("/images/card-back.png");
 
   const handleClick = () => {
@@ -63,7 +65,9 @@ export default function ItineraryCard({
               }}
               className="px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full bg-[#FAF8F5]/90 border border-[#bc2c1a]/30 shadow-md backdrop-blur-sm flex items-center justify-center text-[#bc2c1a] text-[8px] min-[360px]:text-[9px] sm:text-xs font-bold tracking-wider sm:tracking-widest uppercase"
             >
-              <span className="whitespace-nowrap">Tap to reveal</span>
+              <span className="whitespace-nowrap">
+                {t("itinerary.tap_to_reveal") || "Tap to reveal"}
+              </span>
             </motion.div>
           </div>
         </div>
