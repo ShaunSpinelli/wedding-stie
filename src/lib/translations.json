@@ -90,7 +90,7 @@
           "events": [
             {
               "time": "Late Morning",
-              "title": "The White Pizza Party",
+              "title": "The Pizza Party - The White Edition",
               "description": "A relaxed Sunday by the pool with good music, cold drinks, and wood-fired pizza."
             }
           ]
@@ -361,7 +361,7 @@
           "title": "Welcome Braai",
           "subtitle": "Let the celebrations begin!",
           "description": "Inspired by Shaun’s South African roots, our Welcome Braai will bring everyone together for a relaxed evening of barbecue, drinks, and good company.\n\nAs guests arrive and settle into their accommodation, join us for a drink, something delicious from the grill, and a chance to meet, reconnect, and get to know one another before the Big Day.",
-          "dressCode": "Dress code : Come as you are",
+          "dressCode": "Dress Code — Come As You Are",
           "feature": "WEEKEND"
         },
         {
@@ -369,17 +369,17 @@
           "day": "Saturday, May 22 — Early Afternoon",
           "title": "The Big Day",
           "subtitle": "",
-          "description": "The reason we are all here! Join us as we celebrate one of the most special days of our lives, surrounded by the people we love most.\n\nThe afternoon will begin with refreshments before our ceremony, expect a few happy tears! From there, we’ll raise a glass at cocktail hour, enjoy the golden South of France light, sit down for a beautiful dinner, and then dance together until late into the morning.\n\nCome ready to celebrate, laugh, eat, drink, dance… and make some unforgettable memories with us.",
+          "description": "The reason we are all here! Join us as we celebrate one of the most special days of our lives, surrounded by the people we love most.\n\nThe afternoon will begin with our outdoor ceremony and probably a few happy tears!\n\nFrom there, we’ll raise a glass at cocktail hour while soaking up the golden South of France light, sit down for a beautiful dinner, and then head to the dance floor.\nCome ready to celebrate, laugh, eat, drink, dance… and make some unforgettable memories with us. And bring your energy — we fully expect you to celebrate with us until the early hours of the morning!",
           "dressCode": "Dress Code — Romantic Garden Formal\nLook up here for some inspo: [Pinterest](https://pin.it/5JDLFxnQr)",
           "feature": null
         },
         {
           "id": "white_pizza_party",
           "day": "Sunday, May 23 — Late Morning",
-          "title": "The White Pizza Party",
+          "title": "The Pizza Party - The White Edition",
           "subtitle": "One last celebration before we say goodbye!",
           "description": "After dancing late into the night, join us for a relaxed Sunday by the pool with good music, cold drinks, and wood-fired pizza.\n\nThe White Party is a tradition in the bride’s family, and this year we’re giving it a little Italian twist. So put on your favourite white outfit, grab a slice of pizza, and spend one last afternoon eating, laughing, swimming, and recovering together.",
-          "dressCode": "Dress Code — All White\nThis time, white isn’t just allowed — it’s encouraged!",
+          "dressCode": "Dress Code — All White\nThe one day of the weekend you get to match the bride and wear white — so make the most of it!",
           "feature": "WEEKEND"
         }
       ]
@@ -401,7 +401,7 @@
         "Comfortable rooms, most with a private entrance and terrace",
         "No need to drive after the wedding"
       ],
-      "pricing": "€125 per person (€250 per couple) for the weekend",
+      "pricing": "€125 per person (€250 per couple) for the full weekend — Friday & Saturday night included.",
       "gallery_button": "Click here to see a few examples of the rooms and the venue outside",
       "gallery_title": "Rooms & Venue Examples",
       "question_weekend": "Would you like to stay with us at the venue for the wedding weekend?",
