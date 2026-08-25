@@ -38,11 +38,9 @@ export default function MainContent() {
       <Hero useAltBg={false} />
       <LocationBanner />
 
-      <FeatureGate feature="dev">
-        <Itinerary />
-      </FeatureGate>
+      <Itinerary />
 
-      <FeatureGate features={["dev", "staying"]}>
+      <FeatureGate feature="staying">
         <Accommodation />
       </FeatureGate>
 

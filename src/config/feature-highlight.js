@@ -48,5 +48,5 @@ export const ACTIVE_FEATURE_RELEASE = {
    * If set, only guests with this feature flag will be scrolled to it.
    * Set to `null` if the feature is visible to all guests.
    */
-  requiredFeature: "dev",
+  requiredFeature: null,
 };

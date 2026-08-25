@@ -29,7 +29,6 @@ const allMenuItems = [
     labelKey: "nav.itinerary",
     href: "#itinerary",
     id: "itinerary",
-    feature: "dev",
     primaryMobile: true,
   },
   {
@@ -45,7 +44,7 @@ const allMenuItems = [
     labelKey: "nav.accommodation",
     href: "#accommodation",
     id: "accommodation",
-    features: ["dev", "staying"],
+    feature: "staying",
   },
   { icon: Plane, labelKey: "nav.travel", href: "#travel", id: "travel" },
   { icon: Music, labelKey: "nav.playlist", href: "#playlist", id: "playlist" },

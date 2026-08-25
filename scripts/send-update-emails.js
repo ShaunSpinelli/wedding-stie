@@ -19,11 +19,11 @@ const DEFAULT_SLEEP_MS = 2000;
 const DEFAULT_SUBJECTS = {
   YES: {
     EN: "9 Months to Go... Are you ready? 🇫🇷",
-    FR: "Plus que 9 mois... Êtes-vous prêts ? 🇫🇷",
+    FR: "Plus que 9 mois... Êtes-vous prêts ?",
   },
   NO_RSVP: {
     EN: "9 Months to Go... Have you RSVP’d yet? 🇫🇷",
-    FR: "Plus que 9 mois... Avez-vous confirmé votre présence ? 🇫🇷",
+    FR: "Plus que 9 mois... Avez-vous confirmé votre présence ?",
   },
 };
 
@@ -38,13 +38,13 @@ Usage:
   bun scripts/send-update-emails.js <csv-file-path> [options]
   node scripts/send-update-emails.js <csv-file-path> [options]
 
-CSV Columns Supported:
-  - email (or Email, EMAIL, mail, guest_email) [Required]
-  - language (or Language, lang, Lang): "EN" | "FR" (Default: "EN")
-  - rsvp (or status, attendance, template, rsvp_status):
-      • Yes / Confirmed: "yes", "y", "attending", "confirmed", "true", "rsvp-yes"
-      • Maybe / No / Unconfirmed: "no", "n", "maybe", "not_attending", "no-rsvp", ""
-  - name (or Name, guest_name) [Optional]
+Key CSV Columns:
+  - email (or Email, EMAIL): Guest email address [Required]
+  - language (or Language, lang): Language preference ("en" / "fr") [Default: "en"]
+  - attending (or rsvp, attendance, status):
+      • Attending / Yes: "ATTENDING", "yes", "y", "attending", "confirmed", "true"
+      • Maybe / Not Attending: "MAYBE", "NOT_ATTENDING", "no", "maybe", ""
+  - name (or Name, guest_name): Guest name [Optional]
 
 Options:
   --dry-run                 Simulate sending, validate templates and generate links
@@ -63,14 +63,14 @@ Environment Variables:
   GMAIL_APP_PASSWORD        Your Gmail App Password (16 characters)
 
 Examples:
-  # Dry-run test on a guest list
-  bun scripts/send-update-emails.js guests.csv --dry-run
+  # Dry-run test with guest list CSV
+  bun scripts/send-update-emails.js 9month-email/guests.csv --dry-run
 
-  # Send to a specific guest only
-  bun scripts/send-update-emails.js guests.csv --email=friend@example.com --dry-run
+  # Test a single guest from the CSV
+  bun scripts/send-update-emails.js 9month-email/guests.csv --email=friend@example.com --dry-run
 
-  # Send real emails with custom delay
-  bun scripts/send-update-emails.js guests.csv --delay=2500
+  # Send real update emails
+  bun scripts/send-update-emails.js 9month-email/guests.csv --delay=2500
 `);
 }
 
@@ -86,7 +86,55 @@ function generateInvitationLink(guestEmail) {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Helper to determine RSVP template type from CSV value or CLI override
+// Resolve CSV file path from CLI input
+function resolveCsvPath(inputPath) {
+  if (!inputPath) return null;
+
+  const candidatePaths = [
+    inputPath,
+    path.resolve(process.cwd(), inputPath),
+    path.resolve(__dirname, "..", inputPath),
+    path.resolve(inputPath, "guests.csv"),
+    path.resolve(process.cwd(), inputPath, "guests.csv"),
+    path.resolve(__dirname, "..", inputPath, "guests.csv"),
+  ];
+
+  if (
+    inputPath.includes("month-email") &&
+    !inputPath.includes("9month-email")
+  ) {
+    const alt = inputPath.replace("month-email", "9month-email");
+    candidatePaths.push(
+      alt,
+      path.resolve(process.cwd(), alt),
+      path.resolve(__dirname, "..", alt),
+      path.resolve(alt, "guests.csv"),
+      path.resolve(process.cwd(), alt, "guests.csv"),
+      path.resolve(__dirname, "..", alt, "guests.csv"),
+    );
+  }
+
+  for (const candidate of candidatePaths) {
+    if (fs.existsSync(candidate)) {
+      const stats = fs.statSync(candidate);
+      if (stats.isFile()) {
+        return candidate;
+      } else if (stats.isDirectory()) {
+        const nestedGuestCsv = path.join(candidate, "guests.csv");
+        if (
+          fs.existsSync(nestedGuestCsv) &&
+          fs.statSync(nestedGuestCsv).isFile()
+        ) {
+          return nestedGuestCsv;
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+// Helper to determine RSVP template type from CSV attending value or CLI override
 function determineRsvpType(row, cliTemplateOverride) {
   if (cliTemplateOverride) {
     const override = cliTemplateOverride.toLowerCase().trim();
@@ -100,8 +148,11 @@ function determineRsvpType(row, cliTemplateOverride) {
     return "NO_RSVP";
   }
 
-  // Check possible column names
+  // Check key 'attending' column first, followed by fallbacks
   const rawValue =
+    row.attending ||
+    row.Attending ||
+    row.ATTENDING ||
     row.rsvp ||
     row.RSVP ||
     row.status ||
@@ -116,6 +167,7 @@ function determineRsvpType(row, cliTemplateOverride) {
 
   const val = String(rawValue).toLowerCase().trim();
 
+  // ATTENDING -> RSVP Yes Template
   if (
     [
       "yes",
@@ -133,6 +185,7 @@ function determineRsvpType(row, cliTemplateOverride) {
     return "YES";
   }
 
+  // MAYBE / NOT_ATTENDING / Empty -> No RSVP Reminder Template
   return "NO_RSVP";
 }
 
@@ -225,8 +278,24 @@ async function main() {
     process.exit(args.includes("--help") ? 0 : 1);
   }
 
-  const csvPath = args.find((arg) => !arg.startsWith("--"));
+  const rawCsvArg = args.find((arg) => !arg.startsWith("--"));
   const isDryRun = args.includes("--dry-run");
+
+  if (!rawCsvArg) {
+    console.error("\n❌ Error: Please specify the CSV file path.");
+    printUsage();
+    process.exit(1);
+  }
+
+  const resolvedCsvPath = resolveCsvPath(rawCsvArg);
+
+  if (!resolvedCsvPath) {
+    console.error(`\n❌ Error: CSV file not found: ${rawCsvArg}`);
+    printUsage();
+    process.exit(1);
+  }
+
+  const csvPath = resolvedCsvPath;
 
   // Parse CLI flags
   const templateArg = args
@@ -254,12 +323,6 @@ async function main() {
 
   const sleepMs = delayArg ? parseInt(delayArg, 10) : DEFAULT_SLEEP_MS;
   const maxLimit = limitArg ? parseInt(limitArg, 10) : Infinity;
-
-  if (!csvPath || !fs.existsSync(csvPath)) {
-    console.error(`\n❌ Error: CSV file not found: ${csvPath}`);
-    printUsage();
-    process.exit(1);
-  }
 
   const gmailUser = process.env.GMAIL_USER;
   const gmailPass = process.env.GMAIL_APP_PASSWORD;
